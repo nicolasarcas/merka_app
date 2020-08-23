@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/TextViewMerka"
+        android:layout_width="289dp"
+        android:layout_height="124dp"
+        android:background="@drawable/background_logoMerka"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textAppearance="@style/textAppearance_Merka"
+        android:textSize="@dimen/Merka"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.056" />
+
+    <EditText
+        android:id="@+id/editTextTextEmailAddress"
+        android:layout_width="289dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/placeholderEmail"
+        android:inputType="textEmailAddress"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNome"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextNome"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNome" />
+
+    <EditText
+        android:id="@+id/editTextTelefone"
+        android:layout_width="289dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="60dp"
+        android:ems="10"
+        android:hint="@string/placeholderTelefone"
+        android:inputType="phone"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+
+    <EditText
+        android:id="@+id/editTextSenha"
+        android:layout_width="289dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="60dp"
+        android:ems="10"
+        android:hint="@string/placeholderSenha"
+        android:inputType="textPassword"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTelefone" />
+
+    <EditText
+        android:id="@+id/editTextNome"
+        android:layout_width="289dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="@string/placeholderNome"
+        android:inputType="textPersonName"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/TextViewMerka"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextViewMerka"
+        app:layout_constraintVertical_bias="0.866" />
+
+    <Button
+        android:id="@+id/buttonCriarConta"
+        style="@style/BtnCadastrar"
+        android:layout_width="289dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/background_Btncadastrar"
+        android:text="@string/TextBtnCriarConta"
+        android:textAppearance="@style/textAppearance_TextBtn"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/editTextSenha"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSenha" />
+
+    <Button
+        android:id="@+id/buttonEntrar"
+        style="@style/BtnCadastrar"
+        android:layout_width="289dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/background_Btncadastrar"
+        android:text="@string/TextBtnEntrar"
+        android:textAppearance="@style/textAppearance_TextBtn"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/buttonCriarConta"
+        app:layout_constraintTop_toBottomOf="@+id/textViewJaPossuiConta" />
+
+    <View
+        android:id="@+id/LinhaHorizontal"
+        android:layout_width="289dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="60dp"
+        android:background="@color/design_default_color_on_secondary"
+        android:focusable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCriarConta" />
+
+    <TextView
+        android:id="@+id/textViewJaPossuiConta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="108dp"
+        android:text="@string/TextViewJaPossuiConta"
+        android:textColor="@android:color/background_dark"
+        android:textSize="@dimen/TextBtn"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEntrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCriarConta" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

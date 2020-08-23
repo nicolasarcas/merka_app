@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Merka</string>
+    <string name="placeholderNome">Nome</string>
+    <string name="placeholderSenha">Senha</string>
+    <string name="placeholderEmail">Email</string>
+    <string name="placeholderTelefone">Telefone</string>
+    <string name="TextBtnCriarConta">Criar conta</string>
+    <string name="TextBtnEntrar">Entrar</string>
+    <string name="boldText">bold</string>
+    <string name="TextViewJaPossuiConta">Já possui uma conta?</string>
+</resources>
