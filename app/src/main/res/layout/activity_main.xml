@@ -10,7 +10,6 @@
         android:id="@+id/TextViewMerka"
         android:layout_width="289dp"
         android:layout_height="124dp"
-        android:background="@drawable/background_logoMerka"
         android:gravity="center"
         android:text="@string/app_name"
         android:textAppearance="@style/textAppearance_Merka"
@@ -88,7 +87,6 @@
         android:layout_width="289dp"
         android:layout_height="54dp"
         android:layout_marginTop="35dp"
-        android:background="@drawable/background_Btncadastrar"
         android:text="@string/TextBtnCriarConta"
         android:textAppearance="@style/textAppearance_TextBtn"
         android:textColor="@color/white"
@@ -102,13 +100,13 @@
         android:layout_width="289dp"
         android:layout_height="54dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/background_Btncadastrar"
         android:text="@string/TextBtnEntrar"
         android:textAppearance="@style/textAppearance_TextBtn"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/buttonCriarConta"
-        app:layout_constraintTop_toBottomOf="@+id/textViewJaPossuiConta" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewJaPossuiConta"
+        android:onClick="irParaLogin"/>
 
     <View
         android:id="@+id/LinhaHorizontal"
