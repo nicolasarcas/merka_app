@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="LogoMerkaHeight">120dp</dimen>
+    <dimen name="TextLogoMerka">90sp</dimen>
+
+    <dimen name="MarginEntreElementos">10dp</dimen>
+    <dimen name="MarginGrandeEntreElementos">20dp</dimen>
+    <dimen name="PaddingHorizontal">150dp</dimen>
+
+    <dimen name="TextBtn">45sp</dimen>
+    <dimen name="TextBtnEscrever">30sp</dimen>
+    <dimen name="CriarConta">20sp</dimen>
+    <dimen name="LabelTemConta">25sp</dimen>
+    <dimen name="Placeholder">30sp</dimen>
+
+    <dimen name="LabelEsqueciSenha">25sp</dimen>
+    <dimen name="PaddingLayout">20dp</dimen>
+</resources>

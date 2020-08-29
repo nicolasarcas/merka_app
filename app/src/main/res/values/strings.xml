@@ -8,4 +8,7 @@
     <string name="TextBtnEntrar">Entrar</string>
     <string name="boldText">bold</string>
     <string name="TextViewJaPossuiConta">Já possui uma conta?</string>
+    <string name="TextViewNaoTemConta">Não tem uma conta?</string>
+    <string name="TextViewEsqueciSenha">Esqueci a senha</string>
+    <string name="btnTextInscrever">Inscrever-se no merka</string>
 </resources>

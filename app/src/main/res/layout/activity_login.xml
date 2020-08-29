@@ -1,83 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:padding="50dp"
-    android:orientation="vertical">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/PaddingHorizontal">
 
     <TextView
-        android:id="@+id/TextViewMerka"
-        android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:id="@+id/textViewMerka"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/LogoMerkaHeight"
         android:layout_gravity="center"
-        android:layout_weight="1"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:background="@drawable/logo_background"
+        android:gravity="center"
         android:text="@string/app_name"
-        android:textAlignment="center"
         android:textAppearance="@style/textAppearance_Merka"
-        android:textSize="@dimen/Merka"
-        android:textStyle="bold" />
+        android:textSize="@dimen/TextLogoMerka"
+        android:textStyle="bold"
+        app:layout_constraintVertical_bias="0.097" />
 
     <EditText
         android:id="@+id/editTextTextEmailAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="1"
+        android:autofillHints="@string/placeholderEmail"
         android:ems="10"
         android:hint="@string/placeholderEmail"
         android:inputType="textEmailAddress"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/Placeholder"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="292dp" />
 
     <EditText
         android:id="@+id/editTextSenha"
-        android:layout_width="289dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:autofillHints="@string/placeholderSenha"
         android:ems="10"
         android:hint="@string/placeholderSenha"
         android:inputType="textPassword"
-        android:textSize="25sp"
+        android:textSize="@dimen/Placeholder"
         android:textStyle="bold"
-        android:layout_weight="1"/>
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="360dp" />
 
     <Button
         android:id="@+id/buttonEntrar"
         style="@style/BtnCadastrar"
-        android:layout_width="289dp"
-        android:layout_height="54dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginEntreElementos"
+        android:background="@drawable/btn_login_registro_background"
         android:text="@string/TextBtnEntrar"
         android:textAppearance="@style/textAppearance_TextBtn"
         android:textColor="@color/white"
         android:textStyle="bold"
+        tools:layout_editor_absoluteX="3dp"
+        tools:layout_editor_absoluteY="584dp" />
+
+    <TextView
+        android:id="@+id/textViewEsqueciSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="2"/>
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:text="@string/TextViewEsqueciSenha"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="@dimen/LabelEsqueciSenha"
+        tools:layout_editor_absoluteX="96dp"
+        tools:layout_editor_absoluteY="454dp" />
 
     <View
         android:id="@+id/LinhaHorizontal"
-        android:layout_width="289dp"
+        android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
         android:background="@color/design_default_color_on_secondary"
         android:focusable="false"
-        android:layout_gravity="center"
-        android:layout_weight="1"/>
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="520dp" />
 
     <TextView
         android:id="@+id/textViewJaPossuiConta"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginEntreElementos"
+        android:text="@string/TextViewNaoTemConta"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/background_dark"
-        android:textSize="@dimen/TextBtn"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:layout_weight="1"/>
+        android:textSize="@dimen/LabelTemConta"
+        tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="549dp" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#D33333"
-        android:layout_gravity="center"
-        android:layout_weight="1"/>
+        android:background="@android:drawable/dialog_holo_dark_frame"
+        android:text="@string/btnTextInscrever"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/TextBtnEscrever" />
 
-</LinearLayout >
+</LinearLayout>

@@ -7,7 +7,7 @@
     </style>
 
     <style name="textAppearance_Merka">
-        <item name="android:textSize">@dimen/Merka</item>
+        <item name="android:textSize">@dimen/TextLogoMerka</item>
         <item name="fontFamily">sans-serif-condensed</item>
     </style>
 
