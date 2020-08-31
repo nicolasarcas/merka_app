@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.097" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/editTextEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -64,7 +64,8 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="584dp" />
+        tools:layout_editor_absoluteY="584dp"
+        android:onClick="fazerLogin"/>
 
     <TextView
         android:id="@+id/textViewEsqueciSenha"

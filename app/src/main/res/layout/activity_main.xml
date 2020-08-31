@@ -33,18 +33,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editTextSenha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints="@+id/editTextSenha"
-        android:ems="10"
-        android:hint="@string/placeholderSenha"
-        android:inputType="textPassword"
-        android:textSize="@dimen/PlaceholderCadastro"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/editTextEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints="@string/placeholderEmail"
@@ -55,14 +44,25 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editTextTelefone"
+        android:id="@+id/editTextSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="@+id/editTextNovaSenha"
+        android:ems="10"
+        android:hint="@string/placeholderSenha"
+        android:inputType="textPassword"
+        android:textSize="@dimen/PlaceholderCadastro"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextConfirmaSenha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
         android:autofillHints="@string/placeholderTelefone"
         android:ems="10"
-        android:hint="@string/placeholderTelefone"
-        android:inputType="phone"
+        android:hint="@string/placeholderConfirmaSenha"
+        android:inputType="textPassword"
         android:textSize="@dimen/PlaceholderCadastro"
         android:textStyle="bold" />
 
@@ -76,7 +76,8 @@
         android:text="@string/TextBtnCriarConta"
         android:textAppearance="@style/textAppearance_TextBtn"
         android:textColor="@color/white"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:onClick="criarNovoUsuario"/>
 
     <View
         android:id="@+id/LinhaHorizontal"
@@ -96,7 +97,7 @@
         android:textSize="@dimen/LabelTemConta" />
 
     <Button
-        android:id="@+id/buttonEntrar"
+        android:id="@+id/buttonIrParaLogin"
         style="@style/BtnCadastrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

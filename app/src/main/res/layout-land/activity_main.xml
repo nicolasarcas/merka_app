@@ -41,26 +41,26 @@
         android:inputType="textPersonName"
         android:textSize="@dimen/PlaceholderCadastro"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/editTextSenha"
-        app:layout_constraintEnd_toEndOf="@+id/editTextSenha"
-        app:layout_constraintStart_toStartOf="@+id/editTextSenha" />
+        app:layout_constraintBottom_toTopOf="@+id/editTextNovaSenha"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNovaSenha"
+        app:layout_constraintStart_toStartOf="@+id/editTextNovaSenha" />
 
     <EditText
         android:id="@+id/editTextSenha"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:autofillHints="@+id/editTextSenha"
+        android:autofillHints="@+id/editTextNovaSenha"
         android:ems="10"
         android:hint="@string/placeholderSenha"
         android:inputType="textPassword"
         android:textSize="@dimen/PlaceholderCadastro"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextEmailAddress"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextEmailAddress"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextEmailAddress" />
+        app:layout_constraintBottom_toTopOf="@+id/editTextNovoEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNovoEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/editTextNovoEmailAddress" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/editTextEmailAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
@@ -78,7 +78,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTelefone"
+        android:id="@+id/editTextConfirmaSenha"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints="@string/placeholderTelefone"
@@ -87,9 +87,9 @@
         android:inputType="phone"
         android:textSize="@dimen/PlaceholderCadastro"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextEmailAddress"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextEmailAddress"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+        app:layout_constraintEnd_toEndOf="@+id/editTextNovoEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/editTextNovoEmailAddress"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNovoEmailAddress" />
 
     <Button
         android:id="@+id/buttonCriarConta"
@@ -102,9 +102,9 @@
         android:textAppearance="@style/textAppearance_TextBtn"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTelefone"
-        app:layout_constraintStart_toStartOf="@+id/editTextTelefone"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTelefone" />
+        app:layout_constraintEnd_toEndOf="@+id/editTextConfirmaSenha"
+        app:layout_constraintStart_toStartOf="@+id/editTextConfirmaSenha"
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmaSenha" />
 
     <TextView
         android:id="@+id/textViewJaPossuiConta"
@@ -121,7 +121,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonEntrar"
+        android:id="@+id/buttonIrParaLogin"
         style="@style/BtnCadastrar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

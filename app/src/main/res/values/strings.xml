@@ -2,6 +2,7 @@
     <string name="app_name">Merka</string>
     <string name="placeholderNome">Nome</string>
     <string name="placeholderSenha">Senha</string>
+    <string name="placeholderConfirmaSenha">Confirmar senha</string>
     <string name="placeholderEmail">Email</string>
     <string name="placeholderTelefone">Telefone</string>
     <string name="TextBtnCriarConta">Criar conta</string>

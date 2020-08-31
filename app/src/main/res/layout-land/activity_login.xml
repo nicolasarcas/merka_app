@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="@+id/textViewJaPossuiConta" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/editTextEmailAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -33,9 +33,9 @@
         android:inputType="textEmailAddress"
         android:textSize="@dimen/Placeholder"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/editTextSenha"
-        app:layout_constraintEnd_toEndOf="@+id/editTextSenha"
-        app:layout_constraintStart_toStartOf="@+id/editTextSenha" />
+        app:layout_constraintBottom_toTopOf="@+id/editTextNovaSenha"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNovaSenha"
+        app:layout_constraintStart_toStartOf="@+id/editTextNovaSenha" />
 
     <EditText
         android:id="@+id/editTextSenha"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonEntrar" />
 
     <Button
-        android:id="@+id/buttonEntrar"
+        android:id="@+id/buttonIrParaLogin"
         style="@style/BtnCadastrar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -83,10 +83,10 @@
         android:textAppearance="@style/textAppearance_TextBtn"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/editTextSenha"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNovaSenha"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextSenha"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSenha" />
+        app:layout_constraintStart_toStartOf="@+id/editTextNovaSenha"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNovaSenha" />
 
     <View
         android:id="@+id/LinhaHorizontal"
