@@ -64,8 +64,7 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="584dp"
-        android:onClick="fazerLogin"/>
+        tools:layout_editor_absoluteY="584dp"/>
 
     <TextView
         android:id="@+id/textViewEsqueciSenha"

@@ -12,4 +12,11 @@
     <string name="TextViewNaoTemConta">Não tem uma conta?</string>
     <string name="TextViewEsqueciSenha">Esqueci a senha</string>
     <string name="btnTextInscrever">Inscrever-se no merka</string>
+    <string name="empty_fields_warning">Preencha todos os campos!</string>
+    <string name="authentication_failure">Falha na autenticação!</string>
+    <string name="min_length_password_warning">Escreva uma senha com no mínimo 8 dígitos!</string>
+    <string name="different_password_warning">Escreva senhas iguais!</string>
+    <string name="registration_successful">Registrado com sucesso!</string>
+    <string name="registration_failure">Falha no registro!</string>
+
 </resources>

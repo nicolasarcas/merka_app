@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
 
@@ -39,8 +43,7 @@ public class Login extends AppCompatActivity {
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (Login.this, Tela_Inicial.class);
-                startActivity(intent);
+                fazerLogin(view);
             }
         });
 
@@ -58,18 +61,59 @@ public class Login extends AppCompatActivity {
     private void fazerLogin(View view){
         String login = editTextEmail.getEditableText().toString();
         String senha = editTextSenha.getEditableText().toString();
-        firebaseAuth.signInWithEmailAndPassword(login, senha).addOnSuccessListener(this, new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                Intent intent = new Intent (Login.this, Tela_Inicial.class);
-                startActivity(intent);
 
-            }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                e.printStackTrace();
-            }
-        });
+        if(validateFields(login,senha)){
+
+            firebaseAuth.signInWithEmailAndPassword(login,senha).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(Login.this, getString(R.string.authentication_failure),
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+
+                    // ...
+                }
+            });
+        }
+        else{
+            Toast.makeText(Login.this, getString(R.string.empty_fields_warning),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void goToMenu(){
+        startActivity (new Intent(this, Tela_Inicial.class));
+        finish();
+    }
+
+    public boolean validateFields(String login, String password1){
+        if(login.isEmpty() || password1.isEmpty()){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    private void updateUI(FirebaseUser user) {
+
+        if(user != null){
+            goToMenu();
+        }
+    }
+
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 }
