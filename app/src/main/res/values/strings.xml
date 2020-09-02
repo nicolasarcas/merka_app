@@ -19,4 +19,6 @@
     <string name="registration_successful">Registrado com sucesso!</string>
     <string name="registration_failure">Falha no registro!</string>
 
+    <string name="asas">style="@style/BtnCadastrar"</string>
+
 </resources>

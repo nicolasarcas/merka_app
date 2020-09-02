@@ -19,12 +19,12 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 mostrarMainActivity();
             }
-        },3500);
+        },2500);
     }
 
     private void mostrarMainActivity() {
         Intent intent = new Intent(SplashScreen.this, MainActivity.class);
         startActivity(intent);
-        finish();// finalizando a tela para não ser possível acessá-la novamente
+        finish();
     }
 }
