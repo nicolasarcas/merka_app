@@ -7,6 +7,23 @@
     android:orientation="vertical"
     tools:context=".Tela_Inicial">
 
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Home"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lojas"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buscar"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pedidos"/>
     <Button
         android:id="@+id/buttonPerfil"
         android:layout_width="match_parent"
