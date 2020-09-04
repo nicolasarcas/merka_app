@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +26,8 @@ public class Login extends AppCompatActivity {
 
     private EditText editTextEmail;
     private EditText editTextSenha;
+
+    private TextView txtForgotPass;
 
     private FirebaseAuth firebaseAuth;
 
@@ -52,10 +55,41 @@ public class Login extends AppCompatActivity {
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (Login.this, MainActivity.class);
-                startActivity(intent);
+                startActivity(new Intent (Login.this, MainActivity.class));
             }
         });
+
+        txtForgotPass = findViewById(R.id.textViewEsqueciSenha);
+
+        txtForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetSenha(view);
+            }
+        });
+    }
+
+    private  void resetSenha(View view){
+        if(editTextEmail.getEditableText().toString().isEmpty()){
+            Toast.makeText(Login.this, getString(R.string.preencherEmail),
+                    Toast.LENGTH_SHORT).show();
+        }
+        else{
+            firebaseAuth.sendPasswordResetEmail(editTextEmail.getEditableText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(Login.this, getString(R.string.resset_pass_successful),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(Login.this, getString(R.string.resset_pass_failure),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 
     private void fazerLogin(View view){

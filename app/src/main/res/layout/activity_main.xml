@@ -44,7 +44,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editTextSenha"
+        android:id="@+id/editNovaTextSenha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints="@+id/editTextNovaSenha"

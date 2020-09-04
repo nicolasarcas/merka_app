@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editTextNome = findViewById(R.id.editTextNome);
-        editTextEmail = findViewById(R.id.editTextNovoEmailAddress);
-        editTextSenha = findViewById(R.id.editTextNovaSenha);
+        editTextEmail = findViewById(R.id.editTextEmailAddress);
+        editTextSenha = findViewById(R.id.editNovaTextSenha);
         editTextConfirmaSenha = findViewById(R.id.editTextConfirmaSenha);
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         if(validateFields(login,pass,pass2,nome)){
             if(validateMinLengthPassword(pass,pass2)){
                 if(validateEqualPasswords(pass,pass2)){
-                    firebaseAuth.createUserWithEmailAndPassword(login,pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    firebaseAuth.createUserWithEmailAndPassword(login,pass2).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -147,9 +147,6 @@ public class MainActivity extends AppCompatActivity {
 
         if(user != null){
             goToMenu();
-
-        }else{
-            goToLogin();
         }
     }
 
@@ -167,6 +164,12 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
 }

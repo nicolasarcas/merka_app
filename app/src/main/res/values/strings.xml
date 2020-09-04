@@ -21,4 +21,11 @@
 
     <string name="asas">style="@style/BtnCadastrar"</string>
 
+    <string name="resset_pass_successful">E-mail de alteração enviado com sucesso!</string>
+    <string name="resset_pass_failure">Falha no envio do e-mail de alteração!</string>
+    <string name="preencherEmail">Preencha o campo de e-mail!</string>
+
+    <string name="delete_failure">Falha na exclusão!</string>
+    <string name="delete_success">Usuário excluido com sucesso!</string>
+
 </resources>
