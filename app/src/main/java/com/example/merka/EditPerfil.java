@@ -1,8 +1,10 @@
 package com.example.merka;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -32,11 +36,14 @@ public class EditPerfil extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
     private DatabaseReference refUser; // variável de acesso ao RealTime DataBase
+    private ValueEventListener userListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_perfil);
+
+        mAuth = FirebaseAuth.getInstance();
 
         txtNome = findViewById(R.id.txtNome);
         txtEmail = findViewById(R.id.txtEmail);
@@ -60,11 +67,7 @@ public class EditPerfil extends AppCompatActivity {
         btnExcluirConta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                excluiConta();
-                deleteUserData();
-                FirebaseAuth.getInstance().signOut();// forçando o current user sair
-                goToLogin();
+                confirmarExclusao();
             }
         });
 
@@ -86,27 +89,43 @@ public class EditPerfil extends AppCompatActivity {
         finish();
     }
 
-    private void atualizarUser(){
-        String email = txtEmail.getEditableText().toString();
-        String password = txtPass.getEditableText().toString();
-        String password2 = txtConfirmPass.getEditableText().toString();
-        String name = txtNome.getEditableText().toString();
+    public void atualizarUser(){
+        final String email = txtEmail.getEditableText().toString();
+        final String password = txtPass.getEditableText().toString();
+        final String password2 = txtConfirmPass.getEditableText().toString();
+        final String name = txtNome.getEditableText().toString();
 
         if(validateFields(email,password,password2,name)){
             if(validateMinLengthPassword(password,password2)){
                 if(validateEqualPasswords(password,password2)){
+                    AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+                    msgBox.setTitle("Alteração de dados");
+                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                    msgBox.setMessage("Deseja alterar seus dados?");
+                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+                            FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+                            String userId = fbuser.getUid();
 
-                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                    FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-                    String userId = fbuser.getUid();
+                            User user = new User(name, email, password);
 
-                    User user = new User(name, email, password);
+                            refUser.child("users").child(userId).setValue(user);
+                            fbuser.updateEmail(email);
+                            fbuser.updatePassword(password2);
 
-                    refUser.child("users").child(userId).setValue(user);
-                    fbuser.updateEmail(email);
-                    fbuser.updatePassword(password2);
+                            goToMenu();
+                        }
+                    });
+                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    goToMenu();
+                        }
+                    });
+                    msgBox.show();
+
                 }else{
                     Toast.makeText(EditPerfil.this, getString(R.string.different_password_warning),
                             Toast.LENGTH_SHORT).show();
@@ -123,7 +142,30 @@ public class EditPerfil extends AppCompatActivity {
         }
     }
 
-    private void excluiConta(){
+    private void confirmarExclusao(){
+        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+        msgBox.setTitle("Excluir");
+        msgBox.setIcon(android.R.drawable.ic_menu_delete);
+        msgBox.setMessage("Deseja mesmo excluir sua conta?");
+        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                excluiConta();
+                deleteUserData();
+                FirebaseAuth.getInstance().signOut();// forçando o current user sair
+                goToLogin();
+            }
+        });
+        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        msgBox.show();
+    }
+
+    public void excluiConta(){
         user = mAuth.getCurrentUser();
 
         user.delete()
@@ -171,5 +213,38 @@ public class EditPerfil extends AppCompatActivity {
             return false;
         }
 
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        //FirebaseUser currentUser = mAuth.getCurrentUser();
+        mAuth.getCurrentUser();
+        //refUser = FirebaseDatabase.getInstance().getReference();
+        refUser = refUser.child(mAuth.getUid());
+
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                User user = dataSnapshot.getValue(User.class);
+                // [START_EXCLUDE]
+                txtNome.setText(user.name);
+                txtEmail.setText(user.email);
+                txtPass.setText(user.password);
+                txtConfirmPass.setText(user.password);
+                // [END_EXCLUDE]
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(EditPerfil.this, "Falha ao carregar dados do usuário.",
+                        Toast.LENGTH_SHORT).show();
+                // [END_EXCLUDE]
+            }
+        };
+        refUser.addListenerForSingleValueEvent(userListener);
     }
 }

@@ -1,8 +1,10 @@
 package com.example.merka;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +34,8 @@ public class Perfil extends AppCompatActivity {
     private TextView txtNomeUser;
     private TextView txtEmailUser;
 
+    private TextView btnHome;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +63,17 @@ public class Perfil extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                goToLogin();
+                deslogar();
             }
         });
 
+        btnHome = findViewById(R.id.textViewHomePerfil);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent (Perfil.this, Tela_Inicial.class));
+            }
+        });
 
     }
 
@@ -105,5 +115,28 @@ public class Perfil extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         refUser.removeEventListener(userListener);
+    }
+
+    public void deslogar(){
+
+        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+        msgBox.setTitle("Desconectar");
+        msgBox.setIcon(android.R.drawable.ic_dialog_alert);
+        msgBox.setMessage("Deseja se desconectar?");
+        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseAuth.getInstance().signOut();
+                goToLogin();
+            }
+        });
+        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        msgBox.show();
+
     }
 }

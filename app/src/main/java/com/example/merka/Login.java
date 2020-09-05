@@ -64,32 +64,9 @@ public class Login extends AppCompatActivity {
         txtForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resetSenha(view);
+                startActivity(new Intent(Login.this,RedefinirSenha.class));
             }
         });
-    }
-
-    private  void resetSenha(View view){
-        if(editTextEmail.getEditableText().toString().isEmpty()){
-            Toast.makeText(Login.this, getString(R.string.preencherEmail),
-                    Toast.LENGTH_SHORT).show();
-        }
-        else{
-            firebaseAuth.sendPasswordResetEmail(editTextEmail.getEditableText().toString())
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(Login.this, getString(R.string.resset_pass_successful),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(Login.this, getString(R.string.resset_pass_failure),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
     }
 
     private void fazerLogin(View view){
