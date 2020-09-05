@@ -18,6 +18,11 @@
     <string name="different_password_warning">Escreva senhas iguais!</string>
     <string name="registration_successful">Registrado com sucesso!</string>
     <string name="registration_failure">Falha no registro!</string>
+    <string name="TextViewHome">Home</string>
+    <string name="TextViewPerfil">Perfil</string>
+    <string name="TextViewLoja">Loja</string>
+    <string name="TextViewPedidos">Pedidos</string>
+    <string name="TextViewBusca">Busca</string>
 
     <string name="asas">style="@style/BtnCadastrar"</string>
 
