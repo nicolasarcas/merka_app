@@ -1,56 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/PaddingHorizontal"
+    android:background="#FF0000">
 
     <TextView
-        android:id="@+id/textViewMerka2"
+        android:id="@+id/TextViewMerka"
         android:layout_width="match_parent"
         android:layout_height="@dimen/LogoMerkaHeight"
-        android:layout_gravity="center"
-        android:layout_margin="50dp"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
         android:background="@drawable/logo_background"
         android:gravity="center"
         android:text="@string/app_name"
         android:textAppearance="@style/textAppearance_Merka"
         android:textSize="@dimen/TextLogoMerka"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="bold" />
 
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_margin="50dp"
-        android:orientation="vertical"
-        tools:context=".RedefinirSenha">
-
-        <EditText
-            android:id="@+id/editTextRedefinirSenha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:autofillHints="preencherEmail"
-            android:hint="@string/preencherEmail"
-            android:inputType="textEmailAddress" />
-
-        <Button
-            android:id="@+id/btnRedefinirSenha"
-            style="@style/BtnCadastrar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/MarginEntreElementos"
-            android:background="@drawable/btn_login_registro_background"
-            android:text="@string/Confirmar"
-            android:textAppearance="@style/textAppearance_TextBtn"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="584dp" />
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

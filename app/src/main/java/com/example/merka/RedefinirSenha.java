@@ -34,7 +34,6 @@ public class RedefinirSenha extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 resetSenha(view);
-                goToLogin();
             }
         });
     }
@@ -56,6 +55,7 @@ public class RedefinirSenha extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 Toast.makeText(RedefinirSenha.this, getString(R.string.resset_pass_successful),
                                         Toast.LENGTH_SHORT).show();
+                                goToLogin();
                             }
                             else{
                                 Toast.makeText(RedefinirSenha.this, getString(R.string.resset_pass_failure),
