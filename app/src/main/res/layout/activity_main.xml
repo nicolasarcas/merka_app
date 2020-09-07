@@ -69,13 +69,13 @@
     <Button
         android:id="@+id/buttonCriarConta"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/heightBtn"
         android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
         android:background="@drawable/btn_login_registro_background"
         android:text="@string/TextBtnCriarConta"
         android:textAppearance="@style/textAppearance_TextBtn"
         android:textColor="@color/white"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <View
         android:id="@+id/LinhaHorizontal"
@@ -97,7 +97,7 @@
     <Button
         android:id="@+id/buttonIrParaLogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/heightBtn"
         android:background="@drawable/btn_login_registro_background"
         android:text="@string/TextBtnEntrar"
         android:textAppearance="@style/textAppearance_TextBtn"

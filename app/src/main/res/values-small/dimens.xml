@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="LogoMerkaHeight">60dp</dimen>
-    <dimen name="TextLogoMerka">40sp</dimen>
+    <dimen name="LogoMerkaHeight">55dp</dimen>
+    <dimen name="TextLogoMerka">35sp</dimen>
 
 
-    <dimen name="TextBtn">15sp</dimen>
-    <dimen name="TextBtnEscrever">15sp</dimen>
-    <dimen name="CriarConta">20sp</dimen>
-    <dimen name="Placeholder">15sp</dimen>
-    <dimen name="LabelEsqueciSenha">10sp</dimen>
-    <dimen name="LabelTemConta">13sp</dimen>
+    <dimen name="TextBtn">13sp</dimen>
+    <dimen name="TextBtnEscrever">13sp</dimen>
+    <dimen name="CriarConta">17sp</dimen>
+    <dimen name="Placeholder">13sp</dimen>
+    <dimen name="LabelEsqueciSenha">8sp</dimen>
+    <dimen name="LabelTemConta">11sp</dimen>
 
     <dimen name="PaddingLayout">30dp</dimen>
     <dimen name="PaddingHorizontal">60dp</dimen>

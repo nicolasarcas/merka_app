@@ -11,29 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_margin="50dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/txtEmailUser"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <TextView
             android:id="@+id/txtNomeUser"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <Button
             android:id="@+id/buttonEditPerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Editar perfil" />
+            android:text="@string/editarPerfil" />
 
         <Button
             android:id="@+id/buttonSignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Encerrar sessão" />
+            android:text="@string/encerrarSessao" />
 
     </LinearLayout>
 

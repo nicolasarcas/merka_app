@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="MarginEntreElementos">10dp</dimen>
-    <dimen name="LogoMerkaWidth">50dp</dimen>
-    <dimen name="MarginGrandeEntreElementos">30dp</dimen>
-    <dimen name="TextLogoMerka">75sp</dimen>
-    <dimen name="TextBtn">25sp</dimen>
-    <dimen name="TextBtnEscrever">20sp</dimen>
-    <dimen name="CriarConta">20sp</dimen>
-    <dimen name="LabelTemConta">18sp</dimen>
-    <dimen name="Placeholder">35sp</dimen>
-    <dimen name="PlaceholderCadastro">30sp</dimen>
-    <dimen name="LogoMerkaHeight">110dp</dimen>
-    <dimen name="LabelEsqueciSenha">15sp</dimen>
+    <dimen name="MarginEntreElementos">8dp</dimen>
+    <dimen name="LogoMerkaWidth">45dp</dimen>
+    <dimen name="MarginGrandeEntreElementos">20dp</dimen>
+    <dimen name="TextLogoMerka">70sp</dimen>
+    <dimen name="TextBtn">23sp</dimen>
+    <dimen name="TextBtnEscrever">18sp</dimen>
+    <dimen name="CriarConta">18sp</dimen>
+    <dimen name="LabelTemConta">15sp</dimen>
+    <dimen name="Placeholder">32sp</dimen>
+    <dimen name="PlaceholderCadastro">27sp</dimen>
+    <dimen name="LogoMerkaHeight">105dp</dimen>
+    <dimen name="LabelEsqueciSenha">13sp</dimen>
     <dimen name="PaddingLayout">20dp</dimen>
     <dimen name="PaddingHorizontal">40dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="heightBtn">45dp</dimen>
 
 </resources>

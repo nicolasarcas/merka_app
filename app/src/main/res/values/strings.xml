@@ -23,6 +23,11 @@
     <string name="TextViewLoja">Loja</string>
     <string name="TextViewPedidos">Pedidos</string>
     <string name="TextViewBusca">Busca</string>
+    <string name="Confirmar">Confirmar</string>
+    <string name="editarPerfil">Editar perfil</string>
+    <string name="encerrarSessao">Encerrar sessão</string>
+    <string name="excluirConta">Excluir conta</string>
+    <string name="cancelar">cancelar</string>
 
     <string name="asas">style="@style/BtnCadastrar"</string>
 
