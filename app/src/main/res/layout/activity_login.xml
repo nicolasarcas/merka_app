@@ -36,20 +36,25 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="292dp" />
 
-    <EditText
-        android:id="@+id/editTextSenha"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
-        android:autofillHints="@string/placeholderSenha"
-        android:ems="10"
-        android:hint="@string/placeholderSenha"
-        android:inputType="textPassword"
-        android:textSize="@dimen/Placeholder"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="360dp" />
+        app:passwordToggleEnabled="true">
+        <EditText
+            android:id="@+id/editTextSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+            android:autofillHints="@string/placeholderSenha"
+            android:ems="10"
+            android:hint="@string/placeholderSenha"
+            android:inputType="textPassword"
+            android:textSize="@dimen/Placeholder"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="360dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonEntrar"
