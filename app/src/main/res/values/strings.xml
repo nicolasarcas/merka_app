@@ -28,13 +28,12 @@
     <string name="encerrarSessao">Encerrar sessão</string>
     <string name="excluirConta">Excluir conta</string>
     <string name="cancelar">cancelar</string>
-
+    <string name="indicarNome">Nome:</string>
+    <string name="indicarEmail">Email:</string>
     <string name="asas">style="@style/BtnCadastrar"</string>
-
     <string name="resset_pass_successful">E-mail de alteração enviado com sucesso!</string>
     <string name="resset_pass_failure">Falha no envio do e-mail de alteração!</string>
     <string name="preencherEmail">Preencha o campo de e-mail!</string>
-
     <string name="delete_failure">Falha na exclusão!</string>
     <string name="delete_success">Usuário excluido com sucesso!</string>
     <string name="title_activity_redefinir_senha">RedefinirSenha</string>
@@ -46,5 +45,4 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-
 </resources>
