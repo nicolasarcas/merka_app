@@ -9,10 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".RedefinirSenha"></activity>
+        <activity android:name=".EditLojaPerfil"></activity>
+        <activity android:name=".PerfilLoja" />
+        <activity android:name=".CriarLoja" />
+        <activity android:name=".RedefinirSenha" />
         <activity android:name=".EditPerfil" />
         <activity android:name=".Perfil" />
-        <activity android:name=".SplashScreen" android:theme="@style/AppCompat.TelaCheia">
+        <activity
+            android:name=".SplashScreen"
+            android:theme="@style/AppCompat.TelaCheia">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
