@@ -29,7 +29,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="true"
-                    android:text="@string/indicarNome"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textSize="21sp"
                     android:textStyle="bold" />
@@ -39,7 +38,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="true"
-                    android:text="@string/indicarEmail"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textSize="21sp"
                     android:textStyle="bold" />
