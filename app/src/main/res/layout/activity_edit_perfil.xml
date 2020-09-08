@@ -8,7 +8,6 @@
     android:orientation="vertical"
     tools:context=".EditPerfil">
 
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -44,6 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/placeholderSenha"
+                android:autofillHints="@string/placeholderSenha"
                 android:inputType="textPassword"
                 android:textSize="@dimen/PlaceholderCadastro"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -51,16 +51,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:passwordToggleEnabled="true">
+
             <EditText
                 android:id="@+id/txtConfirmPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="@string/placeholderConfirmaSenha"
+                android:layout_marginBottom="@dimen/MarginEntreElementos"
                 android:autofillHints="@string/placeholderConfirmaSenha"
+                android:hint="@string/placeholderConfirmaSenha"
+                android:inputType="textPassword"
                 android:textSize="@dimen/PlaceholderCadastro" />
         </com.google.android.material.textfield.TextInputLayout>
-
     </LinearLayout>
 
     <LinearLayout
@@ -74,26 +75,29 @@
         <Button
             android:id="@+id/btnConfirmarAlteracao"
             style="?attr/buttonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/Confirmar" />
-
-        <Button
-            android:id="@+id/btnExluirConta"
-            style="?attr/buttonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/excluirConta"
+            android:layout_weight="1"
+            android:text="@string/Confirmar"
             android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
+        <Button
+            android:id="@+id/btnCancelarAlteracao"
+            style="?attr/buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancelar"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnCancelarAlteracao"
+        android:id="@+id/btnExluirConta"
         style="?attr/buttonStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/cancelar"
+        android:layout_marginTop="@dimen/MarginEntreElementos"
+        android:text="@string/excluirConta"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />

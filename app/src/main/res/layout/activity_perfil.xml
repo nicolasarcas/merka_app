@@ -11,33 +11,77 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="50dp"
+        android:layout_margin="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/txtEmailUser"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/txtNomeUser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewIndicarNome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="true"
+                    android:text="@string/indicarNome"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewIndicarEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="true"
+                    android:text="@string/indicarEmail"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtNomeUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textSize="21sp" />
+
+                <TextView
+                    android:id="@+id/txtEmailUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textSize="21sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
         <Button
             android:id="@+id/buttonEditPerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/MarginEntreElementos"
             android:text="@string/editarPerfil" />
 
         <Button
             android:id="@+id/buttonSignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/MarginEntreElementos"
             android:text="@string/encerrarSessao" />
-
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -104,7 +148,6 @@
                 android:text="@string/TextViewPerfil"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_person" />
-
 
         </LinearLayout>
     </com.google.android.material.bottomnavigation.BottomNavigationView>

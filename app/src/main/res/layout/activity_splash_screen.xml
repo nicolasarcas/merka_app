@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#db1d26"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/PaddingHorizontal"
-    android:background="#FF0000">
+    android:paddingHorizontal="@dimen/PaddingHorizontal">
 
     <TextView
         android:id="@+id/TextViewMerka"
