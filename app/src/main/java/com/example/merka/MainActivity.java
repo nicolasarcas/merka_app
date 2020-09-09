@@ -84,13 +84,13 @@ public class MainActivity extends AppCompatActivity {
                                     FirebaseUser user = firebaseAuth.getCurrentUser();
                                     String userId = user.getUid();
                                     writeNewUser(userId, nome, login, pass);
-                                    updateUI(user);
+                                    FirebaseAuth.getInstance().signOut();
+                                    goToLogin();
 
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(MainActivity.this, getString(R.string.registration_failure),
                                             Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
                                 }
                             }
                         });
@@ -150,12 +150,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateUI(FirebaseUser user) {
-
-        if(user != null){
-            goToMenu();
-        }
-    }
 
     private void writeNewUser(String userId, String name, String email, String password){
         //usando o mesmo UID do Firebase Authentication: userId
@@ -172,11 +166,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
+
 
 }
