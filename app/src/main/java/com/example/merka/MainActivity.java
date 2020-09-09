@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,37 +70,43 @@ public class MainActivity extends AppCompatActivity {
         final String nome = editTextNome.getEditableText().toString();
 
         if(validateFields(login,pass,pass2,nome)){
-            if(validateMinLengthPassword(pass,pass2)){
-                if(validateEqualPasswords(pass,pass2)){
-                    firebaseAuth.createUserWithEmailAndPassword(login,pass2).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Toast.makeText(MainActivity.this, getString(R.string.registration_successful),
-                                        Toast.LENGTH_SHORT).show();
+            if(Patterns.EMAIL_ADDRESS.matcher(login).matches()){
+                if(validateMinLengthPassword(pass,pass2)){
+                    if(validateEqualPasswords(pass,pass2)){
+                        firebaseAuth.createUserWithEmailAndPassword(login,pass2).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Toast.makeText(MainActivity.this, getString(R.string.registration_successful),
+                                            Toast.LENGTH_SHORT).show();
 
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                                String userId = user.getUid();
-                                writeNewUser(userId, nome, login, pass);
-                                updateUI(user);
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    String userId = user.getUid();
+                                    writeNewUser(userId, nome, login, pass);
+                                    updateUI(user);
 
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(MainActivity.this, getString(R.string.registration_failure),
-                                        Toast.LENGTH_SHORT).show();
-                                updateUI(null);
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Toast.makeText(MainActivity.this, getString(R.string.registration_failure),
+                                            Toast.LENGTH_SHORT).show();
+                                    updateUI(null);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, getString(R.string.different_password_warning),
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
-                    Toast.makeText(MainActivity.this, getString(R.string.different_password_warning),
+                    Toast.makeText(MainActivity.this, getString(R.string.min_length_password_warning),
                             Toast.LENGTH_SHORT).show();
                 }
             }
             else{
-                Toast.makeText(MainActivity.this, getString(R.string.min_length_password_warning),
+                Toast.makeText(MainActivity.this, getString(R.string.email_invalido),
                         Toast.LENGTH_SHORT).show();
             }
         }

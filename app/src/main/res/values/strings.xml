@@ -51,6 +51,7 @@
     <string name="hintContatoLoja">Contato</string>
     <string name="hintEnderecoLoja">Endereço</string>
     <string name="cadastrarLoja">Cadastrando sua loja!</string>
+    <string name="email_invalido">Digite um e-mail válido!</string>
 
 
 </resources>

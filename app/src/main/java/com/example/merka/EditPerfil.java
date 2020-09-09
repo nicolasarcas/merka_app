@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -96,43 +97,48 @@ public class EditPerfil extends AppCompatActivity {
         final String name = txtNome.getEditableText().toString();
 
         if(validateFields(email,password,password2,name)){
-            if(validateMinLengthPassword(password,password2)){
-                if(validateEqualPasswords(password,password2)){
-                    AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-                    msgBox.setTitle("Alteração de dados");
-                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                    msgBox.setMessage("Deseja alterar seus dados?");
-                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                            FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-                            String userId = fbuser.getUid();
+            if(Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                if(validateMinLengthPassword(password,password2)){
+                    if(validateEqualPasswords(password,password2)){
+                        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+                        msgBox.setTitle("Alteração de dados");
+                        msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                        msgBox.setMessage("Deseja alterar seus dados?");
+                        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+                                FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+                                String userId = fbuser.getUid();
 
-                            User user = new User(name, email, password);
+                                User user = new User(name, email, password);
 
-                            refUser.child("users").child(userId).setValue(user);
-                            fbuser.updateEmail(email);
-                            fbuser.updatePassword(password2);
+                                refUser.child("users").child(userId).setValue(user);
+                                fbuser.updateEmail(email);
+                                fbuser.updatePassword(password2);
 
-                            goToMenu();
-                        }
-                    });
-                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                                goToMenu();
+                            }
+                        });
+                        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
 
-                        }
-                    });
-                    msgBox.show();
+                            }
+                        });
+                        msgBox.show();
 
-                }else{
-                    Toast.makeText(EditPerfil.this, getString(R.string.different_password_warning),
-                            Toast.LENGTH_SHORT).show();
-                }
+                    }else{
+                        Toast.makeText(EditPerfil.this, getString(R.string.different_password_warning),
+                                Toast.LENGTH_SHORT).show();
+                    }
             }
             else {
                 Toast.makeText(EditPerfil.this, getString(R.string.min_length_password_warning),
+                        Toast.LENGTH_SHORT).show();
+            }}
+            else{
+                Toast.makeText(EditPerfil.this, getString(R.string.email_invalido),
                         Toast.LENGTH_SHORT).show();
             }
         }
