@@ -20,33 +20,35 @@
             android:id="@+id/txtNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints="@string/placeholderNome"
             android:hint="@string/placeholderNome"
             android:inputType="textPersonName"
-            android:autofillHints="@string/placeholderNome"
             android:textSize="@dimen/PlaceholderCadastro" />
 
         <EditText
             android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="@string/placeholderEmail"
             android:autofillHints="@string/placeholderEmail"
+            android:hint="@string/placeholderEmail"
+            android:inputType="textEmailAddress"
             android:textSize="@dimen/PlaceholderCadastro" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:passwordToggleEnabled="true">
+
             <EditText
                 android:id="@+id/txtPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/placeholderSenha"
                 android:autofillHints="@string/placeholderSenha"
+                android:hint="@string/placeholderSenha"
                 android:inputType="textPassword"
-                android:textSize="@dimen/PlaceholderCadastro"/>
+                android:textSize="@dimen/PlaceholderCadastro" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
