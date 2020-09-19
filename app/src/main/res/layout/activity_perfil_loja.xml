@@ -33,6 +33,36 @@
             android:text="@string/nomeDaLoja"
             android:textSize="24sp" />
 
+        <TextView
+            android:id="@+id/txtPerfilNomeLoja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/placeholderNome"
+            android:textSize="@dimen/PlaceholderCadastro" />
+
+        <TextView
+            android:id="@+id/txtPerfilContatoLoja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/hintContatoLoja"
+            android:textSize="@dimen/PlaceholderCadastro" />
+
+        <TextView
+            android:id="@+id/txtPerfilEnderecoLoja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/MarginEntreElementos"
+            android:autofillHints="@string/hintEnderecoLoja"
+            android:textSize="@dimen/PlaceholderCadastro" />
+
+        <TextView
+            android:id="@+id/txtPerfilDescricaoLoja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/hintDescricaoLoja"
+            android:textSize="@dimen/PlaceholderCadastro"
+            />
+
     </LinearLayout>
 
     <LinearLayout

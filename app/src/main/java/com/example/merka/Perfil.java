@@ -35,6 +35,7 @@ public class Perfil extends AppCompatActivity {
     private TextView txtEmailUser;
 
     private TextView btnHome;
+    private TextView btnLoja;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,14 @@ public class Perfil extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent (Perfil.this, Tela_Inicial.class));
+            }
+        });
+
+        btnLoja=findViewById(R.id.textViewLojaPerfil);
+        btnLoja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent (Perfil.this, CriarLoja.class));
             }
         });
 

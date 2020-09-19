@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class Tela_Inicial extends AppCompatActivity {
 
     private TextView btnPerfil;
+    private TextView btnLoja;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +23,14 @@ public class Tela_Inicial extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent (Tela_Inicial.this, Perfil.class));
+            }
+        });
+
+        btnLoja = findViewById(R.id.textViewLojaPerfil);
+        btnLoja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent (Tela_Inicial.this, CriarLoja.class));
             }
         });
 

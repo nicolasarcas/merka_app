@@ -17,6 +17,15 @@
         android:text="@string/cadastrarLoja"
         android:textSize="20sp" />
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/app_icon"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
+
     <EditText
         android:id="@+id/txtNomeLoja"
         android:layout_width="match_parent"
@@ -24,15 +33,6 @@
         android:autofillHints="@string/placeholderNome"
         android:hint="@string/placeholderNome"
         android:inputType="textPersonName"
-        android:textSize="@dimen/PlaceholderCadastro" />
-
-    <EditText
-        android:id="@+id/txtDescricaoLoja"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints="@string/hintDescricaoLoja"
-        android:hint="@string/hintDescricaoLoja"
-        android:inputType="text"
         android:textSize="@dimen/PlaceholderCadastro" />
 
     <EditText
@@ -51,6 +51,15 @@
         android:layout_marginBottom="@dimen/MarginEntreElementos"
         android:autofillHints="@string/hintEnderecoLoja"
         android:hint="@string/hintEnderecoLoja"
+        android:inputType="text"
+        android:textSize="@dimen/PlaceholderCadastro" />
+
+    <EditText
+        android:id="@+id/txtDescricaoLoja"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:autofillHints="@string/hintDescricaoLoja"
+        android:hint="@string/hintDescricaoLoja"
         android:inputType="text"
         android:textSize="@dimen/PlaceholderCadastro" />
 

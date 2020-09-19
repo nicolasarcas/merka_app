@@ -52,11 +52,12 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
-    <string name="hintDescricaoLoja">Descrição</string>
+    <string name="hintDescricaoLoja">Descrição (opcional)</string>
     <string name="hintContatoLoja">Contato</string>
     <string name="hintEnderecoLoja">Endereço</string>
     <string name="cadastrarLoja">Cadastrando sua loja!</string>
     <string name="email_invalido">Digite um e-mail válido!</string>
+    <string name="excluirLoja">Excluir loja</string>
 
 
 </resources>
