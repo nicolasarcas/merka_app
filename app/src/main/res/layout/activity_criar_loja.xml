@@ -57,10 +57,13 @@
     <EditText
         android:id="@+id/txtDescricaoLoja"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
+        android:layout_height="wrap_content"
         android:autofillHints="@string/hintDescricaoLoja"
+        android:gravity="top"
         android:hint="@string/hintDescricaoLoja"
-        android:inputType="text"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:scrollbars="vertical"
         android:textSize="@dimen/PlaceholderCadastro" />
 
     <LinearLayout
