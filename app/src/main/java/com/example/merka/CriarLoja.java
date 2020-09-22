@@ -75,7 +75,6 @@ public class CriarLoja extends AppCompatActivity {
             String userId = user.getUid();
             writeNewLoja(userId, nome, contato, endereco, descricao);
 
-            goToLoja();
         }
         else{
             Toast.makeText(CriarLoja.this, getString(R.string.empty_fields_warning),
@@ -105,6 +104,7 @@ public class CriarLoja extends AppCompatActivity {
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("lojas").child(userId).setValue(loja);
+            goToLoja();
 
         } catch (DatabaseException e) {
                       Toast.makeText(CriarLoja.this, e.getMessage(),

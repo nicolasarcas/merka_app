@@ -94,7 +94,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
                     refUser.child("lojas").child(userId).setValue(loja);
 
-                    goToLoja();goToMenu();
+                    goToLoja();
                 }
             });
             msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -132,7 +132,6 @@ public class EditLojaPerfil extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 deleteUserData();
-                FirebaseAuth.getInstance().signOut();// forçando o current user sair
                 goToMenu();
             }
         });
