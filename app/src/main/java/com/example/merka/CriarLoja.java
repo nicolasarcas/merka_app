@@ -74,7 +74,6 @@ public class CriarLoja extends AppCompatActivity {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             String userId = user.getUid();
             writeNewLoja(userId, nome, contato, endereco, descricao);
-
         }
         else{
             Toast.makeText(CriarLoja.this, getString(R.string.empty_fields_warning),
@@ -100,7 +99,8 @@ public class CriarLoja extends AppCompatActivity {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            Loja loja = new Loja(nome, contato, endereco, descricao);
+            Loja loja = new Loja(nome, descricao, contato, endereco);
+
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("lojas").child(userId).setValue(loja);

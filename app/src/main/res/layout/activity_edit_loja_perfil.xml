@@ -42,6 +42,7 @@
             android:autofillHints="@string/placeholderNome"
             android:hint="@string/placeholderNome"
             android:inputType="textPersonName"
+            android:maxLength="30"
             android:textSize="@dimen/PlaceholderCadastro" />
 
         <EditText
@@ -51,6 +52,7 @@
             android:autofillHints="@string/hintContatoLoja"
             android:hint="@string/hintContatoLoja"
             android:inputType="phone"
+            android:maxLength="11"
             android:textSize="@dimen/PlaceholderCadastro" />
 
         <EditText
@@ -62,17 +64,19 @@
             android:autofillHints="@string/hintEnderecoLoja"
             android:hint="@string/hintEnderecoLoja"
             android:inputType="text"
+            android:maxLength="30"
             android:textSize="@dimen/PlaceholderCadastro" />
 
         <EditText
             android:id="@+id/txtEditDescricaoLoja"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="top"
             android:autofillHints="@string/hintDescricaoLoja"
+            android:gravity="top"
             android:hint="@string/hintDescricaoLoja"
             android:inputType="textMultiLine"
             android:lines="3"
+            android:maxLength="76"
             android:textSize="@dimen/PlaceholderCadastro" />
 
         <LinearLayout

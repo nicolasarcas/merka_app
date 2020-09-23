@@ -32,7 +32,11 @@
     <string name="cancelar">cancelar</string>
     <string name="lableNome">Nome:</string>
     <string name="lableEmail">Email:</string>
+    <string name="lableContato">Contato:</string>
+    <string name="lableEndereço">Endereço:</string>
+    <string name="lableDescrição">Descrição:</string>
     <string name="nomeDaLoja">Loja do merka</string>
+
 
     <string name="asas">style="@style/BtnCadastrar"</string>
 
