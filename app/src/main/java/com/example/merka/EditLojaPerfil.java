@@ -61,7 +61,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(EditLojaPerfil.this, Tela_Inicial.class));
+                startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
             }
         });
 
@@ -154,8 +154,10 @@ public class EditLojaPerfil extends AppCompatActivity {
     public void deleteUserData(){//deletar dados do usuário do banco de dados
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();
+
         refUser = FirebaseDatabase.getInstance().getReference();
         refUser.child("lojas").child(userId).removeValue();
+        refUser.child("users").child(userId).child("store").setValue(false);
     }
 
     @Override

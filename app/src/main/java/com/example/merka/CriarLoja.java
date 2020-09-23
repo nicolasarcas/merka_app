@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class CriarLoja extends AppCompatActivity {
 
@@ -32,12 +33,18 @@ public class CriarLoja extends AppCompatActivity {
     private ImageView pic;
     public Uri picUri;
 
+    private FirebaseUser user;
+    private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
+    private DatabaseReference refUser; // variável de acesso ao RealTime DataBase
+    private ValueEventListener userListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_criar_loja);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        refUser = FirebaseDatabase.getInstance().getReference().child("users");
 
         pic = findViewById(R.id.profile_image);
         pic.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +86,10 @@ public class CriarLoja extends AppCompatActivity {
         if(validateFields(nome,contato,endereco,descricao)){
             FirebaseUser user = firebaseAuth.getCurrentUser();
             String userId = user.getUid();
+
+            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+            refUser.child("users").child(userId).child("store").setValue(true);
+
             writeNewLoja(userId, nome, contato, endereco, descricao);
         }
         else{
@@ -111,6 +122,7 @@ public class CriarLoja extends AppCompatActivity {
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("lojas").child(userId).setValue(loja);
             goToLoja();
+
 
         } catch (DatabaseException e) {
                       Toast.makeText(CriarLoja.this, e.getMessage(),

@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            User user = new User(name, email, password);
+            User user = new User(name, email, password, false);
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("users").child(userId).setValue(user);

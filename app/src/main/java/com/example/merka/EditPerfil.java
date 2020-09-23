@@ -39,6 +39,8 @@ public class EditPerfil extends AppCompatActivity {
     private DatabaseReference refUser; // variável de acesso ao RealTime DataBase
     private ValueEventListener userListener;
 
+    public boolean temLoja;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +113,7 @@ public class EditPerfil extends AppCompatActivity {
                                 FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                                 String userId = fbuser.getUid();
 
-                                User user = new User(name, email, password);
+                                User user = new User(name, email, password, temLoja);
 
                                 refUser.child("users").child(userId).setValue(user);
                                 fbuser.updateEmail(email);
@@ -193,6 +195,7 @@ public class EditPerfil extends AppCompatActivity {
         String userId = user.getUid();
         refUser = FirebaseDatabase.getInstance().getReference();
         refUser.child("users").child(userId).removeValue();
+        refUser.child("lojas").child(userId).removeValue();
     }
 
     public boolean validateFields(String login, String password1, String password2, String name){
@@ -242,6 +245,8 @@ public class EditPerfil extends AppCompatActivity {
                 txtPass.setText(user.password);
                 txtConfirmPass.setText(user.password);
                 // [END_EXCLUDE]
+
+                temLoja = user.store;
             }
 
             @Override
