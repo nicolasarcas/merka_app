@@ -42,6 +42,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         setContentView(R.layout.activity_edit_loja_perfil);
 
         firebaseAuth= FirebaseAuth.getInstance();
+        refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
 
         txtNomeLoja = findViewById(R.id.txtEditNomeLoja);
         txtContatoLoja = findViewById(R.id.txtEditContatoLoja);
@@ -166,8 +167,8 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         userListener = new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Loja loja = snapshot.getValue(Loja.class);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Loja loja = dataSnapshot.getValue(Loja.class);
 
                 txtNomeLoja.setText(loja.nome);
                 txtContatoLoja.setText(loja.contato);
@@ -176,7 +177,7 @@ public class EditLojaPerfil extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(DatabaseError error) {
                 Toast.makeText(EditLojaPerfil.this, "Falha ao carregar dados da loja.",
                         Toast.LENGTH_SHORT).show();
             }

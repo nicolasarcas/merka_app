@@ -62,6 +62,12 @@ public class CriarLoja extends AppCompatActivity {
             }
         });
 
+        btnCancelarCriarLoja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CriarLoja.this, Tela_Inicial.class));
+            }
+        });
     }
 
     private void criarLoja(View view){
@@ -70,7 +76,7 @@ public class CriarLoja extends AppCompatActivity {
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
 
-        if(validateFields(nome,contato,endereco)){
+        if(validateFields(nome,contato,endereco,descricao)){
             FirebaseUser user = firebaseAuth.getCurrentUser();
             String userId = user.getUid();
             writeNewLoja(userId, nome, contato, endereco, descricao);
@@ -86,8 +92,8 @@ public class CriarLoja extends AppCompatActivity {
         finish();
     }
 
-    public boolean validateFields(String nome, String contato, String endereco){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty()){
+    public boolean validateFields(String nome, String contato, String endereco, String desc){
+        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty()){
             return false;
         }
         else{
@@ -99,7 +105,7 @@ public class CriarLoja extends AppCompatActivity {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            Loja loja = new Loja(nome, descricao, contato, endereco);
+            Loja loja = new Loja(nome, contato, endereco, descricao);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
