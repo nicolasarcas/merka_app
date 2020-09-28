@@ -45,33 +45,42 @@ public class Tela_Inicial extends AppCompatActivity {
         btnLoja.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                mAuth.getCurrentUser();
-                refUser = refUser.child(mAuth.getUid());
-                userListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get Post object and use the values to update the UI
-                        User user = dataSnapshot.getValue(User.class);
-                        // [START_EXCLUDE]
-                        if(user.store){
-                            startActivity(new Intent (Tela_Inicial.this, PerfilLoja.class));
-                        }
-                        else{
-                            startActivity(new Intent (Tela_Inicial.this, CriarLoja.class));
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(Tela_Inicial.this, "Falha ao carregar dados do usuário.",
-                                Toast.LENGTH_SHORT).show();
-                        // [END_EXCLUDE]
-                    }
-                };
-                refUser.addListenerForSingleValueEvent(userListener);
+                decisaoLoja();
             }
         });
 
+    }
+
+    private void decisaoLoja() {
+        mAuth.getCurrentUser();
+        refUser = refUser.child(mAuth.getUid());
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                User user = dataSnapshot.getValue(User.class);
+                // [START_EXCLUDE]
+                if(user.store){
+                    startActivity(new Intent (Tela_Inicial.this, PerfilLoja.class));
+                }
+                else{
+                    startActivity(new Intent (Tela_Inicial.this, CriarLoja.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(Tela_Inicial.this, "Falha ao carregar dados do usuário.",
+                        Toast.LENGTH_SHORT).show();
+                // [END_EXCLUDE]
+            }
+        };
+        refUser.addListenerForSingleValueEvent(userListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        refUser.removeEventListener(userListener);
     }
 }

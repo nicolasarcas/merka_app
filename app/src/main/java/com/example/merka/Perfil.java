@@ -37,6 +37,8 @@ public class Perfil extends AppCompatActivity {
     private TextView btnHome;
     private TextView btnLoja;
 
+    private boolean loja;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,10 +82,18 @@ public class Perfil extends AppCompatActivity {
         btnLoja.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent (Perfil.this, CriarLoja.class));
+                decisaoLoja();
             }
         });
 
+    }
+
+    private void decisaoLoja() {
+        if(loja){
+            startActivity(new Intent (Perfil.this, PerfilLoja.class));
+        } else{
+            startActivity(new Intent (Perfil.this, CriarLoja.class));
+        }
     }
 
     public void goToLogin(){
@@ -109,6 +119,8 @@ public class Perfil extends AppCompatActivity {
                 txtNomeUser.setText(user.name);
                 txtEmailUser.setText(user.email);
                 // [END_EXCLUDE]
+
+                loja = user.store;
             }
 
             @Override
