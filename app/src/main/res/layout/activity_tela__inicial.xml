@@ -45,16 +45,6 @@
                 app:drawableTopCompat="@drawable/ic_busca" />
 
             <TextView
-                android:id="@+id/textViewPedidosPerfil"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/TextViewPedidos"
-                android:textStyle="bold"
-                app:drawableTopCompat="@drawable/ic_pedidos" />
-
-            <TextView
                 android:id="@+id/textViewLojaPerfil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

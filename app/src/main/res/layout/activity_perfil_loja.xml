@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="20dp"
     tools:context=".PerfilLoja">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_margin="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -119,6 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_margin="20dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView2"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -167,16 +168,6 @@
                 android:text="@string/TextViewBusca"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_busca" />
-
-            <TextView
-                android:id="@+id/textViewPedidosPerfil"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/TextViewPedidos"
-                android:textStyle="bold"
-                app:drawableTopCompat="@drawable/ic_pedidos" />
 
             <TextView
                 android:id="@+id/textViewLojaPerfil"
