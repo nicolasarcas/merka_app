@@ -11,22 +11,32 @@
     </style>
 
     <style name="textAppearance_Merka">
-        <item name="android:textSize">@dimen/TextLogoMerka</item>
+        <item name="android:textSize">@dimen/TextSizeLogoMerka</item>
         <item name="fontFamily">sans-serif-condensed</item>
     </style>
 
-    <style name="textAppearance_TextBtn">
-        <item name="android:textSize">@dimen/TextBtn</item>
+    <style name="textAppearance_WhiteTextBtn">
+        <item name="android:textSize">@dimen/TextSizeButton</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="BtnCadastrar">
+    <style name="textAppearance_Button">
+        <item name="background">@drawable/input_simple_background</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="textAppearance_Esqueci_A_Senha">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">@dimen/TextSizeEsqueciSenha</item>
+    </style>
 
-        <!-- Outros temas -->
+    <!-- Outros temas -->
     <style name="AppCompat.TelaCheia" parent="Theme.AppCompat.NoActionBar">
-            <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
 

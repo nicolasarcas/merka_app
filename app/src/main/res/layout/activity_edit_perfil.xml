@@ -20,19 +20,19 @@
             android:id="@+id/txtNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/placeholderNome"
-            android:hint="@string/placeholderNome"
+            android:autofillHints="@string/TextViewHintNome"
+            android:hint="@string/TextViewHintNome"
             android:inputType="textPersonName"
-            android:textSize="@dimen/PlaceholderCadastro" />
+            android:textSize="@dimen/HintCadastro" />
 
         <EditText
             android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/placeholderEmail"
-            android:hint="@string/placeholderEmail"
+            android:autofillHints="@string/TextViewHintEmail"
+            android:hint="@string/TextViewHintEmail"
             android:inputType="textEmailAddress"
-            android:textSize="@dimen/PlaceholderCadastro" />
+            android:textSize="@dimen/HintCadastro" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -43,10 +43,10 @@
                 android:id="@+id/txtPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="@string/placeholderSenha"
-                android:hint="@string/placeholderSenha"
+                android:autofillHints="@string/TextViewHintSenha"
+                android:hint="@string/TextViewHintSenha"
                 android:inputType="textPassword"
-                android:textSize="@dimen/PlaceholderCadastro" />
+                android:textSize="@dimen/HintCadastro" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -59,10 +59,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/MarginEntreElementos"
-                android:autofillHints="@string/placeholderConfirmaSenha"
-                android:hint="@string/placeholderConfirmaSenha"
+                android:autofillHints="@string/TextViewHintConfirmaSenha"
+                android:hint="@string/TextViewHintConfirmaSenha"
                 android:inputType="textPassword"
-                android:textSize="@dimen/PlaceholderCadastro" />
+                android:textSize="@dimen/HintCadastro" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
@@ -79,8 +79,11 @@
             style="?attr/buttonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:text="@string/Confirmar"
+            android:background="@drawable/input_simple_background"
+            android:text="@string/ButtonTextConfirmar"
             android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
         <Button
@@ -88,8 +91,11 @@
             style="?attr/buttonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:text="@string/cancelar"
+            android:background="@drawable/input_simple_background"
+            android:text="@string/ButtonTextCancelar"
             android:textColor="@color/common_google_signin_btn_text_dark_focused" />
     </LinearLayout>
 
@@ -99,7 +105,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/MarginEntreElementos"
-        android:text="@string/excluirConta"
+        android:background="@drawable/input_simple_background"
+        android:text="@string/ButtonTextExcluirConta"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />

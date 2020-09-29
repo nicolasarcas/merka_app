@@ -8,23 +8,26 @@
     <TextView
         android:id="@+id/textViewMerka2"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/LogoMerkaHeight"
+        android:layout_height="@dimen/HeightLogoMerka"
         android:layout_gravity="center"
         android:layout_margin="50dp"
         android:background="@drawable/logo_background"
         android:gravity="center"
         android:text="@string/app_name"
         android:textAppearance="@style/textAppearance_Merka"
-        android:textSize="@dimen/TextLogoMerka"
+        android:textSize="@dimen/TextSizeLogoMerka"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_margin="50dp"
+        android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".RedefinirSenha">
 
         <EditText
@@ -33,21 +36,18 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:autofillHints="preencherEmail"
-            android:hint="@string/preencherEmail"
+            android:hint="@string/TextViewHintPreencherEmail"
             android:inputType="textEmailAddress" />
 
         <Button
             android:id="@+id/btnRedefinirSenha"
-            style="@style/BtnCadastrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/MarginEntreElementos"
             android:background="@drawable/btn_login_registro_background"
-            android:text="@string/Confirmar"
-            android:textAppearance="@style/textAppearance_TextBtn"
-            android:textColor="@color/white"
-            android:textStyle="bold"
+            android:text="@string/ButtonTextConfirmar"
+            android:textAppearance="@style/textAppearance_WhiteTextBtn"
             tools:layout_editor_absoluteX="3dp"
             tools:layout_editor_absoluteY="584dp" />
 

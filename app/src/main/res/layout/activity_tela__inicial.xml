@@ -22,7 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/textViewHomePerfil"
@@ -30,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/TextViewHome"
+                android:text="@string/TextViewTextHome"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_home" />
 
@@ -40,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/TextViewBusca"
+                android:text="@string/TextViewTextBusca"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_busca" />
 
@@ -50,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/TextViewLoja"
+                android:text="@string/TextViewTextLoja"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_loja" />
 
@@ -60,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/TextViewPerfil"
+                android:text="@string/TextViewTextPerfil"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_person" />
 

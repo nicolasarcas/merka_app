@@ -44,7 +44,7 @@ public class RedefinirSenha extends AppCompatActivity {
 
     private  void resetSenha(View view){
         if(editTextRedefinirSenha.getEditableText().toString().isEmpty()){
-            Toast.makeText(RedefinirSenha.this, getString(R.string.preencherEmail),
+            Toast.makeText(RedefinirSenha.this, getString(R.string.TextViewHintPreencherEmail),
                     Toast.LENGTH_SHORT).show();
         }
         else{

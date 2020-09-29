@@ -12,49 +12,50 @@
     <TextView
         android:id="@+id/TextViewMerka"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/LogoMerkaHeight"
+        android:layout_height="@dimen/HeightLogoMerka"
         android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
         android:background="@drawable/logo_background"
         android:gravity="center"
         android:text="@string/app_name"
         android:textAppearance="@style/textAppearance_Merka"
-        android:textSize="@dimen/TextLogoMerka"
+        android:textSize="@dimen/TextSizeLogoMerka"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editTextNome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="@string/placeholderNome"
+        android:autofillHints="@string/TextViewHintNome"
         android:ems="10"
-        android:hint="@string/placeholderNome"
+        android:hint="@string/TextViewHintNome"
         android:inputType="textPersonName"
-        android:textSize="@dimen/PlaceholderCadastro"
+        android:textSize="@dimen/HintCadastro"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editTextEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="@string/placeholderEmail"
+        android:autofillHints="@string/TextViewHintEmail"
         android:ems="10"
-        android:hint="@string/placeholderEmail"
+        android:hint="@string/TextViewHintEmail"
         android:inputType="textEmailAddress"
-        android:textSize="@dimen/PlaceholderCadastro"
+        android:textSize="@dimen/HintCadastro"
         android:textStyle="bold" />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:passwordToggleEnabled="true">
+
         <EditText
             android:id="@+id/editNovaTextSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="@+id/editTextNovaSenha"
             android:ems="10"
-            android:hint="@string/placeholderSenha"
+            android:hint="@string/TextViewHintSenha"
             android:inputType="textPassword"
-            android:textSize="@dimen/PlaceholderCadastro"
+            android:textSize="@dimen/HintCadastro"
             android:textStyle="bold" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -67,11 +68,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
-            android:autofillHints="@string/placeholderTelefone"
+            android:autofillHints="@string/TextViewHintConfirmaSenha"
             android:ems="10"
-            android:hint="@string/placeholderConfirmaSenha"
+            android:hint="@string/TextViewHintConfirmaSenha"
             android:inputType="textPassword"
-            android:textSize="@dimen/PlaceholderCadastro"
+            android:textSize="@dimen/HintCadastro"
             android:textStyle="bold" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,10 +82,8 @@
         android:layout_height="@dimen/heightBtn"
         android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
         android:background="@drawable/btn_login_registro_background"
-        android:text="@string/TextBtnCriarConta"
-        android:textAppearance="@style/textAppearance_TextBtn"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
+        android:text="@string/ButtonTextCriarConta"
+        android:textAppearance="@style/textAppearance_WhiteTextBtn" />
 
     <View
         android:id="@+id/LinhaHorizontal"
@@ -99,18 +98,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/MarginEntreElementos"
-        android:text="@string/TextViewJaPossuiConta"
+        android:text="@string/TextViewTextJaPossuiConta"
         android:textColor="@android:color/background_dark"
-        android:textSize="@dimen/LabelTemConta" />
+        android:textSize="@dimen/TextSizeJaPossuiUmaConta" />
 
     <Button
         android:id="@+id/buttonIrParaLogin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/heightBtn"
         android:background="@drawable/btn_login_registro_background"
-        android:text="@string/TextBtnEntrar"
-        android:textAppearance="@style/textAppearance_TextBtn"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
+        android:text="@string/ButtonTextEntrar"
+        android:textAppearance="@style/textAppearance_WhiteTextBtn" />
 
 </LinearLayout>

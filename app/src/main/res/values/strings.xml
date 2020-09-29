@@ -1,49 +1,53 @@
 <resources>
     <string name="app_name">Merka</string>
-    <string name="placeholderNome">Nome</string>
-    <string name="placeholderSenha">Senha</string>
-    <string name="placeholderConfirmaSenha">Confirmar senha</string>
-    <string name="placeholderEmail">Email</string>
-    <string name="placeholderTelefone">Telefone</string>
-    <string name="TextBtnCriarConta">Criar conta</string>
-    <string name="TextBtnEntrar">Entrar</string>
-    <string name="boldText">bold</string>
-    <string name="editarLoja">Editar loja</string>
-    <string name="alterarFotoPerfil">Alterar foto do perfil</string>
-    <string name="TextViewJaPossuiConta">Já possui uma conta?</string>
-    <string name="TextViewNaoTemConta">Não tem uma conta?</string>
-    <string name="TextViewEsqueciSenha">Esqueci a senha</string>
-    <string name="btnTextInscrever">Inscrever-se no merka</string>
-    <string name="empty_fields_warning">Preencha todos os campos!</string>
-    <string name="authentication_failure">Falha na autenticação!</string>
-    <string name="min_length_password_warning">Escreva uma senha com no mínimo 8 dígitos!</string>
-    <string name="different_password_warning">Escreva senhas iguais!</string>
-    <string name="registration_successful">Registrado com sucesso!</string>
-    <string name="registration_failure">Falha no registro!</string>
-    <string name="TextViewHome">Home</string>
-    <string name="TextViewPerfil">Perfil</string>
-    <string name="TextViewLoja">Loja</string>
-    <string name="TextViewPedidos">Pedidos</string>
-    <string name="TextViewBusca">Busca</string>
-    <string name="Confirmar">Confirmar</string>
-    <string name="editarPerfil">Editar perfil</string>
-    <string name="encerrarSessao">Encerrar sessão</string>
-    <string name="excluirConta">Excluir conta</string>
-    <string name="cancelar">cancelar</string>
-    <string name="lableNome">Nome:</string>
-    <string name="lableEmail">Email:</string>
-    <string name="lableContato">Contato:</string>
-    <string name="lableEndereço">Endereço:</string>
-    <string name="lableDescrição">Descrição:</string>
-    <string name="nomeDaLoja">Loja do merka</string>
 
+    <string name="TextViewHintNome">Nome</string>
+    <string name="TextViewHintSenha">Senha</string>
+    <string name="TextViewHintEmail">Email</string>
+    <string name="TextViewHintContato">Contato</string>
+    <string name="TextViewHintEndereco">Endereço</string>
+    <string name="TextViewHintTelefone">Telefone</string>
+    <string name="TextViewHintDescricao">Descrição</string>
+    <string name="TextViewHintConfirmaSenha">Confirmar senha</string>
+    <string name="TextViewHintPreencherEmail">Preencha o campo de e-mail!</string>
+    <string name="TextViewTextHome">Home</string>
+    <string name="TextViewTextLoja">Loja</string>
+    <string name="TextViewTextBusca">Busca</string>
+    <string name="TextViewTextPerfil">Perfil</string>
+    <string name="TextViewTextEsqueciASenha">Esqueci a senha</string>
+    <string name="TextViewTextNaoTemUmaConta">Não tem uma conta?</string>
+    <string name="TextViewTextJaPossuiConta">Já possui uma conta?</string>
+    <string name="TextViewTextAlterarFotoPerfil">Alterar foto do perfil</string>
+    <string name="TextViewTextCadastrandoSuaLoja">Cadastrando sua loja!</string>
+    <string name="TextViewTextIndicaNome">Nome:</string>
+    <string name="TextViewTextIndicaEmail">Email:</string>
+    <string name="TextViewTextIndicaContato">Contato:</string>
+    <string name="TextViewTextIndicaDelivery">Delivery:</string>
+    <string name="TextViewTextIndicaEndereço">Endereço:</string>
+    <string name="TextViewTextNomeDaLoja">Loja do merka</string>
+    <string name="TextViewTextIndicaDescrição">Descrição:</string>
+    <string name="ButtonTextEntrar">Entrar</string>
+    <string name="ButtonTextCancelar">Cancelar</string>
+    <string name="ButtonTextLoja">Excluir loja</string>
+    <string name="ButtonTextEditarLoja">Editar loja</string>
+    <string name="ButtonTextCriarConta">Criar conta</string>
+    <string name="ButtonTextConfirmar">Confirmar</string>
+    <string name="ButtonTextEditarPerfil">Editar perfil</string>
+    <string name="ButtonTextExcluirConta">Excluir conta</string>
+    <string name="ButtonTextEncerrarSessao">Encerrar sessão</string>
+    <string name="ButtonTextInscreverseNoMerka">Inscrever-se no merka</string>
+    <string name="RadioButtonTextSim">Sim</string>
+    <string name="RadioButtonTextNao">Não</string>
 
+    <string name="empty_fields_warning">Preencha todos os campos!</string> warning
+    <string name="authentication_failure">Falha na autenticação!</string> wargning
+    <string name="min_length_password_warning">Escreva uma senha com no mínimo 8 dígitos!</string> wargning
+    <string name="different_password_warning">Escreva senhas iguais!</string> wargning
+    <string name="registration_successful">Registrado com sucesso!</string> wargning
+    <string name="registration_failure">Falha no registro!</string> wargning
     <string name="asas">style="@style/BtnCadastrar"</string>
-
     <string name="resset_pass_successful">E-mail de alteração enviado com sucesso!</string>
     <string name="resset_pass_failure">Falha no envio do e-mail de alteração!</string>
-    <string name="preencherEmail">Preencha o campo de e-mail!</string>
-
     <string name="delete_failure">Falha na exclusão!</string>
     <string name="delete_success">Usuário excluido com sucesso!</string>
     <string name="title_activity_redefinir_senha">RedefinirSenha</string>
@@ -55,14 +59,6 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-
-    <string name="hintDescricaoLoja">Descrição</string>
-    <string name="hintContatoLoja">Contato</string>
-    <string name="hintEnderecoLoja">Endereço</string>
-    <string name="cadastrarLoja">Cadastrando sua loja!</string>
     <string name="email_invalido">Digite um e-mail válido!</string>
-    <string name="excluirLoja">Excluir loja</string>
     <string name="fazDelivery">Faz delivery?</string>
-
-
 </resources>

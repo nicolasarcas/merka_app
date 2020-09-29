@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="20dp"
+    android:orientation="vertical"
+    android:paddingBottom="4dp"
     tools:context=".CriarLoja">
 
     <TextView
@@ -13,8 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
-        android:autofillHints="@string/cadastrarLoja"
-        android:text="@string/cadastrarLoja"
+        android:autofillHints="@string/TextViewTextCadastrandoSuaLoja"
+        android:text="@string/TextViewTextCadastrandoSuaLoja"
         android:textSize="20sp" />
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -30,45 +31,45 @@
         android:id="@+id/txtNomeLoja"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="@string/placeholderNome"
-        android:hint="@string/placeholderNome"
-        android:maxLength="30"
+        android:autofillHints="@string/TextViewHintNome"
+        android:hint="@string/TextViewHintNome"
         android:inputType="textPersonName"
-        android:textSize="@dimen/PlaceholderCadastro" />
+        android:maxLength="30"
+        android:textSize="@dimen/HintCadastro" />
 
     <EditText
         android:id="@+id/txtContatoLoja"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="@string/hintContatoLoja"
-        android:hint="@string/hintContatoLoja"
-        android:maxLength="11"
+        android:autofillHints="@string/TextViewHintContato"
+        android:hint="@string/TextViewHintContato"
         android:inputType="phone"
-        android:textSize="@dimen/PlaceholderCadastro" />
+        android:maxLength="11"
+        android:textSize="@dimen/HintCadastro" />
 
     <EditText
         android:id="@+id/txtEnderecoLoja"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/MarginEntreElementos"
-        android:autofillHints="@string/hintEnderecoLoja"
-        android:hint="@string/hintEnderecoLoja"
+        android:autofillHints="@string/TextViewHintEndereco"
+        android:hint="@string/TextViewHintEndereco"
         android:inputType="text"
         android:maxLength="30"
-        android:textSize="@dimen/PlaceholderCadastro" />
+        android:textSize="@dimen/HintCadastro" />
 
     <EditText
         android:id="@+id/txtDescricaoLoja"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="@string/hintDescricaoLoja"
+        android:autofillHints="@string/TextViewHintDescricao"
         android:gravity="top"
-        android:hint="@string/hintDescricaoLoja"
+        android:hint="@string/TextViewHintDescricao"
         android:inputType="textMultiLine"
         android:lines="3"
         android:maxLength="76"
         android:scrollbars="vertical"
-        android:textSize="@dimen/PlaceholderCadastro" />
+        android:textSize="@dimen/HintCadastro" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -78,9 +79,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/fazDelivery"
             android:layout_gravity="center"
-            android:textSize="20dp"/>
+            android:text="@string/fazDelivery"
+            android:textSize="20sp" />
 
         <RadioGroup
             android:id="@+id/radioGroupCadastro"
@@ -92,13 +93,13 @@
                 android:id="@+id/radioCadastroSim"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sim" />
+                android:text="@string/RadioButtonTextSim" />
 
             <RadioButton
                 android:id="@+id/radioCadastroNao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Não" />
+                android:text="@string/RadioButtonTextNao" />
         </RadioGroup>
 
     </LinearLayout>
@@ -113,16 +114,24 @@
             style="?attr/buttonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:text="@string/Confirmar" />
+            android:background="@drawable/input_simple_background"
+            android:paddingBottom="4dp"
+            android:text="@string/ButtonTextConfirmar" />
 
         <Button
             android:id="@+id/btnCancelarCriarLoja"
             style="?attr/buttonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:text="@string/cancelar" />
+            android:background="@drawable/input_simple_background"
+            android:paddingBottom="4dp"
+            android:text="@string/ButtonTextCancelar" />
     </LinearLayout>
 
 </LinearLayout>

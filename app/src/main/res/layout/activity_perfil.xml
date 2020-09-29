@@ -29,7 +29,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="true"
-                    android:text="@string/lableNome"
+                    android:text="@string/TextViewTextIndicaNome"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -39,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="true"
-                    android:text="@string/lableEmail"
+                    android:text="@string/TextViewTextIndicaEmail"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -65,23 +65,25 @@
                     android:includeFontPadding="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textSize="18sp" />
-        </LinearLayout>
+            </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
 
         <Button
             android:id="@+id/buttonEditPerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/MarginEntreElementos"
-            android:text="@string/editarPerfil" />
+            android:background="@drawable/input_simple_background"
+            android:text="@string/ButtonTextEditarPerfil" />
 
         <Button
             android:id="@+id/buttonSignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/MarginEntreElementos"
-            android:text="@string/encerrarSessao" />
+            android:background="@drawable/input_simple_background"
+            android:text="@string/ButtonTextEncerrarSessao" />
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -97,7 +99,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/textViewHomePerfil"
@@ -105,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/TextViewHome"
+                android:text="@string/TextViewTextHome"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_home" />
 
@@ -115,19 +118,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/TextViewBusca"
+                android:text="@string/TextViewTextBusca"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_busca" />
-
-            <TextView
-                android:id="@+id/textViewPedidosPerfil"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/TextViewPedidos"
-                android:textStyle="bold"
-                app:drawableTopCompat="@drawable/ic_pedidos" />
 
             <TextView
                 android:id="@+id/textViewLojaPerfil"
@@ -135,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/TextViewLoja"
+                android:text="@string/TextViewTextLoja"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_loja" />
 
@@ -145,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/TextViewPerfil"
+                android:text="@string/TextViewTextPerfil"
                 android:textStyle="bold"
                 app:drawableTopCompat="@drawable/ic_person" />
 
