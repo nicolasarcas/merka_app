@@ -1,18 +1,28 @@
 package com.example.merka;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,21 +30,41 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 public class EditLojaPerfil extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference refUser;
     private ValueEventListener userListener;
+    private StorageReference storageReference;
+    private FirebaseStorage storage;
 
     private EditText txtNomeLoja;
     private EditText txtContatoLoja;
     private EditText txtEnderecoLoja;
     private EditText txtDescricaoLoja;
 
+    private TextView txtEditImageLoja;
+
+    private ImageView imageView;
+
     private Button btnConfirmar;
     private Button btnCancelar;
     private Button btnExcluir;
+
+    private RadioGroup radioGroupAlteracao;
+    private RadioButton radioAlteracao;
+
+    private ImageView pic;
+    public Uri picUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +73,27 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         firebaseAuth= FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+        imageView = findViewById(R.id.editPerfilLojaImage);
+
+        radioGroupAlteracao = findViewById(R.id.radioGroupAlteracao);
+
+        pic = findViewById(R.id.editPerfilLojaImage);
 
         txtNomeLoja = findViewById(R.id.txtEditNomeLoja);
         txtContatoLoja = findViewById(R.id.txtEditContatoLoja);
         txtEnderecoLoja = findViewById(R.id.txtEditEnderecoLoja);
         txtDescricaoLoja = findViewById(R.id.txtEditDescricaoLoja);
+
+        txtEditImageLoja = findViewById(R.id.txtEditLojaImage);
+        txtEditImageLoja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choosePic();
+            }
+        });
 
         btnConfirmar = findViewById(R.id.btnConfirmarAlteracaoLoja);
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
@@ -73,13 +119,24 @@ public class EditLojaPerfil extends AppCompatActivity {
             }
         });
     }
+    private void choosePic(){
+        Intent intent= new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,2);
+    }
+
     private void atualizarLoja(){
         final String nome = txtNomeLoja.getEditableText().toString();
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
+        int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
+        radioAlteracao = findViewById(radioIdAlteracao);
+        final String delivery = radioAlteracao.getText().toString();
+        boolean selected = radioGroupAlteracao.isSelected();
 
-        if(validateFields(nome,contato,endereco)){
+        if(validateFields(nome,contato,endereco,selected)){
             AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
             msgBox.setTitle("Alteração de dados");
             msgBox.setIcon(android.R.drawable.ic_menu_info_details);
@@ -91,9 +148,10 @@ public class EditLojaPerfil extends AppCompatActivity {
                     FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                     String userId = fbuser.getUid();
 
-                    Loja loja = new Loja(nome, contato, endereco, descricao);
+                    Loja loja = new Loja(nome, contato, endereco, descricao,delivery);
 
                     refUser.child("lojas").child(userId).setValue(loja);
+                    uploadPic();
 
                     goToLoja();
                 }
@@ -115,8 +173,8 @@ public class EditLojaPerfil extends AppCompatActivity {
         startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
         finish();
     }
-    public boolean validateFields(String nome, String contato, String endereco){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty()){
+    public boolean validateFields(String nome, String contato, String endereco, boolean selected){
+        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || selected == false){
             return false;
         }
         else{
@@ -185,5 +243,61 @@ public class EditLojaPerfil extends AppCompatActivity {
             }
         };
         refUser.addListenerForSingleValueEvent(userListener);
+        loadImage();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+            picUri = data.getData();
+            pic.setImageURI(picUri);
+        }
+    }
+    private void uploadPic(){
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userId = user.getUid();
+
+        StorageReference riversRef = storageReference.child(userId).child("images/"+txtNomeLoja.getEditableText().toString());
+
+        riversRef.putFile(picUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Snackbar.make(findViewById(android.R.id.content),"Dados gravados", Snackbar.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(getApplicationContext(), "Falha ao gravar dados", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    private void loadImage() {
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userId = user.getUid();
+        storageReference = FirebaseStorage.getInstance().getReference().child(userId).child("images/"+txtNomeLoja.getText().toString()+".jpg");
+
+        try {
+            final File localFile = File.createTempFile(txtNomeLoja.getText().toString(),"jpg");
+            storageReference.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(EditLojaPerfil.this, "Falha no carregamento da imagem", Toast.LENGTH_SHORT);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

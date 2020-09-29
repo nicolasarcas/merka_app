@@ -62,6 +62,7 @@
     <string name="cadastrarLoja">Cadastrando sua loja!</string>
     <string name="email_invalido">Digite um e-mail válido!</string>
     <string name="excluirLoja">Excluir loja</string>
+    <string name="fazDelivery">Faz delivery?</string>
 
 
 </resources>

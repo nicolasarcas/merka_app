@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.internal.Storage;
@@ -40,6 +42,9 @@ public class CriarLoja extends AppCompatActivity {
 
     private Button btnCriarLoja;
     private Button btnCancelarCriarLoja;
+
+    private RadioGroup radioGroupCadastro;
+    private RadioButton radioCadastro;
 
     private ImageView pic;
     public Uri picUri;
@@ -71,6 +76,8 @@ public class CriarLoja extends AppCompatActivity {
             }
         });
 
+        radioGroupCadastro = findViewById(R.id.radioGroupCadastro);
+
         txtNomeLoja=findViewById(R.id.txtNomeLoja);
         txtContatoLoja=findViewById(R.id.txtContatoLoja);
         txtEnderecoLoja=findViewById(R.id.txtEnderecoLoja);
@@ -99,15 +106,19 @@ public class CriarLoja extends AppCompatActivity {
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
+        int radioId = radioGroupCadastro.getCheckedRadioButtonId();
+        radioCadastro = findViewById(radioId);
+        final String delivery = radioCadastro.getText().toString();
+        boolean radioSelected = radioGroupCadastro.isSelected();
 
-        if(validateFields(nome,contato,endereco,descricao)){
+        if(validateFields(nome,contato,endereco,descricao, radioSelected)){
             FirebaseUser user = firebaseAuth.getCurrentUser();
             String userId = user.getUid();
 
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("users").child(userId).child("store").setValue(true);
 
-            writeNewLoja(userId, nome, contato, endereco, descricao);
+            writeNewLoja(userId, nome, contato, endereco, descricao,delivery);
         }
         else{
             Toast.makeText(CriarLoja.this, getString(R.string.empty_fields_warning),
@@ -120,8 +131,8 @@ public class CriarLoja extends AppCompatActivity {
         finish();
     }
 
-    public boolean validateFields(String nome, String contato, String endereco, String desc){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty()){
+    public boolean validateFields(String nome, String contato, String endereco, String desc, boolean selected){
+        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty() || selected == false){
             return false;
         }
         else{
@@ -129,11 +140,11 @@ public class CriarLoja extends AppCompatActivity {
         }
     }
 
-    private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao) {
+    private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao,String delivery) {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            Loja loja = new Loja(nome, contato, endereco, descricao);
+            Loja loja = new Loja(nome, contato, endereco, descricao,delivery);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
@@ -165,12 +176,10 @@ public class CriarLoja extends AppCompatActivity {
 
     private void uploadPic(){
 
-        final String randomKey = UUID.randomUUID().toString();
-
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();
 
-        StorageReference riversRef = storageReference.child(userId).child("images/"+randomKey);
+        StorageReference riversRef = storageReference.child(userId).child("images/"+txtNomeLoja.getEditableText().toString());
 
         riversRef.putFile(picUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
