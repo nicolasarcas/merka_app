@@ -109,9 +109,8 @@ public class CriarLoja extends AppCompatActivity {
         int radioId = radioGroupCadastro.getCheckedRadioButtonId();
         radioCadastro = findViewById(radioId);
         final String delivery = radioCadastro.getText().toString();
-        boolean radioSelected = radioGroupCadastro.isSelected();
 
-        if(validateFields(nome,contato,endereco,descricao, radioSelected)){
+        if(validateFields(nome,contato,endereco,descricao)){
             FirebaseUser user = firebaseAuth.getCurrentUser();
             String userId = user.getUid();
 
@@ -131,8 +130,8 @@ public class CriarLoja extends AppCompatActivity {
         finish();
     }
 
-    public boolean validateFields(String nome, String contato, String endereco, String desc, boolean selected){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty() || selected == false){
+    public boolean validateFields(String nome, String contato, String endereco, String desc){
+        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty()){
             return false;
         }
         else{
@@ -149,7 +148,7 @@ public class CriarLoja extends AppCompatActivity {
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("lojas").child(userId).setValue(loja);
-            uploadPic();
+           // uploadPic();
             goToLoja();
 
 

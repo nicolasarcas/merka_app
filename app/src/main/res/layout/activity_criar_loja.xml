@@ -99,7 +99,8 @@
                 android:id="@+id/radioCadastroNao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/RadioButtonTextNao" />
+                android:text="@string/RadioButtonTextNao"
+                android:checked="true"/>
         </RadioGroup>
 
     </LinearLayout>

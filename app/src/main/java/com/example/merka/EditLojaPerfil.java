@@ -63,6 +63,9 @@ public class EditLojaPerfil extends AppCompatActivity {
     private RadioGroup radioGroupAlteracao;
     private RadioButton radioAlteracao;
 
+    private RadioButton radioEditSim;
+    private RadioButton radioEditNao;
+
     private ImageView pic;
     public Uri picUri;
 
@@ -79,6 +82,9 @@ public class EditLojaPerfil extends AppCompatActivity {
         imageView = findViewById(R.id.editPerfilLojaImage);
 
         radioGroupAlteracao = findViewById(R.id.radioGroupAlteracao);
+
+        radioEditNao=findViewById(R.id.radioAlteracaoNao);
+        radioEditSim=findViewById(R.id.radioAlteracaoSim);
 
         pic = findViewById(R.id.editPerfilLojaImage);
 
@@ -134,9 +140,8 @@ public class EditLojaPerfil extends AppCompatActivity {
         int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
         radioAlteracao = findViewById(radioIdAlteracao);
         final String delivery = radioAlteracao.getText().toString();
-        boolean selected = radioGroupAlteracao.isSelected();
 
-        if(validateFields(nome,contato,endereco,selected)){
+        if(validateFields(nome,contato,endereco,descricao)){
             AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
             msgBox.setTitle("Alteração de dados");
             msgBox.setIcon(android.R.drawable.ic_menu_info_details);
@@ -151,7 +156,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                     Loja loja = new Loja(nome, contato, endereco, descricao,delivery);
 
                     refUser.child("lojas").child(userId).setValue(loja);
-                    uploadPic();
+                  //  uploadPic();
 
                     goToLoja();
                 }
@@ -173,8 +178,8 @@ public class EditLojaPerfil extends AppCompatActivity {
         startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
         finish();
     }
-    public boolean validateFields(String nome, String contato, String endereco, boolean selected){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || selected == false){
+    public boolean validateFields(String nome, String contato, String endereco,String desc){
+        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty()){
             return false;
         }
         else{
@@ -234,6 +239,12 @@ public class EditLojaPerfil extends AppCompatActivity {
                 txtContatoLoja.setText(loja.contato);
                 txtEnderecoLoja.setText(loja.endereco);
                 txtDescricaoLoja.setText(loja.descricao);
+                if(loja.delivery.equals("Sim")){
+                    radioEditSim.setChecked(true);
+                }
+                else {
+                    radioEditNao.setChecked(true);
+                }
             }
 
             @Override
@@ -243,7 +254,7 @@ public class EditLojaPerfil extends AppCompatActivity {
             }
         };
         refUser.addListenerForSingleValueEvent(userListener);
-        loadImage();
+//        loadImage();
     }
 
     @Override

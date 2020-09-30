@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -88,6 +89,18 @@ public class PerfilLoja extends AppCompatActivity {
                 startActivity(new Intent (PerfilLoja.this, Perfil.class));
             }
         });
+        txtContatoLoja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCall();
+            }
+        });
+    }
+    private void openCall() {
+        String uri = "tel:" + txtContatoLoja.getText().toString() ;
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse(uri));
+        startActivity(intent);
     }
 
     @Override
@@ -116,7 +129,7 @@ public class PerfilLoja extends AppCompatActivity {
             }
         };
         refUser.addListenerForSingleValueEvent(userListener);
-        loadImage();
+      //  loadImage();
     }
 
     private void loadImage() {
