@@ -10,8 +10,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:orientation="vertical"
-        android:layout_margin="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -45,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/TextViewTextIndicaContato"
                 android:textColor="#8F8F8F"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtPerfilContatoLoja"
@@ -67,7 +70,8 @@
                 android:layout_height="match_parent"
                 android:text="@string/TextViewTextIndicaEndereço"
                 android:textColor="#8F8F8F"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtPerfilEnderecoLoja"
@@ -83,7 +87,8 @@
             android:layout_height="wrap_content"
             android:text="@string/TextViewTextIndicaDescrição"
             android:textColor="#8F8F8F"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtPerfilDescricaoLoja"
@@ -103,7 +108,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/TextViewTextIndicaDelivery"
                 android:textColor="#8F8F8F"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtPerfilDeliveryLoja"
@@ -136,7 +142,6 @@
         android:id="@+id/bottomNavigationView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -148,7 +153,8 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/textViewHomePerfil"

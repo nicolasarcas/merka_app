@@ -33,6 +33,7 @@
     <string name="ButtonTextCriarConta">Criar conta</string>
     <string name="ButtonTextConfirmar">Confirmar</string>
     <string name="ButtonTextEditarPerfil">Editar perfil</string>
+    <string name="ButtonTextExcluirLoja">Excluir loja</string>
     <string name="ButtonTextExcluirConta">Excluir conta</string>
     <string name="ButtonTextEncerrarSessao">Encerrar sessão</string>
     <string name="ButtonTextInscreverseNoMerka">Inscrever-se no merka</string>
