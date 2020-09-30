@@ -142,32 +142,38 @@ public class EditLojaPerfil extends AppCompatActivity {
         final String delivery = radioAlteracao.getText().toString();
 
         if(validateFields(nome,contato,endereco,descricao)){
-            AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-            msgBox.setTitle("Alteração de dados");
-            msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-            msgBox.setMessage("Deseja alterar os dados da sua loja?");
-            msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                    FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-                    String userId = fbuser.getUid();
+            if(validateMinLengthNumber(contato)){
+                AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+                msgBox.setTitle("Alteração de dados");
+                msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                msgBox.setMessage("Deseja alterar os dados da sua loja?");
+                msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+                        FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+                        String userId = fbuser.getUid();
 
-                    Loja loja = new Loja(nome, contato, endereco, descricao,delivery);
+                        Loja loja = new Loja(nome, contato, endereco, descricao,delivery);
 
-                    refUser.child("lojas").child(userId).setValue(loja);
-                  //  uploadPic();
+                        refUser.child("lojas").child(userId).setValue(loja);
+                      //  uploadPic();
 
-                    goToLoja();
-                }
-            });
-            msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+                        goToLoja();
+                    }
+                });
+                msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                }
-            });
-            msgBox.show();
+                    }
+                });
+                msgBox.show();
+            }
+            else{
+                Toast.makeText(EditLojaPerfil.this, getString(R.string.min_length_number_warning),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
         else{
             Toast.makeText(EditLojaPerfil.this, getString(R.string.empty_fields_warning),
@@ -184,6 +190,13 @@ public class EditLojaPerfil extends AppCompatActivity {
         }
         else{
             return true;
+        }
+    }
+    public boolean validateMinLengthNumber(String num){
+        if(num.length() > 9){
+            return true;
+        }else{
+            return false;
         }
     }
 

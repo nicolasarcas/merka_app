@@ -42,6 +42,7 @@
     <string name="empty_fields_warning">Preencha todos os campos!</string> warning
     <string name="authentication_failure">Falha na autenticação!</string> wargning
     <string name="min_length_password_warning">Escreva uma senha com no mínimo 8 dígitos!</string> wargning
+    <string name="min_length_number_warning">Escreva um número com no mínimo 10 dígitos! Incluindo o DDD</string> wargning
     <string name="different_password_warning">Escreva senhas iguais!</string> wargning
     <string name="registration_successful">Registrado com sucesso!</string> wargning
     <string name="registration_failure">Falha no registro!</string> wargning
@@ -61,4 +62,5 @@
     <string name="login_failed">"Login failed"</string>
     <string name="email_invalido">Digite um e-mail válido!</string>
     <string name="fazDelivery">Faz delivery?</string>
+
 </resources>

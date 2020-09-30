@@ -111,13 +111,19 @@ public class CriarLoja extends AppCompatActivity {
         final String delivery = radioCadastro.getText().toString();
 
         if(validateFields(nome,contato,endereco,descricao)){
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            String userId = user.getUid();
+            if(validateMinLengthNumber(contato)){
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                String userId = user.getUid();
 
-            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-            refUser.child("users").child(userId).child("store").setValue(true);
+                DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+                refUser.child("users").child(userId).child("store").setValue(true);
 
-            writeNewLoja(userId, nome, contato, endereco, descricao,delivery);
+                writeNewLoja(userId, nome, contato, endereco, descricao,delivery);
+            }
+            else{
+                Toast.makeText(CriarLoja.this, getString(R.string.min_length_number_warning),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
         else{
             Toast.makeText(CriarLoja.this, getString(R.string.empty_fields_warning),
@@ -136,6 +142,14 @@ public class CriarLoja extends AppCompatActivity {
         }
         else{
             return true;
+        }
+    }
+
+    public boolean validateMinLengthNumber(String num){
+        if(num.length() > 9){
+            return true;
+        }else{
+            return false;
         }
     }
 
