@@ -1,8 +1,10 @@
 package com.example.merka;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -77,15 +79,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(MainActivity.this, getString(R.string.registration_successful),
-                                            Toast.LENGTH_SHORT).show();
 
                                     FirebaseUser user = firebaseAuth.getCurrentUser();
                                     String userId = user.getUid();
                                     writeNewUser(userId, nome, login, pass);
                                     FirebaseAuth.getInstance().signOut();
-                                    goToLogin();
+                                    confirmacaoCadastro();
 
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -115,11 +114,21 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
-
-    public void goToMenu(){
-        startActivity (new Intent(this, Tela_Inicial.class));
-        finish();
+    public void confirmacaoCadastro(){
+        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+        msgBox.setTitle("Cadastro");
+        msgBox.setIcon(android.R.drawable.ic_popup_reminder);
+        msgBox.setMessage("Cadastrado com sucesso! Realize seu login.");
+        msgBox.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+                goToLogin();
+            }
+        });
+        msgBox.show();
     }
+
 
     public void goToLogin(){
         startActivity (new Intent(this, Login.class));

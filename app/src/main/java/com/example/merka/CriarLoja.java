@@ -30,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.InputMismatchException;
 import java.util.UUID;
 
 public class CriarLoja extends AppCompatActivity {
@@ -39,6 +40,7 @@ public class CriarLoja extends AppCompatActivity {
     private EditText txtContatoLoja;
     private EditText txtDescricaoLoja;
     private EditText txtEnderecoLoja;
+    private EditText txtCpfLoja;
 
     private Button btnCriarLoja;
     private Button btnCancelarCriarLoja;
@@ -82,6 +84,7 @@ public class CriarLoja extends AppCompatActivity {
         txtContatoLoja=findViewById(R.id.txtContatoLoja);
         txtEnderecoLoja=findViewById(R.id.txtEnderecoLoja);
         txtDescricaoLoja=findViewById(R.id.txtDescricaoLoja);
+        txtCpfLoja = findViewById(R.id.txtCpfLoja);
 
         btnCriarLoja=findViewById(R.id.btnConfirmarCriarLoja);
         btnCancelarCriarLoja=findViewById(R.id.btnCancelarCriarLoja);
@@ -106,22 +109,29 @@ public class CriarLoja extends AppCompatActivity {
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
+        final String cpf = txtCpfLoja.getEditableText().toString();
         int radioId = radioGroupCadastro.getCheckedRadioButtonId();
         radioCadastro = findViewById(radioId);
         final String delivery = radioCadastro.getText().toString();
 
         if(validateFields(nome,contato,endereco,descricao)){
-            if(validateMinLengthNumber(contato)){
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                String userId = user.getUid();
+            if(cpfValido(cpf)){
+                if(validateMinLengthNumber(contato)){
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    String userId = user.getUid();
 
-                DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                refUser.child("users").child(userId).child("store").setValue(true);
+                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+                    refUser.child("users").child(userId).child("store").setValue(true);
 
-                writeNewLoja(userId, nome, contato, endereco, descricao,delivery);
+                    writeNewLoja(userId, nome, contato, endereco, descricao,delivery,cpf);
+                }
+                else{
+                    Toast.makeText(CriarLoja.this, getString(R.string.min_length_number_warning),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
             else{
-                Toast.makeText(CriarLoja.this, getString(R.string.min_length_number_warning),
+                Toast.makeText(CriarLoja.this, "Digite um CPF válido",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -152,12 +162,67 @@ public class CriarLoja extends AppCompatActivity {
             return false;
         }
     }
+    public static boolean cpfValido(String CPF) {
+        // considera-se erro CPF's formados por uma sequencia de numeros iguais
+        if (CPF.equals("00000000000") ||
+                CPF.equals("11111111111") ||
+                CPF.equals("22222222222") || CPF.equals("33333333333") ||
+                CPF.equals("44444444444") || CPF.equals("55555555555") ||
+                CPF.equals("66666666666") || CPF.equals("77777777777") ||
+                CPF.equals("88888888888") || CPF.equals("99999999999") ||
+                (CPF.length() != 11))
+            return(false);
 
-    private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao,String delivery) {
+        char dig10, dig11;
+        int sm, i, r, num, peso;
+
+        // "try" - protege o codigo para eventuais erros de conversao de tipo (int)
+        try {
+            // Calculo do 1o. Digito Verificador
+            sm = 0;
+            peso = 10;
+            for (i=0; i<9; i++) {
+                // converte o i-esimo caractere do CPF em um numero:
+                // por exemplo, transforma o caractere '0' no inteiro 0
+                // (48 eh a posicao de '0' na tabela ASCII)
+                num = (int)(CPF.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso - 1;
+            }
+
+            r = 11 - (sm % 11);
+            if ((r == 10) || (r == 11))
+                dig10 = '0';
+            else dig10 = (char)(r + 48); // converte no respectivo caractere numerico
+
+            // Calculo do 2o. Digito Verificador
+            sm = 0;
+            peso = 11;
+            for(i=0; i<10; i++) {
+                num = (int)(CPF.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso - 1;
+            }
+
+            r = 11 - (sm % 11);
+            if ((r == 10) || (r == 11))
+                dig11 = '0';
+            else dig11 = (char)(r + 48);
+
+            // Verifica se os digitos calculados conferem com os digitos informados.
+            if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10)))
+                return(true);
+            else return(false);
+        } catch (InputMismatchException erro) {
+            return(false);
+        }
+    }
+
+    private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao,String delivery, String cpf) {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            Loja loja = new Loja(nome, contato, endereco, descricao,delivery);
+            Loja loja = new Loja(nome, contato, endereco, descricao,delivery,cpf);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();

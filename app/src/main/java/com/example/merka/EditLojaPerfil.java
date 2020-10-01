@@ -37,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.UUID;
 
 public class EditLojaPerfil extends AppCompatActivity {
@@ -51,6 +52,7 @@ public class EditLojaPerfil extends AppCompatActivity {
     private EditText txtContatoLoja;
     private EditText txtEnderecoLoja;
     private EditText txtDescricaoLoja;
+    private EditText txtCpfLoja;
 
     private TextView txtEditImageLoja;
 
@@ -92,14 +94,14 @@ public class EditLojaPerfil extends AppCompatActivity {
         txtContatoLoja = findViewById(R.id.txtEditContatoLoja);
         txtEnderecoLoja = findViewById(R.id.txtEditEnderecoLoja);
         txtDescricaoLoja = findViewById(R.id.txtEditDescricaoLoja);
+        txtCpfLoja = findViewById(R.id.txtEditCpfLoja);
 
       //  txtEditImageLoja = findViewById(R.id.txtEditLojaImage);
-        txtEditImageLoja.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                choosePic();
-            }
-        });
+      //  txtEditImageLoja.setOnClickListener(new View.OnClickListener() {
+      //      @Override
+      //      public void onClick(View view) {
+//            }
+      //  });
 
         btnConfirmar = findViewById(R.id.btnConfirmarAlteracaoLoja);
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
@@ -137,41 +139,48 @@ public class EditLojaPerfil extends AppCompatActivity {
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
+        final String cpf = txtCpfLoja.getEditableText().toString();
         int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
         radioAlteracao = findViewById(radioIdAlteracao);
         final String delivery = radioAlteracao.getText().toString();
 
         if(validateFields(nome,contato,endereco,descricao)){
-            if(validateMinLengthNumber(contato)){
-                AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-                msgBox.setTitle("Alteração de dados");
-                msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                msgBox.setMessage("Deseja alterar os dados da sua loja?");
-                msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                        FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-                        String userId = fbuser.getUid();
+            if(cpfValido(cpf)){
+                if(validateMinLengthNumber(contato)){
+                    AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+                    msgBox.setTitle("Alteração de dados");
+                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                    msgBox.setMessage("Deseja alterar os dados da sua loja?");
+                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+                            FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+                            String userId = fbuser.getUid();
 
-                        Loja loja = new Loja(nome, contato, endereco, descricao,delivery);
+                            Loja loja = new Loja(nome, contato, endereco, descricao,delivery,cpf);
 
-                        refUser.child("lojas").child(userId).setValue(loja);
-                      //  uploadPic();
+                            refUser.child("lojas").child(userId).setValue(loja);
+                            //  uploadPic();
 
-                        goToLoja();
-                    }
-                });
-                msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                            goToLoja();
+                        }
+                    });
+                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
-                msgBox.show();
+                        }
+                    });
+                    msgBox.show();
+                }
+                else{
+                    Toast.makeText(EditLojaPerfil.this, getString(R.string.min_length_number_warning),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
             else{
-                Toast.makeText(EditLojaPerfil.this, getString(R.string.min_length_number_warning),
+                Toast.makeText(EditLojaPerfil.this, "Digite um CPF válido",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -197,6 +206,61 @@ public class EditLojaPerfil extends AppCompatActivity {
             return true;
         }else{
             return false;
+        }
+    }
+    public static boolean cpfValido(String CPF) {
+        // considera-se erro CPF's formados por uma sequencia de numeros iguais
+        if (CPF.equals("00000000000") ||
+                CPF.equals("11111111111") ||
+                CPF.equals("22222222222") || CPF.equals("33333333333") ||
+                CPF.equals("44444444444") || CPF.equals("55555555555") ||
+                CPF.equals("66666666666") || CPF.equals("77777777777") ||
+                CPF.equals("88888888888") || CPF.equals("99999999999") ||
+                (CPF.length() != 11))
+            return(false);
+
+        char dig10, dig11;
+        int sm, i, r, num, peso;
+
+        // "try" - protege o codigo para eventuais erros de conversao de tipo (int)
+        try {
+            // Calculo do 1o. Digito Verificador
+            sm = 0;
+            peso = 10;
+            for (i=0; i<9; i++) {
+                // converte o i-esimo caractere do CPF em um numero:
+                // por exemplo, transforma o caractere '0' no inteiro 0
+                // (48 eh a posicao de '0' na tabela ASCII)
+                num = (int)(CPF.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso - 1;
+            }
+
+            r = 11 - (sm % 11);
+            if ((r == 10) || (r == 11))
+                dig10 = '0';
+            else dig10 = (char)(r + 48); // converte no respectivo caractere numerico
+
+            // Calculo do 2o. Digito Verificador
+            sm = 0;
+            peso = 11;
+            for(i=0; i<10; i++) {
+                num = (int)(CPF.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso - 1;
+            }
+
+            r = 11 - (sm % 11);
+            if ((r == 10) || (r == 11))
+                dig11 = '0';
+            else dig11 = (char)(r + 48);
+
+            // Verifica se os digitos calculados conferem com os digitos informados.
+            if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10)))
+                return(true);
+            else return(false);
+        } catch (InputMismatchException erro) {
+            return(false);
         }
     }
 
@@ -252,6 +316,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                 txtContatoLoja.setText(loja.contato);
                 txtEnderecoLoja.setText(loja.endereco);
                 txtDescricaoLoja.setText(loja.descricao);
+                txtCpfLoja.setText(loja.cpf);
                 if(loja.delivery.equals("Sim")){
                     radioEditSim.setChecked(true);
                 }

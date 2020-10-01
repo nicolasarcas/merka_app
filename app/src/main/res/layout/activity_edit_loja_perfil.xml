@@ -82,6 +82,16 @@
             android:maxLength="76"
             android:textSize="@dimen/HintCadastroLojas" />
 
+        <EditText
+            android:id="@+id/txtEditCpfLoja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="CPF do responsável"
+            android:hint="CPF do resposável"
+            android:inputType="number"
+            android:maxLength="11"
+            android:textSize="@dimen/HintCadastroLojas" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
