@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".EditLojaPerfil"></activity>
+        <activity android:name=".EditProdutoLoja"></activity>
+        <activity android:name=".AdicionaProduto" />
+        <activity android:name=".ProdutosLoja" />
+        <activity android:name=".EditLojaPerfil" />
         <activity android:name=".PerfilLoja" />
         <activity android:name=".CriarLoja" />
         <activity android:name=".RedefinirSenha" />

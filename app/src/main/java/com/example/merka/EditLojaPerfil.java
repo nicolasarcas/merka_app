@@ -93,7 +93,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         txtEnderecoLoja = findViewById(R.id.txtEditEnderecoLoja);
         txtDescricaoLoja = findViewById(R.id.txtEditDescricaoLoja);
 
-        txtEditImageLoja = findViewById(R.id.txtEditLojaImage);
+      //  txtEditImageLoja = findViewById(R.id.txtEditLojaImage);
         txtEditImageLoja.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

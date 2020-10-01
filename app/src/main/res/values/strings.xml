@@ -5,6 +5,7 @@
     <string name="TextViewHintSenha">Senha</string>
     <string name="TextViewHintEmail">Email</string>
     <string name="TextViewHintContato">Contato</string>
+    <string name="TextViewHintValor">Valor</string>
     <string name="TextViewHintEndereco">Endereço</string>
     <string name="TextViewHintTelefone">Telefone</string>
     <string name="TextViewHintDescricao">Descrição</string>
@@ -37,16 +38,28 @@
     <string name="ButtonTextExcluirConta">Excluir conta</string>
     <string name="ButtonTextEncerrarSessao">Encerrar sessão</string>
     <string name="ButtonTextInscreverseNoMerka">Inscrever-se no merka</string>
+    <string name="ImageViewContentDeion">Imagem do produto</string>
     <string name="RadioButtonTextSim">Sim</string>
     <string name="RadioButtonTextNao">Não</string>
+    <string name="DefaultTextNomeDoProduto">Nome do produto</string>
+    <string name="DefaultTextValorDoProduto">Valor do produto</string>
+    <string name="DefaultTextDescricaoDoProduto">Descrição do produto</string>
 
-    <string name="empty_fields_warning">Preencha todos os campos!</string> warning
-    <string name="authentication_failure">Falha na autenticação!</string> wargning
-    <string name="min_length_password_warning">Escreva uma senha com no mínimo 8 dígitos!</string> wargning
-    <string name="min_length_number_warning">Escreva um número com no mínimo 10 dígitos! Incluindo o DDD</string> wargning
-    <string name="different_password_warning">Escreva senhas iguais!</string> wargning
-    <string name="registration_successful">Registrado com sucesso!</string> wargning
-    <string name="registration_failure">Falha no registro!</string> wargning
+
+    <string name="empty_fields_warning">Preencha todos os campos!</string>
+    warning
+    <string name="authentication_failure">Falha na autenticação!</string>
+    wargning
+    <string name="min_length_password_warning">Escreva uma senha com no mínimo 8 dígitos!</string>
+    wargning
+    <string name="min_length_number_warning">Escreva um número com no mínimo 10 dígitos! Incluindo o DDD</string>
+    wargning
+    <string name="different_password_warning">Escreva senhas iguais!</string>
+    wargning
+    <string name="registration_successful">Registrado com sucesso!</string>
+    wargning
+    <string name="registration_failure">Falha no registro!</string>
+    wargning
     <string name="asas">style="@style/BtnCadastrar"</string>
     <string name="resset_pass_successful">E-mail de alteração enviado com sucesso!</string>
     <string name="resset_pass_failure">Falha no envio do e-mail de alteração!</string>
@@ -63,5 +76,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="email_invalido">Digite um e-mail válido!</string>
     <string name="fazDelivery">Faz delivery?</string>
+    <string name="ButtonTextProdutosLoja">Produtos</string>
+    <string name="txtAdicionandoProduto">Adicionando um novo produto!</string>
 
 </resources>

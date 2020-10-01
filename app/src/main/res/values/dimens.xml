@@ -13,6 +13,7 @@
     <dimen name="TextSizeButton">23sp</dimen>
     <dimen name="TextSizeEscrever">18sp</dimen>
     <dimen name="TextSizeLogoMerka">70sp</dimen>
+    <dimen name="TextSizeNomeProduto">25sp</dimen>
     <dimen name="TextSizeEsqueciSenha">13sp</dimen>
     <dimen name="TextSizeJaPossuiUmaConta">15sp</dimen>
 
@@ -21,4 +22,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="heightBtn">45dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

@@ -33,6 +33,7 @@ import java.io.IOException;
 public class PerfilLoja extends AppCompatActivity {
 
     private Button btnEditarLoja;
+    private Button btnProdutos;
 
     private TextView txtNomeLoja;
     private TextView txtContatoLoja;
@@ -71,6 +72,14 @@ public class PerfilLoja extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(PerfilLoja.this,EditLojaPerfil.class));
+            }
+        });
+
+        btnProdutos = findViewById(R.id.btnProdutosLoja);
+        btnProdutos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PerfilLoja.this, ProdutosLoja.class));
             }
         });
 

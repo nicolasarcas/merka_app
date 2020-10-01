@@ -129,6 +129,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
+            android:id="@+id/btnProdutosLoja"
+            style="?attr/buttonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/input_simple_background"
+            android:paddingBottom="4dp"
+            android:text="@string/ButtonTextProdutosLoja" />
+
+        <Button
             android:id="@+id/buttonEditarLoja"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
