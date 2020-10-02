@@ -72,6 +72,7 @@ public class PerfilLoja extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(PerfilLoja.this,EditLojaPerfil.class));
+                finish();
             }
         });
 
@@ -171,6 +172,13 @@ public class PerfilLoja extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         refUser.removeEventListener(userListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(PerfilLoja.this, Tela_Inicial.class));
+        finish();
     }
 }
 

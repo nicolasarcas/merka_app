@@ -31,7 +31,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
         Produto p = produtos.get(position);
 
         holder.txtNomeProduto.setText(p.nome);
-        holder.txtValorProduto.setText(p.valor);
+        holder.txtValorProduto.setText("R$ "+p.valor);
         holder.txtDescricaoProduto.setText(p.descricao);
     }
 

@@ -4,28 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:scrollbars="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/layout_bg">
-
-            <TextView
-                android:id="@+id/nomeProduto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:text="@string/DefaultTextNomeDoProduto"
-                android:textSize="@dimen/TextSizeNomeProduto"
-                android:textStyle="bold" />
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="20dp"
+    app:cardCornerRadius="4dp"
+    android:elevation="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:outlineAmbientShadowColor="@color/red">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -37,6 +29,30 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/nomeProduto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/DefaultTextNomeDoProduto"
+                            android:textSize="@dimen/TextSizeNomeProduto"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/valorProduto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/DefaultTextValorDoProduto"
+                            android:textSize="@dimen/TextSizeNomeProduto"
+                            android:textStyle="bold"
+                            android:layout_gravity="right"/>
+
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/descricaoProduto"
                         android:layout_width="match_parent"
@@ -45,16 +61,10 @@
                         android:gravity="center_vertical"
                         android:text="@string/DefaultTextDescricaoDoProduto" />
 
-                    <TextView
-                        android:id="@+id/valorProduto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/DefaultTextValorDoProduto" />
 
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+
 
     </androidx.cardview.widget.CardView>
 
