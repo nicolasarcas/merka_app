@@ -1,35 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".TelaBusca">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchViewBusca"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:padding="10dp"
-        android:layout_margin="5dp"
-        app:queryHint="@string/hintBusca"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:id="@+id/recyclerViewBusca"
-        android:layout_margin="5dp"/>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardBackgroundColor="@android:color/background_light"
-        app:cardCornerRadius="8dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="4"/>
+        android:orientation="vertical"
+        android:padding="@dimen/PaddingLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</LinearLayout>
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchViewBusca"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:padding="10dp"
+            app:queryHint="@string/hintBusca" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewBusca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/textViewHomePerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/TextViewTextHome"
+                android:textStyle="bold"
+                app:drawableTopCompat="@drawable/ic_home" />
+
+            <TextView
+                android:id="@+id/textViewBuscaPerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/TextViewTextBusca"
+                android:textStyle="bold"
+                app:drawableTopCompat="@drawable/ic_busca" />
+
+            <TextView
+                android:id="@+id/textViewLojaPerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/TextViewTextLoja"
+                android:textStyle="bold"
+                app:drawableTopCompat="@drawable/ic_loja" />
+
+            <TextView
+                android:id="@+id/textViewPerfilPerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/TextViewTextPerfil"
+                android:textStyle="bold"
+                app:drawableTopCompat="@drawable/ic_person" />
+
+
+        </LinearLayout>
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
