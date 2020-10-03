@@ -196,6 +196,7 @@ public class EditPerfil extends AppCompatActivity {
         refUser = FirebaseDatabase.getInstance().getReference();
         refUser.child("users").child(userId).removeValue();
         refUser.child("lojas").child(userId).removeValue();
+        refUser.child("produtos").child(userId).removeValue();
     }
 
     public boolean validateFields(String login, String password1, String password2, String name){
@@ -257,5 +258,12 @@ public class EditPerfil extends AppCompatActivity {
             }
         };
         refUser.addListenerForSingleValueEvent(userListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(EditPerfil.this, Perfil.class));
+        finish();;
     }
 }

@@ -297,6 +297,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         refUser = FirebaseDatabase.getInstance().getReference();
         refUser.child("lojas").child(userId).removeValue();
+        refUser.child("produtos").child(userId).removeValue();
         refUser.child("users").child(userId).child("store").setValue(false);
     }
 
@@ -388,5 +389,12 @@ public class EditLojaPerfil extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
+        finish();;
     }
 }

@@ -104,4 +104,11 @@ public class AdicionaProduto extends AppCompatActivity {
         startActivity(new Intent(AdicionaProduto.this, ProdutosLoja.class));
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(AdicionaProduto.this, ProdutosLoja.class));
+        finish();;
+    }
 }

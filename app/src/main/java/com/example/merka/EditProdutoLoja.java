@@ -176,4 +176,11 @@ public class EditProdutoLoja extends AppCompatActivity {
         refUser.addListenerForSingleValueEvent(userListener);
         //  loadImage();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(EditProdutoLoja.this, ProdutosLoja.class));
+        finish();;
+    }
 }

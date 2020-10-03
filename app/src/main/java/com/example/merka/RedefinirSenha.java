@@ -65,4 +65,11 @@ public class RedefinirSenha extends AppCompatActivity {
                     });
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(RedefinirSenha.this, Login.class));
+        finish();;
+    }
 }

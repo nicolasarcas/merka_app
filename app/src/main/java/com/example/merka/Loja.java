@@ -5,6 +5,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Loja {
 
+
     public String nome;
     public String contato;
     public String endereco;
@@ -24,5 +25,19 @@ public class Loja {
         this.cpf = cpf;
     }
 
+    public String getNome() {
+        return nome;
+    }
+    public String getContato() {
+        return contato;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
 
 }

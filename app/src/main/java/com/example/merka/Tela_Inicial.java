@@ -20,6 +20,7 @@ public class Tela_Inicial extends AppCompatActivity {
 
     private TextView btnPerfil;
     private TextView btnLoja;
+    private TextView btnBusca;
 
     private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
     private DatabaseReference refUser; // variável de acesso ao RealTime DataBase
@@ -33,7 +34,6 @@ public class Tela_Inicial extends AppCompatActivity {
         refUser = FirebaseDatabase.getInstance().getReference().child("users");
 
         btnPerfil = findViewById(R.id.textViewPerfilPerfil);
-
         btnPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,6 +49,13 @@ public class Tela_Inicial extends AppCompatActivity {
             }
         });
 
+        btnBusca = findViewById(R.id.textViewBuscaPerfil);
+        btnBusca.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Tela_Inicial.this, TelaBusca.class));
+            }
+        });
     }
 
     private void decisaoLoja() {

@@ -48,6 +48,7 @@ public class PerfilLoja extends AppCompatActivity {
 
     private TextView btnHome;
     private TextView btnPerfil;
+    private TextView btnBusca;
 
     private ImageView imageView;
 
@@ -89,6 +90,7 @@ public class PerfilLoja extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent (PerfilLoja.this, Tela_Inicial.class));
+                finish();
             }
         });
 
@@ -97,6 +99,16 @@ public class PerfilLoja extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent (PerfilLoja.this, Perfil.class));
+                finish();
+            }
+        });
+
+        btnBusca = findViewById(R.id.textViewBuscaPerfil);
+        btnBusca.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PerfilLoja.this, TelaBusca.class));
+                finish();;
             }
         });
         txtContatoLoja.setOnClickListener(new View.OnClickListener() {

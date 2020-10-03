@@ -36,6 +36,7 @@ public class Perfil extends AppCompatActivity {
 
     private TextView btnHome;
     private TextView btnLoja;
+    private TextView btnBusca;
 
     private boolean loja;
 
@@ -75,6 +76,7 @@ public class Perfil extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent (Perfil.this, Tela_Inicial.class));
+                finish();
             }
         });
 
@@ -86,13 +88,24 @@ public class Perfil extends AppCompatActivity {
             }
         });
 
+        btnBusca=findViewById(R.id.textViewBuscaPerfil);
+        btnBusca.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Perfil.this, TelaBusca.class));
+                finish();;
+            }
+        });
+
     }
 
     private void decisaoLoja() {
         if(loja){
             startActivity(new Intent (Perfil.this, PerfilLoja.class));
+            finish();
         } else{
             startActivity(new Intent (Perfil.this, CriarLoja.class));
+            finish();
         }
     }
 
@@ -159,5 +172,12 @@ public class Perfil extends AppCompatActivity {
         });
         msgBox.show();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(Perfil.this, Tela_Inicial.class));
+        finish();;
     }
 }

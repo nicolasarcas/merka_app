@@ -274,4 +274,10 @@ public class CriarLoja extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(CriarLoja.this, Tela_Inicial.class));
+        finish();;
+    }
 }

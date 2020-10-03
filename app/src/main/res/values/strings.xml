@@ -44,6 +44,10 @@
     <string name="DefaultTextNomeDoProduto">Nome do produto</string>
     <string name="DefaultTextValorDoProduto">R$ 00</string>
     <string name="DefaultTextDescricaoDoProduto">Descrição do produto</string>
+    <string name="DefaultTextNomeDaLoja">Nome da Loja</string>
+    <string name="DefaultTextContatoDaLoja">Contato da Loja</string>
+    <string name="DefaultTextDescricaoDaLoja">Descrição da Loja</string>
+    <string name="DefaultTextEnderecoDaLoja">Endereço da Loja</string>
 
 
     <string name="empty_fields_warning">Preencha todos os campos!</string>
@@ -78,5 +82,6 @@
     <string name="fazDelivery">Faz delivery?</string>
     <string name="ButtonTextProdutosLoja">Produtos</string>
     <string name="txtAdicionandoProduto">Adicionando um novo produto!</string>
+    <string name="hintBusca">O que procura?</string>
 
 </resources>
