@@ -195,8 +195,9 @@ public class EditPerfil extends AppCompatActivity {
         String userId = user.getUid();
         refUser = FirebaseDatabase.getInstance().getReference();
         refUser.child("users").child(userId).removeValue();
-        refUser.child("lojas").child(userId).removeValue();
-        refUser.child("produtos").child(userId).removeValue();
+        if(temLoja){
+            refUser.child("lojas").child(userId).removeValue();
+        }
     }
 
     public boolean validateFields(String login, String password1, String password2, String name){

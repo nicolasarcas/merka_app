@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.SearchView;
+
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,12 +38,40 @@ public class TelaBusca extends AppCompatActivity {
 
     private FirebaseUser fireUser;
     private DatabaseReference refUser;
+    private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
+    private ValueEventListener userListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_busca);
 
+        btnHome = findViewById(R.id.textViewHomePerfil);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TelaBusca.this, Tela_Inicial.class));
+                finish();
+            }
+        });
+        btnPerfil = findViewById(R.id.textViewPerfilPerfil);
+        btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TelaBusca.this, Perfil.class));
+                finish();
+            }
+        });
+        btnLoja = findViewById(R.id.textViewLojaPerfil);
+        btnLoja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                decisaoLoja();
+            }
+        });
+
+        mAuth = FirebaseAuth.getInstance();
+        refUser = FirebaseDatabase.getInstance().getReference().child("users");
         searchBusca = findViewById(R.id.searchViewBusca);
 
         lojasRecyclerView = findViewById(R.id.recyclerViewBusca);
@@ -51,6 +81,35 @@ public class TelaBusca extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setReverseLayout(true);
         lojasRecyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    private void decisaoLoja() {
+        mAuth.getCurrentUser();
+        refUser = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getUid());
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                User user = dataSnapshot.getValue(User.class);
+                // [START_EXCLUDE]
+                if(user.store){
+                    startActivity(new Intent (TelaBusca.this, PerfilLoja.class));
+                    finish();
+                }
+                else{
+                    startActivity(new Intent (TelaBusca.this, CriarLoja.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(TelaBusca.this, "Falha ao carregar dados do usuário.",
+                        Toast.LENGTH_SHORT).show();
+                // [END_EXCLUDE]
+            }
+        };
+        refUser.addListenerForSingleValueEvent(userListener);
     }
 
     private void setupFirebase() {

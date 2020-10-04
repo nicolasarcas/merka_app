@@ -133,7 +133,6 @@ public class EditLojaPerfil extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,2);
     }
-
     private void atualizarLoja(){
         final String nome = txtNomeLoja.getEditableText().toString();
         final String contato = txtContatoLoja.getEditableText().toString();

@@ -1,6 +1,9 @@
 package com.example.merka;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Tela_Inicial extends AppCompatActivity {
 
@@ -25,6 +32,15 @@ public class Tela_Inicial extends AppCompatActivity {
     private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
     private DatabaseReference refUser; // variável de acesso ao RealTime DataBase
     private ValueEventListener userListener;
+    private FirebaseUser fireUser;
+
+    private RecyclerView lojasRecyclerView;
+    private LojaAdapter adapterLoja;
+    private List<Loja> lojas;
+
+    private RecyclerView produtosRecyclerView;
+    private ProdutoAdapter adapterProduto;
+    private List<Produto> produtos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +48,22 @@ public class Tela_Inicial extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("users");
+
+        lojasRecyclerView = findViewById(R.id.recyclerViewTelaInicialLojas);
+        lojas = new ArrayList<>();
+        adapterLoja = new LojaAdapter(lojas,this);
+        lojasRecyclerView.setAdapter(adapterLoja);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        lojasRecyclerView.setLayoutManager(linearLayoutManager);
+
+        produtosRecyclerView = findViewById(R.id.recyclerViewTelaInicialProdutos);
+        produtos = new ArrayList<>();
+        adapterProduto = new ProdutoAdapter(produtos,this);
+        produtosRecyclerView.setAdapter(adapterProduto);
+        LinearLayoutManager linearLayoutManagerProd = new LinearLayoutManager(this);
+        linearLayoutManagerProd.setReverseLayout(true);
+        produtosRecyclerView.setLayoutManager(linearLayoutManagerProd);
 
         btnPerfil = findViewById(R.id.textViewPerfilPerfil);
         btnPerfil.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +92,7 @@ public class Tela_Inicial extends AppCompatActivity {
 
     private void decisaoLoja() {
         mAuth.getCurrentUser();
-        refUser = refUser.child(mAuth.getUid());
+        refUser = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getUid());
         userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -89,5 +121,56 @@ public class Tela_Inicial extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         refUser.removeEventListener(userListener);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setupFirebaseLojas();
+        setupFirebaseProdutos();
+    }
+
+    private void setupFirebaseProdutos() {
+        fireUser = FirebaseAuth.getInstance().getCurrentUser();
+        refUser = FirebaseDatabase.getInstance().getReference().child("produtos");
+
+        refUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for(DataSnapshot ds : snapshot.getChildren()){
+                        produtos.add(ds.getValue(Produto.class));
+                    }
+                    adapterProduto.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(Tela_Inicial.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupFirebaseLojas() {
+        fireUser = FirebaseAuth.getInstance().getCurrentUser();
+        refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
+
+        refUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for(DataSnapshot ds : snapshot.getChildren()){
+                        lojas.add(ds.getValue(Loja.class));
+                    }
+                    adapterLoja.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(Tela_Inicial.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
