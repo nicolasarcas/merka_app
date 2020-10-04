@@ -133,17 +133,19 @@
             style="?attr/buttonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/input_simple_background"
-            android:paddingBottom="4dp"
-            android:text="@string/ButtonTextProdutosLoja" />
+            android:layout_marginBottom="@dimen/MarginEntreElementos"
+            android:background="@drawable/botao_fundobranco_brodavermelha_longo"
+            android:text="@string/ButtonTextProdutosLoja"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/buttonEditarLoja"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
-            android:background="@drawable/input_simple_background"
-            android:text="@string/ButtonTextEditarLoja" />
+            android:background="@drawable/botao_fundobranco_brodavermelha_longo"
+            android:text="@string/ButtonTextEditarLoja"
+            android:textStyle="bold" />
     </LinearLayout>
 
 

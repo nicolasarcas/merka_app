@@ -61,8 +61,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/input_simple_background"
-            android:paddingBottom="4dp"
+            android:background="@drawable/botao_fundobranco_bordavermelha"
             android:text="@string/ButtonTextConfirmar" />
 
         <Button
@@ -73,8 +72,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/input_simple_background"
-            android:paddingBottom="4dp"
+            android:background="@drawable/botao_fundobranco_bordavermelha"
             android:text="@string/ButtonTextCancelar" />
     </LinearLayout>
 
@@ -83,8 +81,8 @@
         style="?attr/buttonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/input_simple_background"
-        android:paddingBottom="4dp"
+        android:layout_marginTop="@dimen/MarginEntreElementos"
+        android:background="@drawable/botao_fundobranco_brodavermelha_longo"
         android:text="@string/ButtonTextExcluirLoja" />
 
 </LinearLayout>

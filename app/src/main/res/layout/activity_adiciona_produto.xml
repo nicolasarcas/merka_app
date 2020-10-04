@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AdicionaProduto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/PaddingLayout">
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,6 +48,7 @@
         android:id="@+id/txtAdicionaDescricaoProduto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/MarginEntreElementos"
         android:autofillHints="@string/TextViewHintDescricao"
         android:hint="@string/TextViewHintDescricao"
         android:inputType="text"
@@ -66,8 +68,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/input_simple_background"
-            android:paddingBottom="4dp"
+            android:background="@drawable/botao_fundobranco_bordavermelha"
             android:text="@string/ButtonTextConfirmar" />
 
         <Button
@@ -78,8 +79,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/input_simple_background"
-            android:paddingBottom="4dp"
+            android:background="@drawable/botao_fundobranco_bordavermelha"
             android:text="@string/ButtonTextCancelar" />
     </LinearLayout>
 

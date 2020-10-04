@@ -11,6 +11,7 @@
     <string name="TextViewHintDescricao">Descrição</string>
     <string name="TextViewHintConfirmaSenha">Confirmar senha</string>
     <string name="TextViewHintPreencherEmail">Preencha o campo de e-mail!</string>
+    <string name="TextViewHintCPFdoResposavel">CPF do resposável</string>
     <string name="TextViewTextHome">Home</string>
     <string name="TextViewTextLoja">Loja</string>
     <string name="TextViewTextBusca">Busca</string>

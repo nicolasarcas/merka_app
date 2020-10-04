@@ -92,9 +92,9 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/input_simple_background"
+            android:background="@drawable/botao_fundobranco_bordavermelha"
             android:text="@string/ButtonTextConfirmar"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/btnCancelarAlteracao"
@@ -104,9 +104,9 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/input_simple_background"
+            android:background="@drawable/botao_fundobranco_bordavermelha"
             android:text="@string/ButtonTextCancelar"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <Button
@@ -115,9 +115,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/MarginEntreElementos"
-        android:background="@drawable/input_simple_background"
+        android:background="@drawable/botao_fundobranco_brodavermelha_longo"
         android:text="@string/ButtonTextExcluirConta"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 

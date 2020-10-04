@@ -83,16 +83,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/MarginEntreElementos"
-            android:background="@drawable/input_simple_background"
-            android:text="@string/ButtonTextEditarPerfil" />
+            android:background="@drawable/botao_fundobranco_brodavermelha_longo"
+            android:text="@string/ButtonTextEditarPerfil"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/buttonSignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/MarginEntreElementos"
-            android:background="@drawable/input_simple_background"
-            android:text="@string/ButtonTextEncerrarSessao" />
+            android:background="@drawable/botao_fundobranco_brodavermelha_longo"
+            android:text="@string/ButtonTextEncerrarSessao"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
