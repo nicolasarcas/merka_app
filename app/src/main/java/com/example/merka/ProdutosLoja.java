@@ -1,12 +1,15 @@
 package com.example.merka;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -33,11 +36,14 @@ public class ProdutosLoja extends AppCompatActivity {
 
     private FirebaseUser fireUser;
     private DatabaseReference refUser;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produtos_loja);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         btnAddProduto = findViewById(R.id.btnAddProduto);
         btnAddProduto.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +58,6 @@ public class ProdutosLoja extends AppCompatActivity {
         adapter = new ProdutoAdapter(produtos,this);
         produtosRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
         produtosRecyclerView.setLayoutManager(linearLayoutManager);
     }
     private void setupFirebase() {
@@ -63,6 +68,7 @@ public class ProdutosLoja extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    produtos.clear();
                     for(DataSnapshot ds : snapshot.getChildren()){
                         produtos.add(ds.getValue(Produto.class));
                     }
@@ -75,6 +81,53 @@ public class ProdutosLoja extends AppCompatActivity {
                 Toast.makeText(ProdutosLoja.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case 11:
+                Produto p = produtos.get(item.getGroupId());
+                Intent i = new Intent(ProdutosLoja.this,EditProdutoLoja.class);
+                i.putExtra("nome",p.nome);
+                startActivity(i);
+                return true;
+            case 22:
+                confirmarExclusao(item.getGroupId());
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+    private void confirmarExclusao(final int position){
+        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+        msgBox.setTitle("Excluir");
+        msgBox.setIcon(android.R.drawable.ic_menu_delete);
+        msgBox.setMessage("Deseja mesmo excluir o produto?");
+        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Produto p = produtos.get(position);
+                produtos.remove(p);
+                deleteUserData(p.nome);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        msgBox.show();
+    }
+    public void deleteUserData(String nome){//deletar dados do usuário do banco de dados
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userId = user.getUid();
+
+        refUser = FirebaseDatabase.getInstance().getReference();
+        refUser.child("produtos").child(userId).child(nome).removeValue();
     }
 
     @Override

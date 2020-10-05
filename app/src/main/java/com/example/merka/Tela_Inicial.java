@@ -54,15 +54,13 @@ public class Tela_Inicial extends AppCompatActivity {
         adapterLoja = new LojaAdapter(lojas,this);
         lojasRecyclerView.setAdapter(adapterLoja);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
         lojasRecyclerView.setLayoutManager(linearLayoutManager);
 
         produtosRecyclerView = findViewById(R.id.recyclerViewTelaInicialProdutos);
         produtos = new ArrayList<>();
         adapterProduto = new ProdutoAdapter(produtos,this);
         produtosRecyclerView.setAdapter(adapterProduto);
-        LinearLayoutManager linearLayoutManagerProd = new LinearLayoutManager(this);
-        linearLayoutManagerProd.setReverseLayout(true);
+        LinearLayoutManager linearLayoutManagerProd = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         produtosRecyclerView.setLayoutManager(linearLayoutManagerProd);
 
         btnPerfil = findViewById(R.id.textViewPerfilPerfil);
@@ -127,7 +125,7 @@ public class Tela_Inicial extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         setupFirebaseLojas();
-        setupFirebaseProdutos();
+    //    setupFirebaseProdutos();
     }
 
     private void setupFirebaseProdutos() {

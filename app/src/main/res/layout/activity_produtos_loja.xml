@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ProdutosLoja"
     android:orientation="vertical"
-    android:layout_gravity="bottom">
+    android:layout_gravity="top">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProdutos"
@@ -16,7 +16,8 @@
         android:layout_marginStart="@dimen/PaddingLayout"
         android:layout_marginTop="@dimen/PaddingLayout"
         android:layout_marginEnd="@dimen/PaddingLayout"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:listitem="@layout/produtos_item" />
 
     <LinearLayout
         android:layout_width="match_parent"

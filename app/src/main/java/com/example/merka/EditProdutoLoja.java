@@ -28,11 +28,13 @@ public class EditProdutoLoja extends AppCompatActivity {
 
     private Button btnConfirmaEditProduto;
     private Button btnCancelaEditProduto;
-    private Button btnExlcuiProduto;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference refUser;
     private ValueEventListener userListener;
+
+    private String nomeProd;
+    private Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +64,6 @@ public class EditProdutoLoja extends AppCompatActivity {
             }
         });
 
-        btnExlcuiProduto = findViewById(R.id.btnExcluirProdutoLoja);
-        btnExlcuiProduto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confirmarExclusao();
-            }
-        });
     }
 
     private void atualizarProduto(View view) {
@@ -88,7 +83,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                     FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                     String userId = fbuser.getUid();
 
-                    Produto produto = new Produto();
+                    Produto produto = new Produto(nome,valor,desc);
 
                     refUser.child("produtos").child(userId).child(txtEditNomePrduto.getEditableText().toString()).setValue(produto);
                     //  uploadPic();
@@ -118,44 +113,21 @@ public class EditProdutoLoja extends AppCompatActivity {
         }
     }
 
-    private void confirmarExclusao(){
-        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-        msgBox.setTitle("Excluir");
-        msgBox.setIcon(android.R.drawable.ic_menu_delete);
-        msgBox.setMessage("Deseja mesmo excluir este produto?");
-        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                deleteProdutoData();
-                goToProdutos();
-            }
-        });
-        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        msgBox.show();
-    }
-    public void deleteProdutoData(){//deletar dados do usuário do banco de dados
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userId = user.getUid();
-
-        refUser = FirebaseDatabase.getInstance().getReference();
-        refUser.child("produtos").child(userId).child(txtEditNomePrduto.getEditableText().toString()).removeValue();
-    }
 
     private void goToProdutos() {
         startActivity(new Intent(EditProdutoLoja.this, ProdutosLoja.class));
+        finish();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
+        i = getIntent();
+        nomeProd = i.getStringExtra("nome");
+
         firebaseAuth.getCurrentUser();
-        refUser = refUser.child(firebaseAuth.getUid());
+        refUser = refUser.child(firebaseAuth.getUid()).child(nomeProd);
 
         userListener = new ValueEventListener() {
             @Override
@@ -165,6 +137,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                 txtEditNomePrduto.setText(produto.nome);
                 txtEditValorPrduto.setText(produto.valor);
                 txtEditDescricaoPrduto.setText(produto.descricao);
+
             }
 
             @Override

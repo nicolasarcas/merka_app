@@ -79,7 +79,6 @@ public class TelaBusca extends AppCompatActivity {
         adapter = new LojaAdapter(lojas,this);
         lojasRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
         lojasRecyclerView.setLayoutManager(linearLayoutManager);
     }
 

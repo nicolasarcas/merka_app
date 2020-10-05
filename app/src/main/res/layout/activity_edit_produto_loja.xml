@@ -76,13 +76,4 @@
             android:text="@string/ButtonTextCancelar" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnExcluirProdutoLoja"
-        style="?attr/buttonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/MarginEntreElementos"
-        android:background="@drawable/botao_fundobranco_brodavermelha_longo"
-        android:text="@string/ButtonTextExcluirLoja" />
-
 </LinearLayout>

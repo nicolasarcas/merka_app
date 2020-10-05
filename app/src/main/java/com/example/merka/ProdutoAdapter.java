@@ -39,4 +39,6 @@ public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
     public int getItemCount(){
         return produtos.size();
     }
+
 }
+

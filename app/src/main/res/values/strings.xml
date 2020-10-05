@@ -85,4 +85,7 @@
     <string name="txtAdicionandoProduto">Adicionando um novo produto!</string>
     <string name="hintBusca">O que procura?</string>
 
+    <string name="excluir">Excluir</string>
+    <string name="alterar">Alterar</string>
+
 </resources>
