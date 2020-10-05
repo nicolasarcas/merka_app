@@ -15,6 +15,8 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Random;
+
 public class AdicionaProduto extends AppCompatActivity {
 
     private Button btnAdicionaConfirma;
@@ -85,12 +87,16 @@ public class AdicionaProduto extends AppCompatActivity {
     private void writeNewProduto(String userId, String nome, String valor, String descricao) {
         //usando o mesmo UID do Firebase Authentication: userId
 
+        Random rand = new Random();
+        int id = rand.nextInt(10000)+1;
+        String idProd = String.valueOf(id);
+
         try {//tentando cadastrar no banco
-            Produto produto = new Produto(nome,valor, descricao);
+            Produto produto = new Produto(idProd,nome,valor, descricao);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-            refUser.child("produtos").child(userId).child(txtAdicionaNomeProduto.getEditableText().toString()).setValue(produto);
+            refUser.child("produtos").child(userId).child(idProd).setValue(produto);
             // uploadPic();
             goToProdutos();
 

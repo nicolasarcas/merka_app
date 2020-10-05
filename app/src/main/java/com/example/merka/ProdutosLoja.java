@@ -90,7 +90,7 @@ public class ProdutosLoja extends AppCompatActivity {
             case 11:
                 Produto p = produtos.get(item.getGroupId());
                 Intent i = new Intent(ProdutosLoja.this,EditProdutoLoja.class);
-                i.putExtra("nome",p.nome);
+                i.putExtra("id",p.id);
                 startActivity(i);
                 return true;
             case 22:
@@ -110,7 +110,7 @@ public class ProdutosLoja extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Produto p = produtos.get(position);
                 produtos.remove(p);
-                deleteUserData(p.nome);
+                deleteUserData(p.id);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -122,12 +122,12 @@ public class ProdutosLoja extends AppCompatActivity {
         });
         msgBox.show();
     }
-    public void deleteUserData(String nome){//deletar dados do usuário do banco de dados
+    public void deleteUserData(String prodId){//deletar dados do usuário do banco de dados
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();
 
         refUser = FirebaseDatabase.getInstance().getReference();
-        refUser.child("produtos").child(userId).child(nome).removeValue();
+        refUser.child("produtos").child(userId).child(prodId).removeValue();
     }
 
     @Override

@@ -2,16 +2,26 @@ package com.example.merka;
 
 public class Produto {
 
+    public String id;
     public String nome;
     public String valor;
     public String descricao;
 
     public Produto(){}
 
-    public Produto(String nome, String valor, String descricao){
+    public Produto(String id,String nome, String valor, String descricao){
+        this.id = id;
         this.nome = nome;
         this.valor = valor;
         this.descricao = descricao;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNome() {

@@ -33,7 +33,7 @@ public class EditProdutoLoja extends AppCompatActivity {
     private DatabaseReference refUser;
     private ValueEventListener userListener;
 
-    private String nomeProd;
+    private String idProd;
     private Intent i;
 
     @Override
@@ -70,6 +70,7 @@ public class EditProdutoLoja extends AppCompatActivity {
         final String nome = txtEditNomePrduto.getEditableText().toString();
         final String valor = txtEditValorPrduto.getEditableText().toString();
         final String desc = txtEditDescricaoPrduto.getEditableText().toString();
+        final String id = idProd;
 
         if(validateFields(nome,valor,desc)){
             AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
@@ -83,9 +84,9 @@ public class EditProdutoLoja extends AppCompatActivity {
                     FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                     String userId = fbuser.getUid();
 
-                    Produto produto = new Produto(nome,valor,desc);
+                    Produto produto = new Produto(id,nome,valor,desc);
 
-                    refUser.child("produtos").child(userId).child(txtEditNomePrduto.getEditableText().toString()).setValue(produto);
+                    refUser.child("produtos").child(userId).child(id).setValue(produto);
                     //  uploadPic();
 
                     goToProdutos();
@@ -124,10 +125,10 @@ public class EditProdutoLoja extends AppCompatActivity {
         super.onStart();
 
         i = getIntent();
-        nomeProd = i.getStringExtra("nome");
+        idProd = i.getStringExtra("id");
 
         firebaseAuth.getCurrentUser();
-        refUser = refUser.child(firebaseAuth.getUid()).child(nomeProd);
+        refUser = refUser.child(firebaseAuth.getUid()).child(idProd);
 
         userListener = new ValueEventListener() {
             @Override
