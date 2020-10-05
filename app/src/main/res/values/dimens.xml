@@ -14,6 +14,7 @@
     <dimen name="TextSizeEscrever">18sp</dimen>
     <dimen name="TextSizeLogoMerka">70sp</dimen>
     <dimen name="TextSizeNomeProduto">20sp</dimen>
+    <dimen name="TextSizeNomeProdutoPequeno">18sp</dimen>
     <dimen name="TextSizeEsqueciSenha">13sp</dimen>
     <dimen name="TextSizeJaPossuiUmaConta">15sp</dimen>
 
