@@ -68,7 +68,7 @@ public class EditProdutoLoja extends AppCompatActivity {
 
     private void atualizarProduto(View view) {
         final String nome = txtEditNomePrduto.getEditableText().toString();
-        final String valor = txtEditValorPrduto.getEditableText().toString();
+        final String valor = retonarValorFormatado(txtEditValorPrduto.getEditableText().toString());
         final String desc = txtEditDescricaoPrduto.getEditableText().toString();
         final String id = idProd;
 
@@ -105,13 +105,17 @@ public class EditProdutoLoja extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    public String retonarValorFormatado(String valor){
+
+        if(valor.indexOf('.') == -1){
+            return valor + ",00";
+        }
+        return valor.substring(0, (valor.indexOf('.')+3)).replace('.',',');
+    }
+
     public boolean validateFields(String nome, String valor,  String desc){
-        if(nome.isEmpty() || valor.isEmpty() || desc.isEmpty()){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return !nome.isEmpty() && !valor.isEmpty() && !desc.isEmpty();
     }
 
 
@@ -136,7 +140,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                 Produto produto = snapshot.getValue(Produto.class);
 
                 txtEditNomePrduto.setText(produto.nome);
-                txtEditValorPrduto.setText(produto.valor);
+                txtEditValorPrduto.setText(produto.valor.replace(',', '.'));
                 txtEditDescricaoPrduto.setText(produto.descricao);
 
             }
@@ -155,6 +159,6 @@ public class EditProdutoLoja extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(EditProdutoLoja.this, ProdutosLoja.class));
-        finish();;
+        finish();
     }
 }

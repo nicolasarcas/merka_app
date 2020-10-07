@@ -60,7 +60,7 @@ public class AdicionaProduto extends AppCompatActivity {
 
     private void adicionaProduto(View view) {
         final String nome = txtAdicionaNomeProduto.getEditableText().toString();
-        final String valor = txtAdicionaValorProduto.getEditableText().toString();
+        final String valor = retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
         final String desc = txtAdicionaDescricaoProduto.getEditableText().toString();
 
         if(validateFields(nome,valor, desc)){
@@ -75,14 +75,18 @@ public class AdicionaProduto extends AppCompatActivity {
         }
     }
 
+    public String retonarValorFormatado(String valor){
+
+        if(valor.indexOf('.') == -1){
+            return valor + ",00";
+        }
+
+        valor = valor.substring(0, valor.indexOf('.')+3);
+        return valor.replace('.', ',');
+    }
+
     public boolean validateFields(String nome, String valor,  String desc){
-        if(nome.isEmpty() || valor.isEmpty() || desc.isEmpty()){
-            return false;
-        }
-        else{
-            return true;
-        }
-        //return !nome.isEmpty() && !valor.isEmpty() && !desc.isEmpty();
+        return !nome.isEmpty() && !valor.isEmpty() && !desc.isEmpty();
     }
     private void writeNewProduto(String userId, String nome, String valor, String descricao) {
         //usando o mesmo UID do Firebase Authentication: userId
@@ -115,6 +119,6 @@ public class AdicionaProduto extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(AdicionaProduto.this, ProdutosLoja.class));
-        finish();;
+        finish();
     }
 }
