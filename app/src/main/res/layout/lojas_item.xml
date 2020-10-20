@@ -18,9 +18,12 @@
         android:background="@drawable/layout_bg">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/picLoja"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:contentDescription="@string/ImageViewContentDescription"
+            android:padding="5dp"
+            android:radius="5dp"
             android:src="@drawable/ic_image" />
 
         <LinearLayout

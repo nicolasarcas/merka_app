@@ -50,7 +50,7 @@ public class PerfilLoja extends AppCompatActivity {
     private TextView btnPerfil;
     private TextView btnBusca;
 
-    private ImageView imageView;
+    private ImageView pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class PerfilLoja extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
 
-        imageView = findViewById(R.id.perfilLojaImage);
+        pic = findViewById(R.id.perfilLojaImage);
 
         txtNomeLoja=findViewById(R.id.textViewNomeLoja);
         txtContatoLoja=findViewById(R.id.txtPerfilContatoLoja);
@@ -142,6 +142,7 @@ public class PerfilLoja extends AppCompatActivity {
                 txtEnderecoLoja.setText(loja.endereco);
                 txtDescricao.setText(loja.descricao);
                 txtDeliveryLoja.setText(loja.delivery);
+                if(loja.PicUrl != null) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
             }
 
             @Override
@@ -167,7 +168,7 @@ public class PerfilLoja extends AppCompatActivity {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                            imageView.setImageBitmap(bitmap);
+                            pic.setImageBitmap(bitmap);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override

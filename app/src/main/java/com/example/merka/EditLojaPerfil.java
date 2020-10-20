@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.InputMismatchException;
 import java.util.UUID;
 
@@ -69,7 +71,7 @@ public class EditLojaPerfil extends AppCompatActivity {
     private RadioButton radioEditNao;
 
     private ImageView pic;
-    public Uri picUri;
+    public Uri picUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,19 +91,18 @@ public class EditLojaPerfil extends AppCompatActivity {
         radioEditSim=findViewById(R.id.radioAlteracaoSim);
 
         pic = findViewById(R.id.editPerfilLojaImage);
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choosePic();
+            }
+        });
 
         txtNomeLoja = findViewById(R.id.txtEditNomeLoja);
         txtContatoLoja = findViewById(R.id.txtEditContatoLoja);
         txtEnderecoLoja = findViewById(R.id.txtEditEnderecoLoja);
         txtDescricaoLoja = findViewById(R.id.txtEditDescricaoLoja);
         txtCpfLoja = findViewById(R.id.txtEditCpfLoja);
-
-      //  txtEditImageLoja = findViewById(R.id.txtEditLojaImage);
-      //  txtEditImageLoja.setOnClickListener(new View.OnClickListener() {
-      //      @Override
-      //      public void onClick(View view) {
-//            }
-      //  });
 
         btnConfirmar = findViewById(R.id.btnConfirmarAlteracaoLoja);
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
@@ -133,12 +134,14 @@ public class EditLojaPerfil extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,2);
     }
+
     private void atualizarLoja(){
         final String nome = txtNomeLoja.getEditableText().toString();
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
+        final String url = String.valueOf(picUrl);
         int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
         radioAlteracao = findViewById(radioIdAlteracao);
         final String delivery = radioAlteracao.getText().toString();
@@ -157,7 +160,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                             FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                             String userId = fbuser.getUid();
 
-                            Loja loja = new Loja(nome, contato, endereco, descricao,delivery,cpf);
+                            Loja loja = new Loja(nome, contato, endereco, descricao,delivery,cpf, url);
 
                             refUser.child("lojas").child(userId).setValue(loja);
                             //  uploadPic();
@@ -300,6 +303,30 @@ public class EditLojaPerfil extends AppCompatActivity {
         refUser.child("users").child(userId).child("store").setValue(false);
     }
 
+    static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -317,6 +344,8 @@ public class EditLojaPerfil extends AppCompatActivity {
                 txtEnderecoLoja.setText(loja.endereco);
                 txtDescricaoLoja.setText(loja.descricao);
                 txtCpfLoja.setText(loja.cpf);
+                if(loja.PicUrl!=null) new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
+
                 if(loja.delivery.equals("Sim")){
                     radioEditSim.setChecked(true);
                 }
@@ -339,8 +368,8 @@ public class EditLojaPerfil extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==2 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
-            picUri = data.getData();
-            pic.setImageURI(picUri);
+            picUrl = data.getData();
+            pic.setImageURI(picUrl);
         }
     }
     private void uploadPic(){
@@ -350,7 +379,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         StorageReference riversRef = storageReference.child(userId).child("images/"+txtNomeLoja.getEditableText().toString());
 
-        riversRef.putFile(picUri)
+        riversRef.putFile(picUrl)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

@@ -5,14 +5,16 @@ public class Produto {
     public String id;
     public String nome;
     public String valor;
+    public String picUrl;
     public String descricao;
 
     public Produto(){}
 
-    public Produto(String id,String nome, String valor, String descricao){
+    public Produto(String id,String nome, String valor, String descricao, String picUrl){
         this.id = id;
         this.nome = nome;
         this.valor = valor;
+        this.picUrl = picUrl;
         this.descricao = descricao;
     }
 

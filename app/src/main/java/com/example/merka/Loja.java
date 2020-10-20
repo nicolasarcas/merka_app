@@ -1,5 +1,7 @@
 package com.example.merka;
 
+import android.net.Uri;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
@@ -12,22 +14,25 @@ public class Loja {
     public String descricao;
     public String delivery;
     public String cpf;
+    public String PicUrl;
 
     public Loja(){
         // Default constructor required for calls to DataSnapshot.getValue(Loja.class)
     }
-    public Loja(String nome, String contato, String endereco, String descricao,String delivery, String cpf){
+    public Loja(String nome, String contato, String endereco, String descricao,String delivery, String cpf, String PicUrl){
         this.nome = nome;
         this.descricao=descricao;
         this.contato = contato;
         this.endereco= endereco;
         this.delivery=delivery;
+        this.PicUrl = PicUrl;
         this.cpf = cpf;
     }
 
     public String getNome() {
         return nome;
     }
+
     public String getContato() {
         return contato;
     }

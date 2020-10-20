@@ -2,6 +2,7 @@ package com.example.merka;
 
 import android.view.ContextMenu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -14,10 +15,12 @@ public class ProdutoViewHolder extends RecyclerView.ViewHolder implements View.O
     TextView txtDescricaoProduto;
 
     CardView cardProdutos;
+    ImageView pic;
 
     ProdutoViewHolder(View v){
         super(v);
 
+        this.pic = v.findViewById(R.id.picProduto);
         this.txtNomeProduto = v.findViewById(R.id.nomeProduto);
         this.txtValorProduto = v.findViewById(R.id.valorProduto);
         this.txtDescricaoProduto = v.findViewById(R.id.descricaoProduto);

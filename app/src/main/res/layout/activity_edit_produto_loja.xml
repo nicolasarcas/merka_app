@@ -9,7 +9,7 @@
     tools:context=".AdicionaProduto">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/produto_image"
+        android:id="@+id/picProduto"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_gravity="center_horizontal"

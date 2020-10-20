@@ -1,19 +1,30 @@
 package com.example.merka;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Random;
 
@@ -29,6 +40,44 @@ public class AdicionaProduto extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference refUser;
 
+    private ImageView pic;
+
+    private StorageReference storageReference;
+    private StorageReference mStorageRef;
+    private StorageTask uploadTask;
+    public Uri picUri;
+    private Uri picUrl;
+
+    private String getExtension(Uri uri){
+        ContentResolver cr= getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    private boolean Fileuploader(){
+        StorageReference Ref=mStorageRef.child(System.currentTimeMillis()+"."+getExtension(picUri));
+
+        uploadTask = Ref.putFile(picUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful());
+                        picUrl = urlTask.getResult();
+
+                        adicionaProduto();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(AdicionaProduto.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
+                    }
+                });
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +85,14 @@ public class AdicionaProduto extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("users");
+        pic = findViewById(R.id.picProduto);
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choosePic();
+            }
+        });
+
 
         btnAdicionaCancela = findViewById(R.id.btnCancelarAdicionarProduto);
         btnAdicionaCancela.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +106,7 @@ public class AdicionaProduto extends AppCompatActivity {
         btnAdicionaConfirma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adicionaProduto(view);
+                Fileuploader();
             }
         });
 
@@ -58,16 +115,24 @@ public class AdicionaProduto extends AppCompatActivity {
         txtAdicionaDescricaoProduto = findViewById(R.id.txtAdicionaDescricaoProduto);
     }
 
-    private void adicionaProduto(View view) {
+    private void choosePic(){
+        Intent intent= new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,1);
+    }
+
+    private void adicionaProduto() {
         final String nome = txtAdicionaNomeProduto.getEditableText().toString();
         final String valor = retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
         final String desc = txtAdicionaDescricaoProduto.getEditableText().toString();
+        final String url = String.valueOf(picUrl);
 
         if(validateFields(nome,valor, desc)){
             FirebaseUser user = firebaseAuth.getCurrentUser();
             String userId = user.getUid();
 
-            writeNewProduto(userId, nome, valor, desc);
+            writeNewProduto(userId, nome, valor, desc, url);
         }
         else{
             Toast.makeText(AdicionaProduto.this, getString(R.string.empty_fields_warning),
@@ -88,7 +153,7 @@ public class AdicionaProduto extends AppCompatActivity {
     public boolean validateFields(String nome, String valor,  String desc){
         return !nome.isEmpty() && !valor.isEmpty() && !desc.isEmpty();
     }
-    private void writeNewProduto(String userId, String nome, String valor, String descricao) {
+    private void writeNewProduto(String userId, String nome, String valor, String descricao, String url) {
         //usando o mesmo UID do Firebase Authentication: userId
 
         Random rand = new Random();
@@ -96,7 +161,7 @@ public class AdicionaProduto extends AppCompatActivity {
         String idProd = String.valueOf(id);
 
         try {//tentando cadastrar no banco
-            Produto produto = new Produto(idProd,nome,valor, descricao);
+            Produto produto = new Produto(idProd,nome,valor, descricao, url);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();

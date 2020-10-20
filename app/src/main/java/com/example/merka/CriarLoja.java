@@ -5,10 +5,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.InputMismatchException;
@@ -49,7 +53,7 @@ public class CriarLoja extends AppCompatActivity {
     private RadioButton radioCadastro;
 
     private ImageView pic;
-    public Uri picUri;
+
 
     private FirebaseUser user;
     private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
@@ -58,6 +62,11 @@ public class CriarLoja extends AppCompatActivity {
 
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private StorageReference mStorageRef;
+    private StorageTask uploadTask;
+    public Uri picUri;
+    private Uri picUrl;
+    private String test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,8 @@ public class CriarLoja extends AppCompatActivity {
                 choosePic();
             }
         });
+        mStorageRef = FirebaseStorage.getInstance().getReference("Images");
+
 
         radioGroupCadastro = findViewById(R.id.radioGroupCadastro);
 
@@ -92,7 +103,8 @@ public class CriarLoja extends AppCompatActivity {
         btnCriarLoja.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                criarLoja(view);
+                validar();
+                criarLoja();
             }
         });
 
@@ -104,7 +116,37 @@ public class CriarLoja extends AppCompatActivity {
         });
     }
 
-    private void criarLoja(View view){
+    private String getExtension(Uri uri){
+        ContentResolver cr= getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    private boolean Fileuploader(){
+        StorageReference Ref=mStorageRef.child(System.currentTimeMillis()+"."+getExtension(picUri));
+
+        uploadTask = Ref.putFile(picUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful());
+                        picUrl = urlTask.getResult();
+
+                        criarLoja();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(CriarLoja.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
+                    }
+                });
+        return true;
+    }
+
+    private void validar(){
         final String nome = txtNomeLoja.getEditableText().toString();
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
@@ -117,13 +159,7 @@ public class CriarLoja extends AppCompatActivity {
         if(validateFields(nome,contato,endereco,descricao)){
             if(cpfValido(cpf)){
                 if(validateMinLengthNumber(contato)){
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                    String userId = user.getUid();
-
-                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                    refUser.child("users").child(userId).child("store").setValue(true);
-
-                    writeNewLoja(userId, nome, contato, endereco, descricao,delivery,cpf);
+                    Fileuploader();
                 }
                 else{
                     Toast.makeText(CriarLoja.this, getString(R.string.min_length_number_warning),
@@ -139,6 +175,27 @@ public class CriarLoja extends AppCompatActivity {
             Toast.makeText(CriarLoja.this, getString(R.string.empty_fields_warning),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void criarLoja(){
+        final String nome = txtNomeLoja.getEditableText().toString();
+        final String contato = txtContatoLoja.getEditableText().toString();
+        final String endereco = txtEnderecoLoja.getEditableText().toString();
+        final String descricao = txtDescricaoLoja.getEditableText().toString();
+        final String cpf = txtCpfLoja.getEditableText().toString();
+        int radioId = radioGroupCadastro.getCheckedRadioButtonId();
+        radioCadastro = findViewById(radioId);
+        final String delivery = radioCadastro.getText().toString();
+
+        final String url = String.valueOf(picUrl);
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userId = user.getUid();
+
+        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+        refUser.child("users").child(userId).child("store").setValue(true);
+
+        writeNewLoja(userId, nome, contato, endereco, descricao,delivery,cpf, url);
     }
 
     public void goToLoja(){
@@ -218,11 +275,11 @@ public class CriarLoja extends AppCompatActivity {
         }
     }
 
-    private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao,String delivery, String cpf) {
+    private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao,String delivery, String cpf, String ImageUrl) {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            Loja loja = new Loja(nome, contato, endereco, descricao,delivery,cpf);
+            Loja loja = new Loja(nome, contato, endereco, descricao,delivery,cpf, ImageUrl);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
@@ -250,28 +307,6 @@ public class CriarLoja extends AppCompatActivity {
             picUri = data.getData();
             pic.setImageURI(picUri);
         }
-    }
-
-    private void uploadPic(){
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userId = user.getUid();
-
-        StorageReference riversRef = storageReference.child(userId).child("images/"+txtNomeLoja.getEditableText().toString());
-
-        riversRef.putFile(picUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Snackbar.make(findViewById(android.R.id.content),"Dados gravados", Snackbar.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(getApplicationContext(), "Falha ao gravar dados", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
     @Override
