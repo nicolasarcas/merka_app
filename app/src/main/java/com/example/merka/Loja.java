@@ -15,11 +15,12 @@ public class Loja {
     public String delivery;
     public String cpf;
     public String PicUrl;
+    public String responsavel;
 
     public Loja(){
         // Default constructor required for calls to DataSnapshot.getValue(Loja.class)
     }
-    public Loja(String id, String nome, String contato, String endereco, String descricao,String delivery, String cpf, String PicUrl){
+    public Loja(String id, String nome, String contato, String endereco, String descricao,String delivery, String cpf, String PicUrl, String responsavel){
         this.id=id;
         this.nome = nome;
         this.descricao=descricao;
@@ -28,6 +29,7 @@ public class Loja {
         this.delivery=delivery;
         this.PicUrl = PicUrl;
         this.cpf = cpf;
+        this.responsavel=responsavel;
     }
 
     public String getNome() {

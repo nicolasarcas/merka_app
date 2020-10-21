@@ -65,7 +65,7 @@ public class VitrineLoja extends AppCompatActivity {
         vitrineDeliveryLoja=findViewById(R.id.vitrineDeliveryLoja);
         vitrineDescricaoLoja=findViewById(R.id.vitrineDescricaoLoja);
 
-        produtosRecyclerView = findViewById(R.id.recyclerViewProdutos);
+        produtosRecyclerView = findViewById(R.id.recyclerViewVitrineProdutos);
         produtos = new ArrayList<>();
         adapter = new ProdutoAdapter(produtos,this);
         produtosRecyclerView.setAdapter(adapter);

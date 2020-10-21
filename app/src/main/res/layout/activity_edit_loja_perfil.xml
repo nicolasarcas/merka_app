@@ -71,6 +71,17 @@
             android:textSize="@dimen/HintCadastroLojas" />
 
         <EditText
+
+            android:id="@+id/txtEditResponsavelLoja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/hintResponsavel"
+            android:hint="@string/hintResponsavel"
+            android:inputType="text"
+            android:maxLength="30"
+            android:textSize="@dimen/HintCadastroLojas" />
+
+        <EditText
             android:id="@+id/txtEditDescricaoLoja"
             android:layout_width="match_parent"
             android:layout_height="81dp"

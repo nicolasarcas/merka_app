@@ -60,6 +60,16 @@
         android:textSize="@dimen/HintCadastroLojasPequenos" />
 
     <EditText
+        android:id="@+id/txtResponsavelLoja"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/hintResponsavel"
+        android:hint="@string/hintResponsavel"
+        android:inputType="text"
+        android:maxLength="30"
+        android:textSize="@dimen/HintCadastroLojasPequenos" />
+
+    <EditText
         android:id="@+id/txtDescricaoLoja"
         android:layout_width="match_parent"
         android:layout_height="84dp"

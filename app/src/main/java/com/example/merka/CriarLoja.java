@@ -46,6 +46,7 @@ public class CriarLoja extends AppCompatActivity {
     private EditText txtDescricaoLoja;
     private EditText txtEnderecoLoja;
     private EditText txtCpfLoja;
+    private EditText txtResponsavelLoja;
 
     private Button btnCriarLoja;
     private Button btnCancelarCriarLoja;
@@ -97,6 +98,7 @@ public class CriarLoja extends AppCompatActivity {
         txtEnderecoLoja=findViewById(R.id.txtEnderecoLoja);
         txtDescricaoLoja=findViewById(R.id.txtDescricaoLoja);
         txtCpfLoja = findViewById(R.id.txtCpfLoja);
+        txtResponsavelLoja=findViewById(R.id.txtResponsavelLoja);
 
         btnCriarLoja=findViewById(R.id.btnConfirmarCriarLoja);
         btnCancelarCriarLoja=findViewById(R.id.btnCancelarCriarLoja);
@@ -153,11 +155,12 @@ public class CriarLoja extends AppCompatActivity {
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
+        final String responsavel=txtResponsavelLoja.getEditableText().toString();
         int radioId = radioGroupCadastro.getCheckedRadioButtonId();
         radioCadastro = findViewById(radioId);
         final String delivery = radioCadastro.getText().toString();
 
-        if(validateFields(nome,contato,endereco,descricao)){
+        if(validateFields(nome,contato,endereco,descricao,responsavel)){
             if(cpfValido(cpf)){
                 if(validateMinLengthNumber(contato)){
                     Fileuploader();
@@ -184,6 +187,7 @@ public class CriarLoja extends AppCompatActivity {
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
+        final String responsavel=txtResponsavelLoja.getEditableText().toString();
         int radioId = radioGroupCadastro.getCheckedRadioButtonId();
         radioCadastro = findViewById(radioId);
         final String delivery = radioCadastro.getText().toString();
@@ -196,7 +200,7 @@ public class CriarLoja extends AppCompatActivity {
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
         refUser.child("users").child(userId).child("store").setValue(true);
 
-        writeNewLoja(userId, nome, contato, endereco, descricao,delivery,cpf, url);
+        writeNewLoja(userId, nome, contato, endereco, descricao,delivery,cpf, url, responsavel);
     }
 
     public void goToLoja(){
@@ -204,8 +208,8 @@ public class CriarLoja extends AppCompatActivity {
         finish();
     }
 
-    public boolean validateFields(String nome, String contato, String endereco, String desc){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty()){
+    public boolean validateFields(String nome, String contato, String endereco, String desc, String responsavel){
+        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty() || responsavel.isEmpty()){
             return false;
         }
         else{
@@ -276,11 +280,11 @@ public class CriarLoja extends AppCompatActivity {
         }
     }
 
-    private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao,String delivery, String cpf, String ImageUrl) {
+    private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao,String delivery, String cpf, String ImageUrl,String responsavel) {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            Loja loja = new Loja(userId,nome, contato, endereco, descricao,delivery,cpf, ImageUrl);
+            Loja loja = new Loja(userId,nome, contato, endereco, descricao,delivery,cpf, ImageUrl,responsavel);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();

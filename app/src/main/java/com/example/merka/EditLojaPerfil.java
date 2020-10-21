@@ -55,6 +55,7 @@ public class EditLojaPerfil extends AppCompatActivity {
     private EditText txtEnderecoLoja;
     private EditText txtDescricaoLoja;
     private EditText txtCpfLoja;
+    private EditText txtResponsavel;
 
     private TextView txtEditImageLoja;
 
@@ -104,6 +105,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         txtEnderecoLoja = findViewById(R.id.txtEditEnderecoLoja);
         txtDescricaoLoja = findViewById(R.id.txtEditDescricaoLoja);
         txtCpfLoja = findViewById(R.id.txtEditCpfLoja);
+        txtResponsavel = findViewById(R.id.txtEditResponsavelLoja);
 
         btnConfirmar = findViewById(R.id.btnConfirmarAlteracaoLoja);
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +144,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
+        final String
         final String url = String.valueOf(picUrl);
         int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
         radioAlteracao = findViewById(radioIdAlteracao);
