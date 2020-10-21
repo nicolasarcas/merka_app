@@ -1,6 +1,7 @@
 package com.example.merka;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
@@ -115,13 +116,6 @@ public class AdicionaProduto extends AppCompatActivity {
         txtAdicionaDescricaoProduto = findViewById(R.id.txtAdicionaDescricaoProduto);
     }
 
-    private void choosePic(){
-        Intent intent= new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,1);
-    }
-
     private void adicionaProduto() {
         final String nome = txtAdicionaNomeProduto.getEditableText().toString();
         final String valor = retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
@@ -175,6 +169,21 @@ public class AdicionaProduto extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+    private void choosePic(){
+        Intent intent= new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,2);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+            picUri = data.getData();
+            pic.setImageURI(picUri);
+        }
+    }
+
     public void goToProdutos(){
         startActivity(new Intent(AdicionaProduto.this, ProdutosLoja.class));
         finish();

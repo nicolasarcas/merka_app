@@ -4,43 +4,40 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
+public class ProdutoHorizontalAdapter extends RecyclerView.Adapter<ProdutoHorizontalViewHolder> {
+
     private List<Produto> produtos;
     private Context context;
 
-    ProdutoAdapter(List<Produto> produtos,Context context){
+    ProdutoHorizontalAdapter(List<Produto> produtos, Context context){
         this.produtos = produtos;
         this.context = context;
     }
+
     @NonNull
     @Override
-    public ProdutoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public ProdutoHorizontalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View v =inflater.inflate(R.layout.produtos_item, parent, false);
-        return new ProdutoViewHolder(v);
+        View v =inflater.inflate(R.layout.produtos_item_horizontal, parent, false);
+        return new ProdutoHorizontalViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProdutoViewHolder holder, int position){
+    public void onBindViewHolder(@NonNull ProdutoHorizontalViewHolder holder, int position) {
         Produto p = produtos.get(position);
 
         holder.txtNomeProduto.setText(p.nome);
         holder.txtValorProduto.setText("R$ "+p.valor);
-        holder.txtDescricaoProduto.setText(p.descricao);
-        if(p.picUrl!=null) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return produtos.size();
     }
-
 }
-

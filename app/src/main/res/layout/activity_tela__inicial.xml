@@ -25,7 +25,7 @@
             android:scrollbars="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/produtos_item" />
+            tools:listitem="@layout/produtos_item_horizontal" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewTelaInicialLojas"

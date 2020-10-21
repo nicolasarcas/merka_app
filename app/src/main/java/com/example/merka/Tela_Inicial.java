@@ -39,7 +39,7 @@ public class Tela_Inicial extends AppCompatActivity {
     private List<Loja> lojas;
 
     private RecyclerView produtosRecyclerView;
-    private ProdutoAdapter adapterProduto;
+    private ProdutoHorizontalAdapter adapterProduto;
     private List<Produto> produtos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +55,19 @@ public class Tela_Inicial extends AppCompatActivity {
         lojasRecyclerView.setAdapter(adapterLoja);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         lojasRecyclerView.setLayoutManager(linearLayoutManager);
+        adapterLoja.OnItemClickListener(new LojaAdapter.OnLojaListener() {
+            @Override
+            public void onLojaClick(int position) {
+                Loja l = lojas.get(position);
+                Intent i = new Intent(Tela_Inicial.this,VitrineLoja.class);
+                i.putExtra("id",l.id);
+                startActivity(i);
+            }
+        });
 
         produtosRecyclerView = findViewById(R.id.recyclerViewTelaInicialProdutos);
         produtos = new ArrayList<>();
-        adapterProduto = new ProdutoAdapter(produtos,this);
+        adapterProduto = new ProdutoHorizontalAdapter(produtos,this);
         produtosRecyclerView.setAdapter(adapterProduto);
         LinearLayoutManager linearLayoutManagerProd = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         produtosRecyclerView.setLayoutManager(linearLayoutManagerProd);
@@ -125,7 +134,7 @@ public class Tela_Inicial extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         setupFirebaseLojas();
-    //    setupFirebaseProdutos();
+        setupFirebaseProdutos();
     }
 
     private void setupFirebaseProdutos() {

@@ -72,6 +72,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
     private ImageView pic;
     public Uri picUrl;
+    public String idLoja;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +133,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         Intent intent= new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,2);
+        startActivityForResult(intent,3);
     }
 
     private void atualizarLoja(){
@@ -160,7 +161,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                             FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                             String userId = fbuser.getUid();
 
-                            Loja loja = new Loja(nome, contato, endereco, descricao,delivery,cpf, url);
+                            Loja loja = new Loja(idLoja,nome, contato, endereco, descricao,delivery,cpf, url);
 
                             refUser.child("lojas").child(userId).setValue(loja);
                             //  uploadPic();
@@ -344,6 +345,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                 txtEnderecoLoja.setText(loja.endereco);
                 txtDescricaoLoja.setText(loja.descricao);
                 txtCpfLoja.setText(loja.cpf);
+                idLoja = loja.id;
                 if(loja.PicUrl!=null) new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
 
                 if(loja.delivery.equals("Sim")){
@@ -367,7 +369,7 @@ public class EditLojaPerfil extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==2 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+        if(requestCode==3 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
             picUrl = data.getData();
             pic.setImageURI(picUrl);
         }

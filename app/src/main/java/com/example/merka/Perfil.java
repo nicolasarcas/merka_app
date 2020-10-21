@@ -121,7 +121,7 @@ public class Perfil extends AppCompatActivity {
         //FirebaseUser currentUser = mAuth.getCurrentUser();
         mAuth.getCurrentUser();
         //refUser = FirebaseDatabase.getInstance().getReference();
-        refUser = refUser.child(mAuth.getUid());
+        refUser = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getUid());
 
         userListener = new ValueEventListener() {
             @Override

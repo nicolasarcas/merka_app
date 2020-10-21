@@ -111,18 +111,6 @@ public class PerfilLoja extends AppCompatActivity {
                 finish();;
             }
         });
-        txtContatoLoja.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openCall();
-            }
-        });
-    }
-    private void openCall() {
-        String uri = "tel:" + txtContatoLoja.getText().toString() ;
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse(uri));
-        startActivity(intent);
     }
 
     @Override

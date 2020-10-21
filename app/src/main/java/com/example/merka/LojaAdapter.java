@@ -14,6 +14,7 @@ import java.util.List;
 public class LojaAdapter extends RecyclerView.Adapter<LojaViewHolder> {
     private List<Loja> lojas;
     private Context context;
+    private OnLojaListener lojaListener;
 
     LojaAdapter(List<Loja> lojas, Context context){
         this.context = context;
@@ -25,7 +26,7 @@ public class LojaAdapter extends RecyclerView.Adapter<LojaViewHolder> {
     public LojaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v =inflater.inflate(R.layout.lojas_item, parent, false);
-        return new LojaViewHolder(v);
+        return new LojaViewHolder(v, lojaListener);
     }
 
     @Override
@@ -42,5 +43,13 @@ public class LojaAdapter extends RecyclerView.Adapter<LojaViewHolder> {
     @Override
     public int getItemCount() {
         return lojas.size();
+    }
+
+    public interface OnLojaListener{
+        void onLojaClick(int position);
+    }
+
+    public void OnItemClickListener(OnLojaListener listener){
+        lojaListener = listener;
     }
 }

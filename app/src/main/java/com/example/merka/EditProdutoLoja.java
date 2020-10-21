@@ -210,7 +210,7 @@ public class EditProdutoLoja extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EditProdutoLoja.this, "Falha ao carregar dados da loja.",
+                Toast.makeText(EditProdutoLoja.this, "Falha ao carregar dados do produto.",
                         Toast.LENGTH_SHORT).show();
             }
         };

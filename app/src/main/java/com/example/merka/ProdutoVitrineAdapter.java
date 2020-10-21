@@ -11,24 +11,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
+public class ProdutoVitrineAdapter extends RecyclerView.Adapter <ProdutoVitrineViewHolder> {
     private List<Produto> produtos;
     private Context context;
 
-    ProdutoAdapter(List<Produto> produtos,Context context){
+    ProdutoVitrineAdapter(List<Produto> produtos,Context context){
         this.produtos = produtos;
         this.context = context;
     }
     @NonNull
     @Override
-    public ProdutoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public ProdutoVitrineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater inflater = LayoutInflater.from(context);
         View v =inflater.inflate(R.layout.produtos_item, parent, false);
-        return new ProdutoViewHolder(v);
+        return new ProdutoVitrineViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProdutoViewHolder holder, int position){
+    public void onBindViewHolder(@NonNull ProdutoVitrineViewHolder holder, int position){
         Produto p = produtos.get(position);
 
         holder.txtNomeProduto.setText(p.nome);

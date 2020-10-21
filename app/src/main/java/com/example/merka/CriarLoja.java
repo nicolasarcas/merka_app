@@ -35,6 +35,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.UUID;
 
 public class CriarLoja extends AppCompatActivity {
@@ -279,7 +280,7 @@ public class CriarLoja extends AppCompatActivity {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            Loja loja = new Loja(nome, contato, endereco, descricao,delivery,cpf, ImageUrl);
+            Loja loja = new Loja(userId,nome, contato, endereco, descricao,delivery,cpf, ImageUrl);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
