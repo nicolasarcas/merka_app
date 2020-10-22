@@ -139,7 +139,6 @@ public class EditLojaPerfil extends AppCompatActivity {
     }
 
     private void atualizarLoja(){
-        final String idLoja = ""; //Adicionar gerar id
         final String responsavel = txtResponsavel.getEditableText().toString();
         final String nome = txtNomeLoja.getEditableText().toString();
         final String contato = txtContatoLoja.getEditableText().toString();
@@ -151,7 +150,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         radioAlteracao = findViewById(radioIdAlteracao);
         final String delivery = radioAlteracao.getText().toString();
 
-        if(validateFields(nome,contato,endereco,descricao)){
+        if(validateFields(nome,contato,endereco,descricao,responsavel)){
             if(cpfValido(cpf)){
                 if(validateMinLengthNumber(contato)){
                     AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
@@ -200,8 +199,8 @@ public class EditLojaPerfil extends AppCompatActivity {
         startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
         finish();
     }
-    public boolean validateFields(String nome, String contato, String endereco,String desc){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty()){
+    public boolean validateFields(String nome, String contato, String endereco,String desc,String responsavel){
+        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty() || responsavel.isEmpty()){
             return false;
         }
         else{

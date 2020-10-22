@@ -107,7 +107,6 @@ public class CriarLoja extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 validar();
-                criarLoja();
             }
         });
 
