@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
@@ -47,8 +51,6 @@ public class EditLojaPerfil extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference refUser;
     private ValueEventListener userListener;
-    private StorageReference storageReference;
-    private FirebaseStorage storage;
 
     private EditText txtNomeLoja;
     private EditText txtContatoLoja;
@@ -57,23 +59,27 @@ public class EditLojaPerfil extends AppCompatActivity {
     private EditText txtCpfLoja;
     private EditText txtResponsavel;
 
-    private TextView txtEditImageLoja;
-
-    private ImageView imageView;
-
     private Button btnConfirmar;
     private Button btnCancelar;
     private Button btnExcluir;
 
     private RadioGroup radioGroupAlteracao;
     private RadioButton radioAlteracao;
-
     private RadioButton radioEditSim;
     private RadioButton radioEditNao;
 
+    private StorageReference mStorageRef;
+    private StorageTask uploadTask;
+
+    private boolean picChanged = false;
+
+    private String idLoja;
+    private String oldUrl;
+
     private ImageView pic;
-    public Uri picUrl;
-    public String idLoja;
+    private Uri picUri;
+    private Uri picUrl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +88,10 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         firebaseAuth= FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
 
-        imageView = findViewById(R.id.editPerfilLojaImage);
+        mStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
         radioGroupAlteracao = findViewById(R.id.radioGroupAlteracao);
-
         radioEditNao=findViewById(R.id.radioAlteracaoNao);
         radioEditSim=findViewById(R.id.radioAlteracaoSim);
 
@@ -111,7 +114,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                atualizarLoja();
+                validar_e_confirmarAlteracao();
             }
         });
 
@@ -138,22 +141,29 @@ public class EditLojaPerfil extends AppCompatActivity {
         startActivityForResult(intent,3);
     }
 
-    private void atualizarLoja(){
-        final String idLoja = ""; //Adicionar gerar id
-        final String responsavel = txtResponsavel.getEditableText().toString();
-        final String nome = txtNomeLoja.getEditableText().toString();
-        final String contato = txtContatoLoja.getEditableText().toString();
-        final String endereco = txtEnderecoLoja.getEditableText().toString();
-        final String descricao = txtDescricaoLoja.getEditableText().toString();
-        final String cpf = txtCpfLoja.getEditableText().toString();
-        final String url = String.valueOf(picUrl);
-        int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
-        radioAlteracao = findViewById(radioIdAlteracao);
-        final String delivery = radioAlteracao.getText().toString();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==3 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+            picUri = data.getData();
+            pic.setImageURI(picUri);
+            picChanged = true;
+        }
+    }
 
-        if(validateFields(nome,contato,endereco,descricao)){
+    private void validar_e_confirmarAlteracao(){
+
+        String responsavel = txtResponsavel.getEditableText().toString();
+        String nome = txtNomeLoja.getEditableText().toString();
+        String contato = txtContatoLoja.getEditableText().toString();
+        String endereco = txtEnderecoLoja.getEditableText().toString();
+        String descricao = txtDescricaoLoja.getEditableText().toString();
+        String cpf = txtCpfLoja.getEditableText().toString();
+
+        if(validateFields(nome,contato,endereco,descricao,responsavel)){
             if(cpfValido(cpf)){
                 if(validateMinLengthNumber(contato)){
+
                     AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
                     msgBox.setTitle("Alteração de dados");
                     msgBox.setIcon(android.R.drawable.ic_menu_info_details);
@@ -161,16 +171,9 @@ public class EditLojaPerfil extends AppCompatActivity {
                     msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                            FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-                            String userId = fbuser.getUid();
 
-                            Loja loja = new Loja(idLoja, nome, contato, endereco, descricao,delivery,cpf, url, responsavel);
-
-                            refUser.child("lojas").child(userId).setValue(loja);
-                            //  uploadPic();
-
-                            goToLoja();
+                            if(picChanged) Fileuploader();
+                            else atualizarLoja();
                         }
                     });
                     msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -196,12 +199,38 @@ public class EditLojaPerfil extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void atualizarLoja(){
+
+        final String responsavel = txtResponsavel.getEditableText().toString();
+        final String nome = txtNomeLoja.getEditableText().toString();
+        final String contato = txtContatoLoja.getEditableText().toString();
+        final String endereco = txtEnderecoLoja.getEditableText().toString();
+        final String descricao = txtDescricaoLoja.getEditableText().toString();
+        final String cpf = txtCpfLoja.getEditableText().toString();
+        final String url = (picUrl==null)? oldUrl : String.valueOf(picUrl);
+        int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
+        radioAlteracao = findViewById(radioIdAlteracao);
+        final String delivery = radioAlteracao.getText().toString();
+
+        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = fbuser.getUid();
+
+        Loja loja = new Loja(idLoja, nome, contato, endereco, descricao, delivery, cpf, url, responsavel);
+
+        refUser.child("lojas").child(userId).setValue(loja);
+
+        goToLoja();
+    }
+
     public void goToLoja(){
         startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
         finish();
     }
-    public boolean validateFields(String nome, String contato, String endereco,String desc){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty()){
+
+    public boolean validateFields(String nome, String contato, String endereco,String desc,String responsavel){
+        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty() || responsavel.isEmpty()){
             return false;
         }
         else{
@@ -279,6 +308,21 @@ public class EditLojaPerfil extends AppCompatActivity {
         msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+
+                storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // File deleted successfully
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        return; // File not deleted
+                    }
+                });
+
                 deleteUserData();
                 goToMenu();
             }
@@ -342,21 +386,25 @@ public class EditLojaPerfil extends AppCompatActivity {
         userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Loja loja = dataSnapshot.getValue(Loja.class);
+                if(picUri==null) {
+                    Loja loja = dataSnapshot.getValue(Loja.class);
 
-                txtNomeLoja.setText(loja.nome);
-                txtContatoLoja.setText(loja.contato);
-                txtEnderecoLoja.setText(loja.endereco);
-                txtDescricaoLoja.setText(loja.descricao);
-                txtCpfLoja.setText(loja.cpf);
-                idLoja = loja.id;
-                if(loja.PicUrl!=null) new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
+                    txtNomeLoja.setText(loja.nome);
+                    txtContatoLoja.setText(loja.contato);
+                    txtEnderecoLoja.setText(loja.endereco);
+                    txtDescricaoLoja.setText(loja.descricao);
+                    txtCpfLoja.setText(loja.cpf);
+                    txtResponsavel.setText(loja.responsavel);
+                    idLoja = loja.id;
+                    oldUrl = loja.PicUrl;
 
-                if(loja.delivery.equals("Sim")){
-                    radioEditSim.setChecked(true);
-                }
-                else {
-                    radioEditNao.setChecked(true);
+                    if (loja.PicUrl != null) new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
+
+                    if (loja.delivery.equals("Sim")) {
+                        radioEditSim.setChecked(true);
+                    } else {
+                        radioEditNao.setChecked(true);
+                    }
                 }
             }
 
@@ -367,62 +415,51 @@ public class EditLojaPerfil extends AppCompatActivity {
             }
         };
         refUser.addListenerForSingleValueEvent(userListener);
-//        loadImage();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==3 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
-            picUrl = data.getData();
-            pic.setImageURI(picUrl);
-        }
+    private String getExtension(Uri uri){
+        ContentResolver cr= getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
-    private void uploadPic(){
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userId = user.getUid();
+    private boolean Fileuploader(){
+        StorageReference Ref=mStorageRef.child("Lojas").child(System.currentTimeMillis()+"."+getExtension(picUri));
 
-        StorageReference riversRef = storageReference.child(userId).child("images/"+txtNomeLoja.getEditableText().toString());
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
 
-        riversRef.putFile(picUrl)
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                return; // File not deleted
+            }
+        });
+
+        uploadTask = Ref.putFile(picUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Snackbar.make(findViewById(android.R.id.content),"Dados gravados", Snackbar.LENGTH_SHORT).show();
+
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful());
+                        picUrl = urlTask.getResult();
+
+                        picChanged = false;
+                        atualizarLoja();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(getApplicationContext(), "Falha ao gravar dados", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditLojaPerfil.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
                     }
                 });
-    }
-    private void loadImage() {
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userId = user.getUid();
-        storageReference = FirebaseStorage.getInstance().getReference().child(userId).child("images/"+txtNomeLoja.getText().toString()+".jpg");
-
-        try {
-            final File localFile = File.createTempFile(txtNomeLoja.getText().toString(),"jpg");
-            storageReference.getFile(localFile)
-                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                            imageView.setImageBitmap(bitmap);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(EditLojaPerfil.this, "Falha no carregamento da imagem", Toast.LENGTH_SHORT);
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return true;
     }
 
     @Override

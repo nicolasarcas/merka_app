@@ -1,6 +1,7 @@
 package com.example.merka;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,11 +27,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 public class EditProdutoLoja extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference refUser;
+    private ValueEventListener userListener;
 
     private EditText txtEditNomePrduto;
     private EditText txtEditValorPrduto;
@@ -39,24 +45,20 @@ public class EditProdutoLoja extends AppCompatActivity {
     private Button btnConfirmaEditProduto;
     private Button btnCancelaEditProduto;
 
-    private FirebaseAuth firebaseAuth;
-    private DatabaseReference refUser;
-    private ValueEventListener userListener;
+    private StorageReference mStorageRef;
+    private StorageTask uploadTask;
+
+    private boolean picChanged = false;
 
     private String idProd;
-    private Intent i;
-    StorageReference mStorageRef;
-    private StorageTask uploadTask;
-    private Uri picUri;
-    private String picUrl;
-    private ImageView pic;
+    private String oldUrl;
 
-    private void choosePic(){
-        Intent intent= new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,1);
-    }
+    private ImageView pic;
+    private Uri picUri;
+    private Uri picUrl;
+
+    private Intent i;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class EditProdutoLoja extends AppCompatActivity {
             }
         });
 
+        mStorageRef = FirebaseStorage.getInstance().getReference("Images");
+
         firebaseAuth = FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("produtos");
 
@@ -82,7 +86,7 @@ public class EditProdutoLoja extends AppCompatActivity {
         btnConfirmaEditProduto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fileuploader();
+                validar_e_confirmarAlteracao();
             }
         });
 
@@ -93,7 +97,23 @@ public class EditProdutoLoja extends AppCompatActivity {
                 goToProdutos();
             }
         });
+    }
 
+    private void choosePic(){
+        Intent intent= new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,4);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==4 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+            picUri = data.getData();
+            pic.setImageURI(picUri);
+            picChanged = true;
+        }
     }
 
     private String getExtension(Uri uri){
@@ -103,7 +123,21 @@ public class EditProdutoLoja extends AppCompatActivity {
     }
 
     private boolean Fileuploader(){
-        StorageReference Ref=mStorageRef.child(System.currentTimeMillis()+"."+getExtension(picUri));
+        StorageReference Ref=mStorageRef.child("Produtos").child(System.currentTimeMillis()+"."+getExtension(picUri));
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                return; // File not deleted
+            }
+        });
 
         uploadTask = Ref.putFile(picUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -114,8 +148,9 @@ public class EditProdutoLoja extends AppCompatActivity {
 
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while (!urlTask.isSuccessful());
-                        picUri = urlTask.getResult();
+                        picUrl = urlTask.getResult();
 
+                        picChanged = false;
                         atualizarProduto();
                     }
                 })
@@ -128,12 +163,11 @@ public class EditProdutoLoja extends AppCompatActivity {
         return true;
     }
 
-    private void atualizarProduto() {
+    private void validar_e_confirmarAlteracao(){
+
         final String nome = txtEditNomePrduto.getEditableText().toString();
         final String valor = retonarValorFormatado(txtEditValorPrduto.getEditableText().toString());
         final String desc = txtEditDescricaoPrduto.getEditableText().toString();
-        final String id = idProd;
-        final String url = String.valueOf(picUrl);
 
         if(validateFields(nome,valor,desc)){
             AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
@@ -143,16 +177,9 @@ public class EditProdutoLoja extends AppCompatActivity {
             msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                    FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-                    String userId = fbuser.getUid();
 
-                    Produto produto = new Produto(id,nome,valor,desc,url);
-
-                    refUser.child("produtos").child(userId).child(id).setValue(produto);
-                    //  uploadPic();
-
-                    goToProdutos();
+                    if(picChanged) Fileuploader();
+                    else atualizarProduto();
                 }
             });
             msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -167,6 +194,25 @@ public class EditProdutoLoja extends AppCompatActivity {
             Toast.makeText(EditProdutoLoja.this, getString(R.string.empty_fields_warning),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void atualizarProduto() {
+
+        final String id = idProd;
+        final String nome = txtEditNomePrduto.getEditableText().toString();
+        final String valor = retonarValorFormatado(txtEditValorPrduto.getEditableText().toString());
+        final String desc = txtEditDescricaoPrduto.getEditableText().toString();
+        final String url = (picUrl==null)? oldUrl : String.valueOf(picUrl);
+
+        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = fbuser.getUid();
+
+        Produto produto = new Produto(id,nome,valor,desc,url);
+
+        refUser.child("produtos").child(userId).child(id).setValue(produto);
+
+        goToProdutos();
     }
 
     public String retonarValorFormatado(String valor){
@@ -200,12 +246,16 @@ public class EditProdutoLoja extends AppCompatActivity {
         userListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Produto produto = snapshot.getValue(Produto.class);
+                if(picUri==null){
 
-                txtEditNomePrduto.setText(produto.nome);
-                txtEditValorPrduto.setText(produto.valor.replace(',', '.'));
-                txtEditDescricaoPrduto.setText(produto.descricao);
-                if(produto.picUrl!=null) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(produto.picUrl);
+                    Produto produto = snapshot.getValue(Produto.class);
+
+                    txtEditNomePrduto.setText(produto.nome);
+                    txtEditValorPrduto.setText(produto.valor.replace(',', '.'));
+                    txtEditDescricaoPrduto.setText(produto.descricao);
+                    oldUrl = produto.picUrl;
+                    if(produto.picUrl!=null) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(produto.picUrl);
+                }
             }
 
             @Override

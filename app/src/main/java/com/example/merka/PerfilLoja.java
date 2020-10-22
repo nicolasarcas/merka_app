@@ -40,6 +40,7 @@ public class PerfilLoja extends AppCompatActivity {
     private TextView txtEnderecoLoja;
     private TextView txtDescricao;
     private TextView txtDeliveryLoja;
+    private TextView txtResponsavel;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference refUser;
@@ -67,6 +68,7 @@ public class PerfilLoja extends AppCompatActivity {
         txtEnderecoLoja=findViewById(R.id.txtPerfilEnderecoLoja);
         txtDescricao=findViewById(R.id.txtPerfilDescricaoLoja);
         txtDeliveryLoja=findViewById(R.id.txtPerfilDeliveryLoja);
+        txtResponsavel=findViewById(R.id.txtPerfilResponsavelLoja);
 
         btnEditarLoja=findViewById(R.id.buttonEditarLoja);
         btnEditarLoja.setOnClickListener(new View.OnClickListener() {

@@ -63,7 +63,6 @@ public class CriarLoja extends AppCompatActivity {
     private ValueEventListener userListener;
 
     private FirebaseStorage storage;
-    private StorageReference storageReference;
     private StorageReference mStorageRef;
     private StorageTask uploadTask;
     public Uri picUri;
@@ -77,9 +76,7 @@ public class CriarLoja extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("users");
-
         storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
 
         pic = findViewById(R.id.profile_image);
         pic.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +104,6 @@ public class CriarLoja extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 validar();
-                criarLoja();
             }
         });
 
@@ -126,7 +122,7 @@ public class CriarLoja extends AppCompatActivity {
     }
 
     private boolean Fileuploader(){
-        StorageReference Ref=mStorageRef.child(System.currentTimeMillis()+"."+getExtension(picUri));
+        StorageReference Ref=mStorageRef.child("Lojas").child(System.currentTimeMillis()+"."+getExtension(picUri));
 
         uploadTask = Ref.putFile(picUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
