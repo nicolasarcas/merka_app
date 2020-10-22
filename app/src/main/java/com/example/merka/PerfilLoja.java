@@ -132,6 +132,7 @@ public class PerfilLoja extends AppCompatActivity {
                 txtEnderecoLoja.setText(loja.endereco);
                 txtDescricao.setText(loja.descricao);
                 txtDeliveryLoja.setText(loja.delivery);
+                txtResponsavel.setText(loja.responsavel);
                 if(loja.PicUrl != null) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
             }
 
