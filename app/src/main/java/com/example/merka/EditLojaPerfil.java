@@ -139,12 +139,13 @@ public class EditLojaPerfil extends AppCompatActivity {
     }
 
     private void atualizarLoja(){
+        final String idLoja = ""; //Adicionar gerar id
+        final String responsavel = txtResponsavel.getEditableText().toString();
         final String nome = txtNomeLoja.getEditableText().toString();
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
-        final String
         final String url = String.valueOf(picUrl);
         int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
         radioAlteracao = findViewById(radioIdAlteracao);
@@ -164,7 +165,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                             FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                             String userId = fbuser.getUid();
 
-                            Loja loja = new Loja(idLoja,nome, contato, endereco, descricao,delivery,cpf, url);
+                            Loja loja = new Loja(idLoja, nome, contato, endereco, descricao,delivery,cpf, url, responsavel);
 
                             refUser.child("lojas").child(userId).setValue(loja);
                             //  uploadPic();
