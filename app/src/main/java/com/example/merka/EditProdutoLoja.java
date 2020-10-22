@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,12 +59,15 @@ public class EditProdutoLoja extends AppCompatActivity {
     private Uri picUrl;
 
     private Intent i;
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_produto_loja);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Atualizando dados");
 
         pic = findViewById(R.id.picProduto);
         pic.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +182,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
+                    progressDialog.show();
                     if(picChanged) Fileuploader();
                     else atualizarProduto();
                 }
@@ -212,6 +217,7 @@ public class EditProdutoLoja extends AppCompatActivity {
 
         refUser.child("produtos").child(userId).child(id).setValue(produto);
 
+        progressDialog.dismiss();
         goToProdutos();
     }
 

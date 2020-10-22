@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -80,11 +81,16 @@ public class EditLojaPerfil extends AppCompatActivity {
     private Uri picUri;
     private Uri picUrl;
 
+    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_loja_perfil);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Atualizando dados");
 
         firebaseAuth= FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
@@ -172,6 +178,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
+                            progressDialog.show();
                             if(picChanged) Fileuploader();
                             else atualizarLoja();
                         }
@@ -221,6 +228,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         refUser.child("lojas").child(userId).setValue(loja);
 
+        progressDialog.dismiss();
         goToLoja();
     }
 
@@ -335,7 +343,6 @@ public class EditLojaPerfil extends AppCompatActivity {
         });
         msgBox.show();
     }
-
 
     private void goToMenu(){
         startActivity(new Intent(EditLojaPerfil.this,Tela_Inicial.class));
