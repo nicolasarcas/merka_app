@@ -7,4 +7,6 @@
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
     <color name="fundoProdutos">#D8D8D8</color>
+    <color name="lightBlack">#151515</color>
+    <color name="strongGray">#5C5C5C</color>
 </resources>

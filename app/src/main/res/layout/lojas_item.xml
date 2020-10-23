@@ -4,35 +4,39 @@
     android:id="@+id/cardLojas"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:scrollbars="vertical"
-    android:layout_marginHorizontal="10dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginTop="15dp"
     android:radius="10dp"
+    android:scrollbars="vertical"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
+        android:background="@drawable/layout_bg"
         android:orientation="horizontal"
-        android:background="@drawable/layout_bg">
+        android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/picLoja"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:contentDescription="@string/ImageViewContentDescription"
-            android:padding="5dp"
-            android:radius="5dp"
-            android:src="@drawable/ic_image" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="8dp">
+
+            <ImageView
+                android:id="@+id/picLoja"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/ImageViewContentDescription"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image" />
+
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="100dp"
             android:orientation="vertical"
-            android:paddingTop="7dp"
-            android:paddingEnd="7dp"
-            android:paddingBottom="10dp">
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,6 +50,7 @@
                     android:layout_weight="2"
                     android:maxLength="15"
                     android:text="@string/DefaultTextNomeDaLoja"
+                    android:textColor="@color/lightBlack"
                     android:textSize="@dimen/TextSizeNomeProduto"
                     android:textStyle="bold" />
 

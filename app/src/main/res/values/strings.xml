@@ -43,7 +43,7 @@
     <string name="RadioButtonTextSim">Sim</string>
     <string name="RadioButtonTextNao">Não</string>
     <string name="DefaultTextNomeDoProduto">Nome do produto</string>
-    <string name="DefaultTextValorDoProduto">R$ 00</string>
+    <string name="DefaultTextValorDoProduto">R$00</string>
     <string name="DefaultTextDescricaoDoProduto">Descrição do produto</string>
     <string name="DefaultTextNomeDaLoja">Nome da Loja</string>
     <string name="DefaultTextContatoDaLoja">Contato da Loja</string>

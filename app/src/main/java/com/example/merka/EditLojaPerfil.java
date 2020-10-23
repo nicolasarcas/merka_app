@@ -208,9 +208,8 @@ public class EditLojaPerfil extends AppCompatActivity {
     }
 
     private void atualizarLoja(){
-
+        final String nome = retornaNomeFormatado(txtNomeLoja.getEditableText().toString());
         final String responsavel = txtResponsavel.getEditableText().toString();
-        final String nome = txtNomeLoja.getEditableText().toString();
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
@@ -230,6 +229,10 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         progressDialog.dismiss();
         goToLoja();
+    }
+
+    public String retornaNomeFormatado(String nome){
+        return nome.substring(0, 1).toUpperCase() + nome.substring(1);
     }
 
     public void goToLoja(){
@@ -317,19 +320,21 @@ public class EditLojaPerfil extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+                if(oldUrl != null){
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
 
-                storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // File deleted successfully
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        return; // File not deleted
-                    }
-                });
+                    storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // File deleted successfully
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            return; // File not deleted
+                        }
+                    });
+                }
 
                 deleteUserData();
                 goToMenu();

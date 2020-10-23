@@ -56,6 +56,7 @@ public class CriarLoja extends AppCompatActivity {
 
     private ImageView pic;
 
+    private boolean picChanged = false;
 
     private FirebaseUser user;
     private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
@@ -65,9 +66,9 @@ public class CriarLoja extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference mStorageRef;
     private StorageTask uploadTask;
+
     public Uri picUri;
     private Uri picUrl;
-    private String test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,14 +153,12 @@ public class CriarLoja extends AppCompatActivity {
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
         final String responsavel=txtResponsavelLoja.getEditableText().toString();
-        int radioId = radioGroupCadastro.getCheckedRadioButtonId();
-        radioCadastro = findViewById(radioId);
-        final String delivery = radioCadastro.getText().toString();
 
         if(validateFields(nome,contato,endereco,descricao,responsavel)){
             if(cpfValido(cpf)){
                 if(validateMinLengthNumber(contato)){
-                    Fileuploader();
+                    if(picChanged) Fileuploader();
+                    else criarLoja();
                 }
                 else{
                     Toast.makeText(CriarLoja.this, getString(R.string.min_length_number_warning),
@@ -178,7 +177,7 @@ public class CriarLoja extends AppCompatActivity {
     }
 
     private void criarLoja(){
-        final String nome = txtNomeLoja.getEditableText().toString();
+        final String nome = retornaNomeFormatado(txtNomeLoja.getEditableText().toString());
         final String contato = txtContatoLoja.getEditableText().toString();
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
@@ -188,7 +187,7 @@ public class CriarLoja extends AppCompatActivity {
         radioCadastro = findViewById(radioId);
         final String delivery = radioCadastro.getText().toString();
 
-        final String url = String.valueOf(picUrl);
+        final String url = (String.valueOf(picUrl) == null)? null : String.valueOf(picUrl);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();
@@ -197,6 +196,10 @@ public class CriarLoja extends AppCompatActivity {
         refUser.child("users").child(userId).child("store").setValue(true);
 
         writeNewLoja(userId, nome, contato, endereco, descricao,delivery,cpf, url, responsavel);
+    }
+
+    public String retornaNomeFormatado(String nome){
+        return nome.substring(0, 1).toUpperCase() + nome.substring(1);
     }
 
     public void goToLoja(){

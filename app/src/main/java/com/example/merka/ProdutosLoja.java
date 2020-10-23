@@ -115,19 +115,21 @@ public class ProdutosLoja extends AppCompatActivity {
 
                 Produto p = produtos.get(position);
 
-                StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(p.picUrl);
+                if(p.picUrl != null){
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(p.picUrl);
 
-                storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // File deleted successfully
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        return; // File not deleted
-                    }
-                });
+                    storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // File deleted successfully
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            return; // File not deleted
+                        }
+                    });
+                }
 
                 produtos.remove(p);
                 deleteUserData(p.id);

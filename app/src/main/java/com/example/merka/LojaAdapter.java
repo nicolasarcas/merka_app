@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,11 +33,11 @@ public class LojaAdapter extends RecyclerView.Adapter<LojaViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull LojaViewHolder holder, int position) {
         Loja l = lojas.get(position);
-
         holder.txtNomeLoja.setText(l.nome);
         holder.txtEnderecoLoja.setText(l.endereco);
         holder.txtDescLoja.setText(l.descricao);
         holder.txtContatoLoja.setText(l.contato);
+
         if(l.PicUrl!=null) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(l.PicUrl);
     }
 

@@ -21,7 +21,6 @@
             android:id="@+id/searchViewBusca"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_marginBottom="@dimen/MarginEntreElementos"
             android:background="@drawable/layout_bg"
             android:padding="10dp"
             app:queryHint="@string/hintBusca" />

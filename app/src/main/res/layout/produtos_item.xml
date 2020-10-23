@@ -14,23 +14,29 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="@drawable/layout_bg"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/picProduto"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="@string/ImageViewContentDescription"
-            android:padding="5dp"
-            android:src="@drawable/ic_image" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:cardCornerRadius="8dp">
+
+            <ImageView
+                android:id="@+id/picProduto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/ImageViewContentDescription"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="7dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="7dp">
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/DefaultTextNomeDoProduto"
+                    android:textColor="@color/lightBlack"
                     android:textSize="@dimen/TextSizeNomeProduto"
                     android:textStyle="bold" />
 
@@ -54,6 +61,7 @@
                     android:paddingStart="3sp"
                     android:paddingEnd="3sp"
                     android:text="@string/DefaultTextValorDoProduto"
+                    android:textColor="@color/strongGray"
                     android:textSize="@dimen/TextSizeNomeProduto"
                     android:textStyle="bold" />
 

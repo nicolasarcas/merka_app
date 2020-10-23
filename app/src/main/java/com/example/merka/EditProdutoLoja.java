@@ -170,7 +170,7 @@ public class EditProdutoLoja extends AppCompatActivity {
     private void validar_e_confirmarAlteracao(){
 
         final String nome = txtEditNomePrduto.getEditableText().toString();
-        final String valor = retonarValorFormatado(txtEditValorPrduto.getEditableText().toString());
+        final String valor = retonaValorFormatado(txtEditValorPrduto.getEditableText().toString());
         final String desc = txtEditDescricaoPrduto.getEditableText().toString();
 
         if(validateFields(nome,valor,desc)){
@@ -204,8 +204,8 @@ public class EditProdutoLoja extends AppCompatActivity {
     private void atualizarProduto() {
 
         final String id = idProd;
-        final String nome = txtEditNomePrduto.getEditableText().toString();
-        final String valor = retonarValorFormatado(txtEditValorPrduto.getEditableText().toString());
+        final String nome = retornaNomeFormatado(txtEditNomePrduto.getEditableText().toString());
+        final String valor = retonaValorFormatado(txtEditValorPrduto.getEditableText().toString());
         final String desc = txtEditDescricaoPrduto.getEditableText().toString();
         final String url = (picUrl==null)? oldUrl : String.valueOf(picUrl);
 
@@ -221,7 +221,12 @@ public class EditProdutoLoja extends AppCompatActivity {
         goToProdutos();
     }
 
-    public String retonarValorFormatado(String valor){
+    public String retornaNomeFormatado(String nome){
+        return nome.substring(0, 1).toUpperCase() + nome.substring(1);
+    }
+
+
+    public String retonaValorFormatado(String valor){
 
         if(valor.indexOf('.') == -1){
             return valor + ",00";

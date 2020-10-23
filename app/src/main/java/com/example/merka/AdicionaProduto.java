@@ -91,7 +91,7 @@ public class AdicionaProduto extends AppCompatActivity {
     }
 
     private void adicionaProduto() {
-        final String nome = txtAdicionaNomeProduto.getEditableText().toString();
+        final String nome = retornaNomeFormatado(txtAdicionaNomeProduto.getEditableText().toString());
         final String valor = retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
         final String desc = txtAdicionaDescricaoProduto.getEditableText().toString();
         final String url = (picChanged) ? String.valueOf(picUrl) : null;
@@ -156,12 +156,14 @@ public class AdicionaProduto extends AppCompatActivity {
 
     public String retonarValorFormatado(String valor){
 
-        if(valor.indexOf('.') == -1){
-            return valor + ",00";
-        }
+        if(valor.indexOf('.') == -1) return valor + ",00";
 
         valor = valor.substring(0, valor.indexOf('.')+3);
         return valor.replace('.', ',');
+    }
+
+    public String retornaNomeFormatado(String nome){
+        return nome.substring(0, 1).toUpperCase() + nome.substring(1);
     }
 
     private void writeNewProduto(String userId, String nome, String valor, String descricao, String url) {
