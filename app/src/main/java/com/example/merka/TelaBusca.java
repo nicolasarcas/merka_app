@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TelaBusca extends AppCompatActivity {
@@ -122,6 +123,7 @@ public class TelaBusca extends AppCompatActivity {
                     for(DataSnapshot ds : snapshot.getChildren()){
                         lojas.add(ds.getValue(Loja.class));
                     }
+                    Collections.shuffle(lojas);
                     adapter.notifyDataSetChanged();
                 }
             }

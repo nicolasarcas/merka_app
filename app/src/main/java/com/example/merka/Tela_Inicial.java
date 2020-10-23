@@ -21,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Tela_Inicial extends AppCompatActivity {
@@ -61,7 +63,8 @@ public class Tela_Inicial extends AppCompatActivity {
                 Loja l = lojas.get(position);
                 Intent i = new Intent(Tela_Inicial.this,VitrineLoja.class);
                 i.putExtra("id",l.id);
-                startActivity(i);
+                Toast.makeText(Tela_Inicial.this,l.id.toString(), Toast.LENGTH_LONG).show();
+                //startActivity(i);
             }
         });
 
@@ -170,6 +173,7 @@ public class Tela_Inicial extends AppCompatActivity {
                     for(DataSnapshot ds : snapshot.getChildren()){
                         lojas.add(ds.getValue(Loja.class));
                     }
+                    Collections.shuffle(lojas);
                     adapterLoja.notifyDataSetChanged();
                 }
             }
