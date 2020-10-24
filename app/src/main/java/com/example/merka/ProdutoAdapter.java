@@ -30,11 +30,12 @@ public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ProdutoViewHolder holder, int position){
         Produto p = produtos.get(position);
+        final String valor = "R$" + p.valor;
 
         holder.txtNomeProduto.setText(p.nome);
-        holder.txtValorProduto.setText("R$ "+p.valor);
+        holder.txtValorProduto.setText(valor);
         holder.txtDescricaoProduto.setText(p.descricao);
-        if(p.picUrl!=null) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
+        if(p.picUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
     }
 
     @Override

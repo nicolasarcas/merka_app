@@ -129,19 +129,22 @@ public class EditProdutoLoja extends AppCompatActivity {
     private boolean Fileuploader(){
         StorageReference Ref=mStorageRef.child("Produtos").child(System.currentTimeMillis()+"."+getExtension(picUri));
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+        if (oldUrl.length() > 0) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
 
-        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // File deleted successfully
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                return; // File not deleted
-            }
-        });
+            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // File deleted successfully
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // File not deleted
+                }
+            });
+        }
+
 
         uploadTask = Ref.putFile(picUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -207,7 +210,7 @@ public class EditProdutoLoja extends AppCompatActivity {
         final String nome = retornaNomeFormatado(txtEditNomePrduto.getEditableText().toString());
         final String valor = retonaValorFormatado(txtEditValorPrduto.getEditableText().toString());
         final String desc = txtEditDescricaoPrduto.getEditableText().toString();
-        final String url = (picUrl==null)? oldUrl : String.valueOf(picUrl);
+        final String url = (String.valueOf(picUrl).equals("")) ? oldUrl : "";
 
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
         FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -265,7 +268,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                     txtEditValorPrduto.setText(produto.valor.replace(',', '.'));
                     txtEditDescricaoPrduto.setText(produto.descricao);
                     oldUrl = produto.picUrl;
-                    if(produto.picUrl!=null) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(produto.picUrl);
+                    if(produto.picUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(produto.picUrl);
                 }
             }
 

@@ -241,19 +241,10 @@ public class EditLojaPerfil extends AppCompatActivity {
     }
 
     public boolean validateFields(String nome, String contato, String endereco,String desc,String responsavel){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty() || responsavel.isEmpty()){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return !nome.isEmpty() && !contato.isEmpty() && !endereco.isEmpty() && !desc.isEmpty() && !responsavel.isEmpty();
     }
     public boolean validateMinLengthNumber(String num){
-        if(num.length() > 9){
-            return true;
-        }else{
-            return false;
-        }
+        return num.length() > 9;
     }
     public static boolean cpfValido(String CPF) {
         // considera-se erro CPF's formados por uma sequencia de numeros iguais
@@ -303,9 +294,7 @@ public class EditLojaPerfil extends AppCompatActivity {
             else dig11 = (char)(r + 48);
 
             // Verifica se os digitos calculados conferem com os digitos informados.
-            if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10)))
-                return(true);
-            else return(false);
+            return (dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10));
         } catch (InputMismatchException erro) {
             return(false);
         }
@@ -320,7 +309,7 @@ public class EditLojaPerfil extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                if(oldUrl != null){
+                if(oldUrl.length() > 0){
                     StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
 
                     storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -331,7 +320,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
-                            return; // File not deleted
+                            // File not deleted
                         }
                     });
                 }
@@ -365,6 +354,7 @@ public class EditLojaPerfil extends AppCompatActivity {
     }
 
     static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
         ImageView bmImage;
 
         public DownloadImageTask(ImageView bmImage) {
@@ -398,7 +388,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(picUri==null) {
+                if(picUri == null) {
                     Loja loja = dataSnapshot.getValue(Loja.class);
 
                     txtNomeLoja.setText(loja.nome);
@@ -410,7 +400,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                     idLoja = loja.id;
                     oldUrl = loja.PicUrl;
 
-                    if (loja.PicUrl != null) new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
+                    if (loja.PicUrl.length() > 0) new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
 
                     if (loja.delivery.equals("Sim")) {
                         radioEditSim.setChecked(true);
@@ -438,19 +428,21 @@ public class EditLojaPerfil extends AppCompatActivity {
     private boolean Fileuploader(){
         StorageReference Ref=mStorageRef.child("Lojas").child(System.currentTimeMillis()+"."+getExtension(picUri));
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+        if(oldUrl.length() > 0){
+            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
 
-        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // File deleted successfully
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                return; // File not deleted
-            }
-        });
+            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // File deleted successfully
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    return; // File not deleted
+                }
+            });
+        }
 
         uploadTask = Ref.putFile(picUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -478,6 +470,6 @@ public class EditLojaPerfil extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
-        finish();;
+        finish();
     }
 }

@@ -68,7 +68,7 @@ public class CriarLoja extends AppCompatActivity {
     private StorageTask uploadTask;
 
     public Uri picUri;
-    private Uri picUrl;
+    private Uri picUrl = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +187,7 @@ public class CriarLoja extends AppCompatActivity {
         radioCadastro = findViewById(radioId);
         final String delivery = radioCadastro.getText().toString();
 
-        final String url = (String.valueOf(picUrl) == null)? null : String.valueOf(picUrl);
+        final String url = (picUrl != null) ? String.valueOf(picUrl) : "";
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();
@@ -208,20 +208,11 @@ public class CriarLoja extends AppCompatActivity {
     }
 
     public boolean validateFields(String nome, String contato, String endereco, String desc, String responsavel){
-        if(nome.isEmpty() || contato.isEmpty() || endereco.isEmpty() || desc.isEmpty() || responsavel.isEmpty()){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return !nome.isEmpty() && !contato.isEmpty() && !endereco.isEmpty() && !desc.isEmpty() && !responsavel.isEmpty();
     }
 
     public boolean validateMinLengthNumber(String num){
-        if(num.length() > 9){
-            return true;
-        }else{
-            return false;
-        }
+        return num.length() > 9;
     }
     public static boolean cpfValido(String CPF) {
         // considera-se erro CPF's formados por uma sequencia de numeros iguais
@@ -271,9 +262,7 @@ public class CriarLoja extends AppCompatActivity {
             else dig11 = (char)(r + 48);
 
             // Verifica se os digitos calculados conferem com os digitos informados.
-            if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10)))
-                return(true);
-            else return(false);
+            return (dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10));
         } catch (InputMismatchException erro) {
             return(false);
         }
@@ -317,6 +306,6 @@ public class CriarLoja extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(CriarLoja.this, Tela_Inicial.class));
-        finish();;
+        finish();
     }
 }

@@ -94,7 +94,7 @@ public class AdicionaProduto extends AppCompatActivity {
         final String nome = retornaNomeFormatado(txtAdicionaNomeProduto.getEditableText().toString());
         final String valor = retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
         final String desc = txtAdicionaDescricaoProduto.getEditableText().toString();
-        final String url = (picChanged) ? String.valueOf(picUrl) : null;
+        final String url = (picChanged) ? String.valueOf(picUrl) : "";
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();

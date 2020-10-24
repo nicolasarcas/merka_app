@@ -34,6 +34,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="@dimen/MarginEntreElementos"
             android:text="@string/TextViewTextNomeDaLoja"
+            android:textColor="@color/black"
             android:textSize="24sp" />
 
         <LinearLayout
@@ -90,7 +91,7 @@
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Responsável"
+                android:text="@string/TextViewTextResponsavel"
                 android:textColor="#8F8F8F"
                 android:textSize="20sp"
                 android:textStyle="bold" />

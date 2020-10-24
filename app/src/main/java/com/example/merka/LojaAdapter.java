@@ -38,7 +38,7 @@ public class LojaAdapter extends RecyclerView.Adapter<LojaViewHolder> {
         holder.txtDescLoja.setText(l.descricao);
         holder.txtContatoLoja.setText(l.contato);
 
-        if(l.PicUrl!=null) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(l.PicUrl);
+        if(l.PicUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(l.PicUrl);
     }
 
     @Override

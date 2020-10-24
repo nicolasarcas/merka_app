@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class PerfilLoja extends AppCompatActivity {
 
@@ -110,7 +112,7 @@ public class PerfilLoja extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(PerfilLoja.this, TelaBusca.class));
-                finish();;
+                finish();
             }
         });
     }
@@ -133,7 +135,7 @@ public class PerfilLoja extends AppCompatActivity {
                 txtDescricao.setText(loja.descricao);
                 txtDeliveryLoja.setText(loja.delivery);
                 txtResponsavel.setText(loja.responsavel);
-                if(loja.PicUrl != null) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
+                if(loja.PicUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
             }
 
             @Override
@@ -164,7 +166,7 @@ public class PerfilLoja extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(PerfilLoja.this, "Falha no carregamento da imagem", Toast.LENGTH_SHORT);
+                    Toast.makeText(PerfilLoja.this, "Falha no carregamento da imagem", Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (IOException e) {

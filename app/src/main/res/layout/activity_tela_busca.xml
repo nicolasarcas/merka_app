@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="@dimen/PaddingLayout"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,6 +20,9 @@
             android:id="@+id/searchViewBusca"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/layout_bg"
             android:padding="10dp"
             app:queryHint="@string/hintBusca" />
@@ -29,6 +31,7 @@
             android:id="@+id/recyclerViewBusca"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
             android:scrollbars="vertical"
             tools:listitem="@layout/lojas_item">
 

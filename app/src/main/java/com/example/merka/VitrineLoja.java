@@ -128,7 +128,7 @@ public class VitrineLoja extends AppCompatActivity {
                 vitrineEnderecoLoja.setText((loja.endereco));
                 vitrineDescricaoLoja.setText(loja.descricao);
                 vitrineDeliveryLoja.setText(loja.delivery);
-                if(loja.PicUrl != null) new EditLojaPerfil.DownloadImageTask((ImageView) vitrineLojaImage).execute(loja.PicUrl);
+                if(loja.PicUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) vitrineLojaImage).execute(loja.PicUrl);
             }
 
             @Override

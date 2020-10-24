@@ -115,7 +115,7 @@ public class ProdutosLoja extends AppCompatActivity {
 
                 Produto p = produtos.get(position);
 
-                if(p.picUrl != null){
+                if(p.picUrl.length() > 0){
                     StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(p.picUrl);
 
                     storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -126,7 +126,7 @@ public class ProdutosLoja extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
-                            return; // File not deleted
+                            // File not deleted
                         }
                     });
                 }

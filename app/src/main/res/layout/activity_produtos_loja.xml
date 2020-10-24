@@ -13,9 +13,8 @@
         android:id="@+id/recyclerViewProdutos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/PaddingLayout"
-        android:layout_marginTop="@dimen/PaddingLayout"
-        android:layout_marginEnd="@dimen/PaddingLayout"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:scrollbars="vertical"
         tools:listitem="@layout/produtos_item" />
 
