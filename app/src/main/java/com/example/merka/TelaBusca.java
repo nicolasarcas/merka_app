@@ -81,6 +81,17 @@ public class TelaBusca extends AppCompatActivity {
         lojasRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         lojasRecyclerView.setLayoutManager(linearLayoutManager);
+        adapter.OnItemClickListener(new LojaAdapter.OnLojaListener() {
+            @Override
+            public void onLojaClick(int position) {
+                Loja l = lojas.get(position);
+                Intent i = new Intent(TelaBusca.this,VitrineLoja.class);
+                i.putExtra("idLoja",l.id.toString());
+                i.putExtra("comingFrom","busca");
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     private void decisaoLoja() {

@@ -34,7 +34,7 @@ public class VitrineLoja extends AppCompatActivity {
     private TextView vitrineDescricaoLoja;
 
     private RecyclerView produtosRecyclerView;
-    private ProdutoAdapter adapter;
+    private ProdutoVitrineAdapter adapter;
     private List<Produto> produtos;
 
     private FirebaseUser fireUser;
@@ -44,6 +44,7 @@ public class VitrineLoja extends AppCompatActivity {
 
     private  Intent i;
     private String idLoja;
+    private String comingFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class VitrineLoja extends AppCompatActivity {
         setContentView(R.layout.activity_vitrine_loja);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
 
         vitrineLojaImage = findViewById(R.id.vitrineLojaImage);
         vitrineNomeLoja = findViewById(R.id.vitrineNomeLoja);
@@ -67,7 +69,7 @@ public class VitrineLoja extends AppCompatActivity {
 
         produtosRecyclerView = findViewById(R.id.recyclerViewVitrineProdutos);
         produtos = new ArrayList<>();
-        adapter = new ProdutoAdapter(produtos,this);
+        adapter = new ProdutoVitrineAdapter(produtos,this);
         produtosRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         produtosRecyclerView.setLayoutManager(linearLayoutManager);
@@ -83,7 +85,10 @@ public class VitrineLoja extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(VitrineLoja.this,Tela_Inicial.class));
+        if(comingFrom.equals("busca"))
+            startActivity(new Intent(VitrineLoja.this,TelaBusca.class));
+        else
+            startActivity(new Intent(VitrineLoja.this,Tela_Inicial.class));
         finish();
     }
 
@@ -115,8 +120,9 @@ public class VitrineLoja extends AppCompatActivity {
         super.onStart();
 
         i = getIntent();
-        idLoja = i.getStringExtra("id");
-        refUser = refUser.child("lojas").child(idLoja);
+        idLoja = i.getStringExtra("idLoja");
+        comingFrom = i.getStringExtra("comingFrom");
+        refUser = refUser.child(idLoja);
 
         userListener = new ValueEventListener() {
             @Override

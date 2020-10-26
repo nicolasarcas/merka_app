@@ -62,9 +62,10 @@ public class Tela_Inicial extends AppCompatActivity {
             public void onLojaClick(int position) {
                 Loja l = lojas.get(position);
                 Intent i = new Intent(Tela_Inicial.this,VitrineLoja.class);
-                i.putExtra("id",l.id);
-                Toast.makeText(Tela_Inicial.this,l.id.toString(), Toast.LENGTH_LONG).show();
-                //startActivity(i);
+                i.putExtra("idLoja",l.id.toString());
+                i.putExtra("comingFrom","inicio");
+                startActivity(i);
+                finish();
             }
         });
 
@@ -140,12 +141,13 @@ public class Tela_Inicial extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        setupFirebaseLojas();
         setupFirebaseProdutos();
+        setupFirebaseLojas();
+
     }
 
     private void setupFirebaseProdutos() {
-        fireUser = FirebaseAuth.getInstance().getCurrentUser();
+
         refUser = FirebaseDatabase.getInstance().getReference().child("produtos");
 
         refUser.addValueEventListener(new ValueEventListener() {
@@ -155,6 +157,7 @@ public class Tela_Inicial extends AppCompatActivity {
                     for(DataSnapshot ds : snapshot.getChildren()){
                         produtos.add(ds.getValue(Produto.class));
                     }
+                    Collections.shuffle(produtos);
                     adapterProduto.notifyDataSetChanged();
                 }
             }
@@ -167,7 +170,7 @@ public class Tela_Inicial extends AppCompatActivity {
     }
 
     private void setupFirebaseLojas() {
-        fireUser = FirebaseAuth.getInstance().getCurrentUser();
+
         refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
 
         refUser.addValueEventListener(new ValueEventListener() {
