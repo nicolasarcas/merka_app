@@ -80,6 +80,7 @@ public class Tela_Inicial extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent (Tela_Inicial.this, Perfil.class));
+                finish();
             }
         });
 
@@ -96,6 +97,7 @@ public class Tela_Inicial extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Tela_Inicial.this, TelaBusca.class));
+                finish();
             }
         });
     }
@@ -111,9 +113,11 @@ public class Tela_Inicial extends AppCompatActivity {
                 // [START_EXCLUDE]
                 if(user.store){
                     startActivity(new Intent (Tela_Inicial.this, PerfilLoja.class));
+                    finish();
                 }
                 else{
                     startActivity(new Intent (Tela_Inicial.this, CriarLoja.class));
+                    finish();
                 }
             }
 
@@ -130,7 +134,7 @@ public class Tela_Inicial extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        refUser.removeEventListener(userListener);
+//        refUser.removeEventListener(userListener);
     }
 
     @Override

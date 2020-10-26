@@ -151,7 +151,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Toast.makeText(EditProdutoLoja.this , "Image Uploaded succesFully",Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditProdutoLoja.this , "Dados do produto alterados!",Toast.LENGTH_LONG).show();
 
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while (!urlTask.isSuccessful());
