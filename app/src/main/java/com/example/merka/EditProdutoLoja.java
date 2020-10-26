@@ -210,7 +210,7 @@ public class EditProdutoLoja extends AppCompatActivity {
         final String nome = retornaNomeFormatado(txtEditNomePrduto.getEditableText().toString());
         final String valor = retonaValorFormatado(txtEditValorPrduto.getEditableText().toString());
         final String desc = txtEditDescricaoPrduto.getEditableText().toString();
-        final String url = (String.valueOf(picUrl).equals("")) ? oldUrl : "";
+        final String url = (String.valueOf(picUrl).equals("")) ? oldUrl : String.valueOf(picUrl);
 
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
         FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
