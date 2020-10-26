@@ -14,6 +14,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -83,6 +86,8 @@ public class EditLojaPerfil extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
+    private String lastChar = " ";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +116,38 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         txtNomeLoja = findViewById(R.id.txtEditNomeLoja);
         txtContatoLoja = findViewById(R.id.txtEditContatoLoja);
+        txtContatoLoja.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = txtContatoLoja.getText().toString().length();
+                if (digits > 1)
+                    lastChar = txtContatoLoja.getText().toString().substring(digits-1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = txtContatoLoja.getText().toString().length();
+
+                if (!lastChar.equals("-")) {
+                    if(digits == 2){
+
+                        if(!lastChar.equals(" ")) {
+                            txtContatoLoja.append(" ");
+                        }
+                    }
+                    else if (digits == 8) {
+                        txtContatoLoja.append("-");
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //txtContatoLoja.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //AQUI
+
         txtEnderecoLoja = findViewById(R.id.txtEditEnderecoLoja);
         txtDescricaoLoja = findViewById(R.id.txtEditDescricaoLoja);
         txtCpfLoja = findViewById(R.id.txtEditCpfLoja);
@@ -161,7 +198,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         String responsavel = txtResponsavel.getEditableText().toString();
         String nome = txtNomeLoja.getEditableText().toString();
-        String contato = txtContatoLoja.getEditableText().toString();
+        String contato = justNumbers(txtContatoLoja.getEditableText().toString());
         String endereco = txtEnderecoLoja.getEditableText().toString();
         String descricao = txtDescricaoLoja.getEditableText().toString();
         String cpf = txtCpfLoja.getEditableText().toString();
@@ -207,10 +244,22 @@ public class EditLojaPerfil extends AppCompatActivity {
         }
     }
 
+    private String justNumbers(String contato) {
+        String result = contato.substring(0,2);
+        result += contato.substring(3, 8);
+        return result += contato.substring(9);
+    }
+
+    private String maskAplication(String contato) {
+        String result = contato.substring(0,2) + " ";
+        result += contato.substring(2, 7) + "-";
+        return result + contato.substring(7);
+    }
+
     private void atualizarLoja(){
         final String nome = retornaNomeFormatado(txtNomeLoja.getEditableText().toString());
         final String responsavel = txtResponsavel.getEditableText().toString();
-        final String contato = txtContatoLoja.getEditableText().toString();
+        final String contato = justNumbers(txtContatoLoja.getEditableText().toString());
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
@@ -392,7 +441,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                     Loja loja = dataSnapshot.getValue(Loja.class);
 
                     txtNomeLoja.setText(loja.nome);
-                    txtContatoLoja.setText(loja.contato);
+                    txtContatoLoja.setText(maskAplication(loja.contato));
                     txtEnderecoLoja.setText(loja.endereco);
                     txtDescricaoLoja.setText(loja.descricao);
                     txtCpfLoja.setText(loja.cpf);

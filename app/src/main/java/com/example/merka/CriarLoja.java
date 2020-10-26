@@ -9,6 +9,8 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -67,8 +69,9 @@ public class CriarLoja extends AppCompatActivity {
     private StorageReference mStorageRef;
     private StorageTask uploadTask;
 
-    public Uri picUri;
+    private Uri picUri;
     private Uri picUrl = null;
+    private String lastChar = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +91,40 @@ public class CriarLoja extends AppCompatActivity {
         });
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
-
         radioGroupCadastro = findViewById(R.id.radioGroupCadastro);
 
         txtNomeLoja=findViewById(R.id.txtNomeLoja);
         txtContatoLoja=findViewById(R.id.txtContatoLoja);
+        txtContatoLoja.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = txtContatoLoja.getText().toString().length();
+                if (digits > 1)
+                    lastChar = txtContatoLoja.getText().toString().substring(digits-1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = txtContatoLoja.getText().toString().length();
+
+                if (!lastChar.equals("-")) {
+                    if(digits == 2){
+
+                        if(!lastChar.equals(" ")) {
+                            txtContatoLoja.append(" ");
+                        }
+                    }
+                    else if (digits == 8) {
+                        txtContatoLoja.append("-");
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         txtEnderecoLoja=findViewById(R.id.txtEnderecoLoja);
         txtDescricaoLoja=findViewById(R.id.txtDescricaoLoja);
         txtCpfLoja = findViewById(R.id.txtCpfLoja);
@@ -148,7 +180,7 @@ public class CriarLoja extends AppCompatActivity {
 
     private void validar(){
         final String nome = txtNomeLoja.getEditableText().toString();
-        final String contato = txtContatoLoja.getEditableText().toString();
+        final String contato = justNumbers(txtContatoLoja.getEditableText().toString());
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
@@ -178,7 +210,7 @@ public class CriarLoja extends AppCompatActivity {
 
     private void criarLoja(){
         final String nome = retornaNomeFormatado(txtNomeLoja.getEditableText().toString());
-        final String contato = txtContatoLoja.getEditableText().toString();
+        final String contato = justNumbers(txtContatoLoja.getEditableText().toString());
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
@@ -307,5 +339,11 @@ public class CriarLoja extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(CriarLoja.this, Tela_Inicial.class));
         finish();
+    }
+
+    private String justNumbers(String contato) {
+        String result = contato.substring(0,2);
+        result += contato.substring(3, 8);
+        return result += contato.substring(9);
     }
 }
