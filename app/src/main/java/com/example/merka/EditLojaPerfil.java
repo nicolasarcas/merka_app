@@ -113,6 +113,42 @@ public class EditLojaPerfil extends AppCompatActivity {
                 choosePic();
             }
         });
+        pic.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+
+                AlertDialog.Builder msgBox = new AlertDialog.Builder(EditLojaPerfil.this);
+                msgBox.setTitle("Excluir imagem");
+                msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                msgBox.setMessage("Deseja retirar a imagem da loja?");
+                msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        if(oldUrl.length() > 0){
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+
+                            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // File deleted successfully
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // File not deleted
+                                }
+                            });
+                        }
+                        picChanged = false;
+                        pic.setImageResource(0);
+                    }
+                });
+
+                return true;
+            }
+        });
 
         txtNomeLoja = findViewById(R.id.txtEditNomeLoja);
         txtContatoLoja = findViewById(R.id.txtEditContatoLoja);

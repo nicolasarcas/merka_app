@@ -2,10 +2,12 @@ package com.example.merka;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -83,6 +86,26 @@ public class CriarLoja extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
 
         pic = findViewById(R.id.profile_image);
+        pic.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+
+                AlertDialog.Builder msgBox = new AlertDialog.Builder(CriarLoja.this);
+                msgBox.setTitle("Excluir imagem");
+                msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                msgBox.setMessage("Deseja retirar a imagem da loja?");
+                msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        picChanged = false;
+                        pic.setImageResource(0);
+                    }
+                });
+
+                return true;
+            }
+        });
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -219,7 +242,7 @@ public class CriarLoja extends AppCompatActivity {
         radioCadastro = findViewById(radioId);
         final String delivery = radioCadastro.getText().toString();
 
-        final String url = (picUrl != null) ? String.valueOf(picUrl) : "";
+        final String url = (String.valueOf(picUrl).length() > 0) ? String.valueOf(picUrl) : "";
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();
@@ -331,6 +354,7 @@ public class CriarLoja extends AppCompatActivity {
         if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
             picUri = data.getData();
             pic.setImageURI(picUri);
+            picChanged = true;
         }
     }
 
