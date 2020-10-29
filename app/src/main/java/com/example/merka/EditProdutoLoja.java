@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Bundle;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -49,6 +50,7 @@ public class EditProdutoLoja extends AppCompatActivity {
     private StorageReference mStorageRef;
     private StorageTask uploadTask;
 
+    private boolean hasPicture = false;
     private boolean picChanged = false;
 
     private String idProd;
@@ -60,6 +62,7 @@ public class EditProdutoLoja extends AppCompatActivity {
 
     private Intent i;
     private ProgressDialog progressDialog;
+    private boolean idf = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,36 @@ public class EditProdutoLoja extends AppCompatActivity {
         progressDialog.setTitle("Atualizando dados");
 
         pic = findViewById(R.id.picProduto);
+        pic.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+
+                if(hasPicture){
+                    AlertDialog.Builder msgBox = new AlertDialog.Builder(EditProdutoLoja.this);
+                    msgBox.setTitle("Excluir imagem");
+                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                    msgBox.setMessage("Deseja retirar a imagem do produto?");
+                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            pic.setImageResource(getResources().getIdentifier("com.example.merka:drawable/store_icon", null, null));
+                            picChanged = true;
+                            hasPicture = false;
+                        }
+                    });
+                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    msgBox.show();
+                }
+                return true;
+            }
+        });
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +150,7 @@ public class EditProdutoLoja extends AppCompatActivity {
             picUri = data.getData();
             pic.setImageURI(picUri);
             picChanged = true;
+            hasPicture = true;
         }
     }
 
@@ -125,26 +159,29 @@ public class EditProdutoLoja extends AppCompatActivity {
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
+    private void fileDeleteFromFirebase(){
 
-    private boolean Fileuploader(){
-        StorageReference Ref=mStorageRef.child("Produtos").child(System.currentTimeMillis()+"."+getExtension(picUri));
-
-        if (oldUrl.length() > 0) {
+        if(oldUrl.length() > 0){
             StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
 
             storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    // File deleted successfully
+                    oldUrl = "";
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    // File not deleted
+                    return;
                 }
             });
         }
+    }
 
+    private boolean Fileuploader(){
+        StorageReference Ref=mStorageRef.child("Produtos").child(System.currentTimeMillis()+"."+getExtension(picUri));
+
+        fileDeleteFromFirebase();
 
         uploadTask = Ref.putFile(picUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -157,7 +194,6 @@ public class EditProdutoLoja extends AppCompatActivity {
                         while (!urlTask.isSuccessful());
                         picUrl = urlTask.getResult();
 
-                        picChanged = false;
                         atualizarProduto();
                     }
                 })
@@ -186,8 +222,15 @@ public class EditProdutoLoja extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
 
                     progressDialog.show();
-                    if(picChanged) Fileuploader();
+
+                    if(picChanged) {
+                        fileDeleteFromFirebase();
+
+                        if(hasPicture) Fileuploader();
+                        else atualizarProduto();
+                    }
                     else atualizarProduto();
+
                 }
             });
             msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -199,9 +242,20 @@ public class EditProdutoLoja extends AppCompatActivity {
             msgBox.show();
         }
         else{
-            Toast.makeText(EditProdutoLoja.this, getString(R.string.empty_fields_warning),
+            Toast.makeText(EditProdutoLoja.this, getString(R.string.ToastPreenchaTodosCampos),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String getFinalPictureUrl(){
+
+        String url = "";
+
+        if(hasPicture){
+            if(oldUrl.length() > 0) url = oldUrl;
+            else url = String.valueOf(picUrl);
+        }
+        return url;
     }
 
     private void atualizarProduto() {
@@ -210,7 +264,7 @@ public class EditProdutoLoja extends AppCompatActivity {
         final String nome = retornaNomeFormatado(txtEditNomePrduto.getEditableText().toString());
         final String valor = retonaValorFormatado(txtEditValorPrduto.getEditableText().toString());
         final String desc = txtEditDescricaoPrduto.getEditableText().toString();
-        final String url = (String.valueOf(picUrl).equals("")) ? oldUrl : String.valueOf(picUrl);
+        final String url = getFinalPictureUrl();
 
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
         FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -260,7 +314,8 @@ public class EditProdutoLoja extends AppCompatActivity {
         userListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(picUri==null){
+
+                if(txtEditNomePrduto.getText().length() == 0) {
 
                     Produto produto = snapshot.getValue(Produto.class);
 
@@ -268,7 +323,11 @@ public class EditProdutoLoja extends AppCompatActivity {
                     txtEditValorPrduto.setText(produto.valor.replace(',', '.'));
                     txtEditDescricaoPrduto.setText(produto.descricao);
                     oldUrl = produto.picUrl;
-                    if(produto.picUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(produto.picUrl);
+
+                    if (oldUrl.length() > 0) {
+                        new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(produto.picUrl);
+                        hasPicture = true;
+                    }
                 }
             }
 

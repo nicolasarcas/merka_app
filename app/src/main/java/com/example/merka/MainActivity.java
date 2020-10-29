@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         else{
-            Toast.makeText(MainActivity.this, getString(R.string.empty_fields_warning),
+            Toast.makeText(MainActivity.this, getString(R.string.ToastPreenchaTodosCampos),
                     Toast.LENGTH_SHORT).show();
         }
     }

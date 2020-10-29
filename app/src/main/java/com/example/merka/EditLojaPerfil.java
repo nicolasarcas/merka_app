@@ -1,10 +1,5 @@
 package com.example.merka;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -14,9 +9,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -24,13 +19,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,17 +36,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.InputMismatchException;
-import java.util.UUID;
 
 public class EditLojaPerfil extends AppCompatActivity {
 
@@ -72,22 +66,21 @@ public class EditLojaPerfil extends AppCompatActivity {
     private RadioButton radioEditSim;
     private RadioButton radioEditNao;
 
+    private ProgressDialog progressDialog;
+
     private StorageReference mStorageRef;
     private StorageTask uploadTask;
 
+    private boolean hasPicture = false;
     private boolean picChanged = false;
 
     private String idLoja;
     private String oldUrl;
+    private String lastChar = " ";
 
     private ImageView pic;
     private Uri picUri;
     private Uri picUrl;
-
-    private ProgressDialog progressDialog;
-
-    private String lastChar = " ";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,34 +111,28 @@ public class EditLojaPerfil extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                AlertDialog.Builder msgBox = new AlertDialog.Builder(EditLojaPerfil.this);
-                msgBox.setTitle("Excluir imagem");
-                msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                msgBox.setMessage("Deseja retirar a imagem da loja?");
-                msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                if(hasPicture){
+                    AlertDialog.Builder msgBox = new AlertDialog.Builder(EditLojaPerfil.this);
+                    msgBox.setTitle("Excluir imagem");
+                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                    msgBox.setMessage("Deseja retirar a imagem da loja?");
+                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                        if(oldUrl.length() > 0){
-                            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
-
-                            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    // File deleted successfully
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // File not deleted
-                                }
-                            });
+                            pic.setImageResource(getResources().getIdentifier("com.example.merka:drawable/store_icon", null, null));
+                            picChanged = true;
+                            hasPicture = false;
                         }
-                        picChanged = false;
-                        pic.setImageResource(0);
-                    }
-                });
+                    });
+                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
+                        }
+                    });
+                    msgBox.show();
+                }
                 return true;
             }
         });
@@ -166,29 +153,20 @@ public class EditLojaPerfil extends AppCompatActivity {
 
                 if (!lastChar.equals("-")) {
                     if(digits == 2){
-
                         if(!lastChar.equals(" ")) {
                             txtContatoLoja.append(" ");
                         }
                     }
-                    else if (digits == 8) {
-                        txtContatoLoja.append("-");
-                    }
                 }
             }
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s){}
         });
-
-        //txtContatoLoja.addTextChangedListener(new PhoneNumberFormattingTextWatcher()); //AQUI
 
         txtEnderecoLoja = findViewById(R.id.txtEditEnderecoLoja);
         txtDescricaoLoja = findViewById(R.id.txtEditDescricaoLoja);
         txtCpfLoja = findViewById(R.id.txtEditCpfLoja);
         txtResponsavel = findViewById(R.id.txtEditResponsavelLoja);
-
         btnConfirmar = findViewById(R.id.btnConfirmarAlteracaoLoja);
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,6 +205,7 @@ public class EditLojaPerfil extends AppCompatActivity {
             picUri = data.getData();
             pic.setImageURI(picUri);
             picChanged = true;
+            hasPicture = true;
         }
     }
 
@@ -241,7 +220,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         if(validateFields(nome,contato,endereco,descricao,responsavel)){
             if(cpfValido(cpf)){
-                if(validateMinLengthNumber(contato)){
+                if(validateMinAndMaxLengthNumber(contato)){
 
                     AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
                     msgBox.setTitle("Alteração de dados");
@@ -252,44 +231,31 @@ public class EditLojaPerfil extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                             progressDialog.show();
-                            if(picChanged) Fileuploader();
+
+                            if(picChanged) {
+                                fileDeleteFromFirebase();
+
+                                if(hasPicture) Fileuploader();
+                                else atualizarLoja();
+                            }
                             else atualizarLoja();
                         }
                     });
                     msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
                         }
                     });
                     msgBox.show();
                 }
-                else{
-                    Toast.makeText(EditLojaPerfil.this, getString(R.string.min_length_number_warning),
-                            Toast.LENGTH_SHORT).show();
-                }
             }
-            else{
-                Toast.makeText(EditLojaPerfil.this, "Digite um CPF válido",
-                        Toast.LENGTH_SHORT).show();
-            }
+            else printToast(getString(R.string.ToastDigiteCPFvalido));
         }
-        else{
-            Toast.makeText(EditLojaPerfil.this, getString(R.string.empty_fields_warning),
-                    Toast.LENGTH_SHORT).show();
-        }
+        else printToast(getString(R.string.ToastPreenchaTodosCampos));
     }
 
-    private String justNumbers(String contato) {
-        String result = contato.substring(0,2);
-        result += contato.substring(3, 8);
-        return result += contato.substring(9);
-    }
-
-    private String maskAplication(String contato) {
-        String result = contato.substring(0,2) + " ";
-        result += contato.substring(2, 7) + "-";
-        return result + contato.substring(7);
+    public void printToast(String value){
+        Toast.makeText(EditLojaPerfil.this, value, Toast.LENGTH_SHORT).show();
     }
 
     private void atualizarLoja(){
@@ -299,7 +265,8 @@ public class EditLojaPerfil extends AppCompatActivity {
         final String endereco = txtEnderecoLoja.getEditableText().toString();
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
-        final String url = (picUrl==null)? oldUrl : String.valueOf(picUrl);
+        final String url = getFinalPictureUrl();
+
         int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
         radioAlteracao = findViewById(radioIdAlteracao);
         final String delivery = radioAlteracao.getText().toString();
@@ -313,7 +280,30 @@ public class EditLojaPerfil extends AppCompatActivity {
         refUser.child("lojas").child(userId).setValue(loja);
 
         progressDialog.dismiss();
+
+        printToast(getString(R.string.ToastDadosAtualizados));
         goToLoja();
+    }
+
+    private String justNumbers(String contato) {
+
+        return contato.replaceAll("\\s+","");
+    }
+
+    private String maskAplication(String contato) {
+
+        return contato.substring(0,2) + " " + contato.substring(2);
+    }
+
+    private String getFinalPictureUrl(){
+
+        String url = "";
+
+        if(hasPicture){
+            if(oldUrl.length() > 0) url = oldUrl;
+            else url = String.valueOf(picUrl);
+        }
+        return url;
     }
 
     public String retornaNomeFormatado(String nome){
@@ -328,9 +318,20 @@ public class EditLojaPerfil extends AppCompatActivity {
     public boolean validateFields(String nome, String contato, String endereco,String desc,String responsavel){
         return !nome.isEmpty() && !contato.isEmpty() && !endereco.isEmpty() && !desc.isEmpty() && !responsavel.isEmpty();
     }
-    public boolean validateMinLengthNumber(String num){
-        return num.length() > 9;
+
+    public boolean validateMinAndMaxLengthNumber(String num){
+
+        if (num.replaceAll("\\s+","").length() < 9){
+            printToast(getString(R.string.ToastMinimoDeDigitos));
+            return false;
+        }
+        else if (num.replaceAll("\\s+","").length() > 11){
+            printToast(getString(R.string.ToastMaximoDeDigitos));
+            return false;
+        }
+        return true;
     }
+
     public static boolean cpfValido(String CPF) {
         // considera-se erro CPF's formados por uma sequencia de numeros iguais
         if (CPF.equals("00000000000") ||
@@ -473,7 +474,8 @@ public class EditLojaPerfil extends AppCompatActivity {
         userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(picUri == null) {
+
+                if(txtNomeLoja.getText().length() == 0) {
                     Loja loja = dataSnapshot.getValue(Loja.class);
 
                     txtNomeLoja.setText(loja.nome);
@@ -485,7 +487,10 @@ public class EditLojaPerfil extends AppCompatActivity {
                     idLoja = loja.id;
                     oldUrl = loja.PicUrl;
 
-                    if (loja.PicUrl.length() > 0) new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
+                    if (oldUrl.length() > 0) {
+                        new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
+                        hasPicture = true;
+                    }
 
                     if (loja.delivery.equals("Sim")) {
                         radioEditSim.setChecked(true);
@@ -497,8 +502,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                Toast.makeText(EditLojaPerfil.this, "Falha ao carregar dados da loja.",
-                        Toast.LENGTH_SHORT).show();
+                printToast(getString(R.string.ToastErrorLoadStoreData));
             }
         };
         refUser.addListenerForSingleValueEvent(userListener);
@@ -510,8 +514,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
-    private boolean Fileuploader(){
-        StorageReference Ref=mStorageRef.child("Lojas").child(System.currentTimeMillis()+"."+getExtension(picUri));
+    private void fileDeleteFromFirebase(){
 
         if(oldUrl.length() > 0){
             StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
@@ -519,15 +522,20 @@ public class EditLojaPerfil extends AppCompatActivity {
             storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    // File deleted successfully
+                    oldUrl = "";
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    return; // File not deleted
+                    return;
                 }
             });
         }
+    }
+
+    private void Fileuploader(){
+
+        StorageReference Ref=mStorageRef.child("Lojas").child(System.currentTimeMillis()+"."+getExtension(picUri));
 
         uploadTask = Ref.putFile(picUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -538,17 +546,15 @@ public class EditLojaPerfil extends AppCompatActivity {
                         while (!urlTask.isSuccessful());
                         picUrl = urlTask.getResult();
 
-                        picChanged = false;
                         atualizarLoja();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(EditLojaPerfil.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
+                        printToast(getString(R.string.ToastUploadNaoFoiPossivel));
                     }
                 });
-        return true;
     }
 
     @Override

@@ -145,7 +145,7 @@ public class EditPerfil extends AppCompatActivity {
             }
         }
         else{
-            Toast.makeText(EditPerfil.this, getString(R.string.empty_fields_warning),
+            Toast.makeText(EditPerfil.this, getString(R.string.ToastPreenchaTodosCampos),
                     Toast.LENGTH_SHORT).show();
         }
     }

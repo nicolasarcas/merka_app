@@ -51,14 +51,21 @@
     <string name="DefaultTextDescricaoDaLoja">Descrição da Loja</string>
     <string name="DefaultTextEnderecoDaLoja">Endereço da Loja</string>
 
+    <string name="ToastDigiteCPFvalido">Digite um CPF válido</string>
+    <string name="ToastPreenchaTodosCampos">Preencha todos os campos!</string>
+    <string name="ToastMinimoDeDigitos">Escreva um número com no mínimo 10 dígitos! Incluindo o DDD</string>
+    <string name="ToastMaximoDeDigitos">Escreva um número com no máximo 11 dígitos!</string>
+    <string name="ToastErrorLoadStoreData">Falha ao carregar dados da loja</string>
+    <string name="ToastUploadNaoFoiPossivel">Não foi possível fazer o upload da imagem</string>
+    <string name="ToastDadosAtualizados">Dados atualizados com sucesso!</string>
+    <string name="ToastDigiteValorValido">Digite um valor válido!</string>
 
-    <string name="empty_fields_warning">Preencha todos os campos!</string>
     warning
     <string name="authentication_failure">Falha na autenticação!</string>
     wargning
     <string name="min_length_password_warning">Escreva uma senha com no mínimo 8 dígitos!</string>
     wargning
-    <string name="min_length_number_warning">Escreva um número com no mínimo 10 dígitos! Incluindo o DDD</string>
+
     wargning
     <string name="different_password_warning">Escreva senhas iguais!</string>
     wargning

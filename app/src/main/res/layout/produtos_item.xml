@@ -48,7 +48,7 @@
 
                 <TextView
                     android:id="@+id/nomeProduto"
-                    android:layout_width="45dp"
+                    android:layout_width="35dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/DefaultTextNomeDoProduto"
@@ -65,7 +65,7 @@
                     android:paddingEnd="3sp"
                     android:text="@string/DefaultTextValorDoProduto"
                     android:textColor="@color/strongGray"
-                    android:textSize="@dimen/TextSizeNomeProduto"
+                    android:textSize="18dp"
                     android:textStyle="bold" />
 
             </LinearLayout>

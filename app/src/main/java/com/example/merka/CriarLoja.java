@@ -61,7 +61,9 @@ public class CriarLoja extends AppCompatActivity {
 
     private ImageView pic;
 
-    private boolean picChanged = false;
+    private boolean hasPicture = false;
+
+    private ProgressDialog progressDialog;
 
     private FirebaseUser user;
     private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
@@ -73,13 +75,16 @@ public class CriarLoja extends AppCompatActivity {
     private StorageTask uploadTask;
 
     private Uri picUri;
-    private Uri picUrl = null;
+    private Uri picUrl;
     private String lastChar = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_criar_loja);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Atualizando dados");
 
         firebaseAuth = FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("users");
@@ -91,17 +96,27 @@ public class CriarLoja extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                AlertDialog.Builder msgBox = new AlertDialog.Builder(CriarLoja.this);
-                msgBox.setTitle("Excluir imagem");
-                msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                msgBox.setMessage("Deseja retirar a imagem da loja?");
-                msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        picChanged = false;
-                        pic.setImageResource(0);
-                    }
-                });
+                if(hasPicture){
+                    AlertDialog.Builder msgBox = new AlertDialog.Builder(CriarLoja.this);
+                    msgBox.setTitle("Excluir imagem");
+                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                    msgBox.setMessage("Deseja retirar a imagem da loja?");
+                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            pic.setImageResource(getResources().getIdentifier("com.example.merka:drawable/store_icon", null, null));
+                            hasPicture = false;
+                        }
+                    });
+                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    msgBox.show();
+                }
 
                 return true;
             }
@@ -136,9 +151,6 @@ public class CriarLoja extends AppCompatActivity {
                         if(!lastChar.equals(" ")) {
                             txtContatoLoja.append(" ");
                         }
-                    }
-                    else if (digits == 8) {
-                        txtContatoLoja.append("-");
                     }
                 }
             }
@@ -177,7 +189,7 @@ public class CriarLoja extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
-    private boolean Fileuploader(){
+    private void Fileuploader(){
         StorageReference Ref=mStorageRef.child("Lojas").child(System.currentTimeMillis()+"."+getExtension(picUri));
 
         uploadTask = Ref.putFile(picUri)
@@ -198,7 +210,6 @@ public class CriarLoja extends AppCompatActivity {
                         Toast.makeText(CriarLoja.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
                     }
                 });
-        return true;
     }
 
     private void validar(){
@@ -212,11 +223,14 @@ public class CriarLoja extends AppCompatActivity {
         if(validateFields(nome,contato,endereco,descricao,responsavel)){
             if(cpfValido(cpf)){
                 if(validateMinLengthNumber(contato)){
-                    if(picChanged) Fileuploader();
+
+                    progressDialog.show();
+
+                    if(hasPicture) Fileuploader();
                     else criarLoja();
                 }
                 else{
-                    Toast.makeText(CriarLoja.this, getString(R.string.min_length_number_warning),
+                    Toast.makeText(CriarLoja.this, getString(R.string.ToastMinimoDeDigitos),
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -226,7 +240,7 @@ public class CriarLoja extends AppCompatActivity {
             }
         }
         else{
-            Toast.makeText(CriarLoja.this, getString(R.string.empty_fields_warning),
+            Toast.makeText(CriarLoja.this, getString(R.string.ToastPreenchaTodosCampos),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -238,11 +252,10 @@ public class CriarLoja extends AppCompatActivity {
         final String descricao = txtDescricaoLoja.getEditableText().toString();
         final String cpf = txtCpfLoja.getEditableText().toString();
         final String responsavel=txtResponsavelLoja.getEditableText().toString();
-        int radioId = radioGroupCadastro.getCheckedRadioButtonId();
-        radioCadastro = findViewById(radioId);
-        final String delivery = radioCadastro.getText().toString();
+        final String url = (hasPicture) ? String.valueOf(picUrl) : "";
 
-        final String url = (String.valueOf(picUrl).length() > 0) ? String.valueOf(picUrl) : "";
+        radioCadastro = findViewById(radioGroupCadastro.getCheckedRadioButtonId());
+        final String delivery = radioCadastro.getText().toString();
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();
@@ -332,7 +345,7 @@ public class CriarLoja extends AppCompatActivity {
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("lojas").child(userId).setValue(loja);
-           // uploadPic();
+            progressDialog.dismiss();
             goToLoja();
 
 
@@ -354,7 +367,7 @@ public class CriarLoja extends AppCompatActivity {
         if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
             picUri = data.getData();
             pic.setImageURI(picUri);
-            picChanged = true;
+            hasPicture = true;
         }
     }
 
@@ -366,8 +379,6 @@ public class CriarLoja extends AppCompatActivity {
     }
 
     private String justNumbers(String contato) {
-        String result = contato.substring(0,2);
-        result += contato.substring(3, 8);
-        return result += contato.substring(9);
+        return contato.substring(0,2) + contato.substring(3);
     }
 }

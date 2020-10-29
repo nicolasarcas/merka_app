@@ -2,12 +2,16 @@ package com.example.merka;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -45,7 +49,9 @@ public class AdicionaProduto extends AppCompatActivity {
     private StorageReference mStorageRef;
     private StorageTask uploadTask;
 
-    private boolean picChanged = false;
+    private boolean hasPicture = false;
+
+    private ProgressDialog progressDialog;
 
     private ImageView pic;
     private Uri picUri;
@@ -56,6 +62,9 @@ public class AdicionaProduto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adiciona_produto);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Atualizando dados");
+
         firebaseAuth = FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("users");
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
@@ -65,6 +74,36 @@ public class AdicionaProduto extends AppCompatActivity {
         txtAdicionaDescricaoProduto = findViewById(R.id.txtAdicionaDescricaoProduto);
 
         pic = findViewById(R.id.picProduto);
+        pic.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+
+                if(hasPicture){
+                    AlertDialog.Builder msgBox = new AlertDialog.Builder(AdicionaProduto.this);
+                    msgBox.setTitle("Excluir imagem");
+                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                    msgBox.setMessage("Deseja retirar a imagem do produto?");
+                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            pic.setImageResource(getResources().getIdentifier("com.example.merka:drawable/store_icon", null, null));
+                            hasPicture = false;
+                        }
+                    });
+                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    msgBox.show();
+                }
+
+                return true;
+            }
+        });
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,27 +123,51 @@ public class AdicionaProduto extends AppCompatActivity {
         btnAdicionaConfirma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(picChanged) Fileuploader();
-                else adicionaProduto();
+
+                validar_e_confirmarAlteracao();
             }
         });
     }
 
+    private void validar_e_confirmarAlteracao(){
+
+        String nome = txtAdicionaNomeProduto.getEditableText().toString();
+        String valor = txtAdicionaValorProduto.getEditableText().toString();
+        String desc = txtAdicionaDescricaoProduto.getEditableText().toString();
+
+        if(validateFields(nome, valor, desc)){
+            if(valorValido(valor)){
+
+                progressDialog.show();
+
+                if(hasPicture) Fileuploader();
+                else adicionaProduto();
+            }
+            else Toast.makeText(AdicionaProduto.this, getString(R.string.ToastDigiteValorValido), Toast.LENGTH_SHORT).show();
+        }
+        else Toast.makeText(AdicionaProduto.this, getString(R.string.ToastPreenchaTodosCampos), Toast.LENGTH_SHORT).show();
+
+    }
+
+    public boolean validateFields(String nome, String valor, String desc){
+        return !nome.isEmpty() && !valor.isEmpty() && !desc.isEmpty();
+    }
+
+    public boolean valorValido(String valor){
+        return valor.replace(".", "").length() > 0;
+    }
+
     private void adicionaProduto() {
+
         final String nome = retornaNomeFormatado(txtAdicionaNomeProduto.getEditableText().toString());
         final String valor = retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
         final String desc = txtAdicionaDescricaoProduto.getEditableText().toString();
-        final String url = (picChanged) ? String.valueOf(picUrl) : "";
+        final String url = (hasPicture) ? String.valueOf(picUrl) : "";
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = user.getUid();
 
-        if(!isBlank(nome, valor, desc)) writeNewProduto(userId, nome, valor, desc, url);
-        else Toast.makeText(AdicionaProduto.this, getString(R.string.empty_fields_warning), Toast.LENGTH_SHORT).show();
-    }
-
-    public boolean isBlank(String nome, String valor,  String desc){
-        return nome.isEmpty() || valor.isEmpty()  || desc.isEmpty();
+        writeNewProduto(userId, nome, valor, desc, url);
     }
 
     private void Fileuploader(){
@@ -144,7 +207,7 @@ public class AdicionaProduto extends AppCompatActivity {
         if(requestCode==2 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
             picUri = data.getData();
             pic.setImageURI(picUri);
-            picChanged = true;
+            hasPicture = true;
         }
     }
 
@@ -156,9 +219,15 @@ public class AdicionaProduto extends AppCompatActivity {
 
     public String retonarValorFormatado(String valor){
 
-        if(valor.indexOf('.') == -1) return valor + ",00";
+        if(valor.indexOf(".") == 0 || valor.indexOf(".") == valor.length() -1){
+            valor = valor.replace(".", "");
+        }
 
-        valor = valor.substring(0, valor.indexOf('.')+3);
+        int index = valor.indexOf(".");
+
+        if (index == -1) return valor + ",00";
+        else if(index == valor.length()-2) valor += "0";
+
         return valor.replace('.', ',');
     }
 
@@ -179,7 +248,7 @@ public class AdicionaProduto extends AppCompatActivity {
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("produtos").child(userId).child(idProd).setValue(produto);
-            // uploadPic();
+            progressDialog.dismiss();
             goToProdutos();
 
 

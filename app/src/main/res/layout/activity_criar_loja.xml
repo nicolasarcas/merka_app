@@ -47,7 +47,7 @@
         android:autofillHints="@string/TextViewHintContato"
         android:hint="@string/TextViewHintContato"
         android:inputType="phone"
-        android:maxLength="13"
+        android:maxLength="12"
         android:textSize="@dimen/HintCadastroLojasPequenos" />
 
     <EditText

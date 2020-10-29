@@ -95,7 +95,7 @@ public class Login extends AppCompatActivity {
             });
         }
         else{
-            Toast.makeText(Login.this, getString(R.string.empty_fields_warning),
+            Toast.makeText(Login.this, getString(R.string.ToastPreenchaTodosCampos),
                     Toast.LENGTH_SHORT).show();
         }
     }
