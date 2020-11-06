@@ -154,6 +154,7 @@ public class Tela_Inicial extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    produtos.clear();
                     for(DataSnapshot ds : snapshot.getChildren()){
                         produtos.add(ds.getValue(Produto.class));
                     }
@@ -177,6 +178,7 @@ public class Tela_Inicial extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    lojas.clear();
                     for(DataSnapshot ds : snapshot.getChildren()){
                         lojas.add(ds.getValue(Loja.class));
                     }

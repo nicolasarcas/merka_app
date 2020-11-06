@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class VitrineLoja extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private ValueEventListener userListener;
 
-    private  Intent i;
+    private Intent i;
     private String idLoja;
     private String comingFrom;
 
@@ -64,6 +65,12 @@ public class VitrineLoja extends AppCompatActivity {
             }
         });
         vitrineEnderecoLoja =findViewById(R.id.vitrineEnderecoLoja);
+        vitrineEnderecoLoja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirMapa();
+            }
+        });
         vitrineDeliveryLoja=findViewById(R.id.vitrineDeliveryLoja);
         vitrineDescricaoLoja=findViewById(R.id.vitrineDescricaoLoja);
 
@@ -73,8 +80,9 @@ public class VitrineLoja extends AppCompatActivity {
         produtosRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         produtosRecyclerView.setLayoutManager(linearLayoutManager);
-    }
 
+        configVitrine();
+    }
     private void openCall() {
         String uri = "tel:" + vitrineContatoLoja.getText().toString() ;
         Intent intent = new Intent(Intent.ACTION_DIAL);
@@ -85,6 +93,10 @@ public class VitrineLoja extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        decisaoVolta();
+    }
+
+    private void decisaoVolta(){
         if(comingFrom.equals("busca"))
             startActivity(new Intent(VitrineLoja.this,TelaBusca.class));
         else
@@ -115,13 +127,11 @@ public class VitrineLoja extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    private void configVitrine(){
         i = getIntent();
         idLoja = i.getStringExtra("idLoja");
         comingFrom = i.getStringExtra("comingFrom");
+
         refUser = refUser.child(idLoja);
 
         userListener = new ValueEventListener() {
@@ -145,5 +155,34 @@ public class VitrineLoja extends AppCompatActivity {
         };
         refUser.addListenerForSingleValueEvent(userListener);
         setupFirebase();
+    }
+
+    private void abrirMapa(){
+
+        String destino = vitrineEnderecoLoja.getText().toString().trim();
+
+        try{
+            //When maps is installed
+            //Initialize Uri
+            Uri uri = Uri.parse("https://www.google.co.in/maps/dir//"+destino);
+            //Initialize intent with action view
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            //Set package
+            intent.setPackage("com.google.android.apps.maps");
+            //Set flag
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //Start activity
+            startActivity(intent);
+        }catch (ActivityNotFoundException e){
+            //When google maps is not installed
+            //Initialize uri
+            Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.apps.maps");
+            //Initialize intent with action view
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            //Set flag
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //Start activity
+            startActivity(intent);
+        }
     }
 }

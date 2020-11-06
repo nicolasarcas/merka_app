@@ -96,5 +96,6 @@
     <string name="excluir">Excluir</string>
     <string name="alterar">Alterar</string>
     <string name="hintResponsavel">Nome do responsável pela loja</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
