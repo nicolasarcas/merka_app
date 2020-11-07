@@ -14,31 +14,40 @@
     app:cardCornerRadius="10dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
         android:background="@drawable/layout_bg"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/ImageViewContentDescription"
-            android:src="@drawable/ic_image" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:cardCornerRadius="8dp">
+
+            <ImageView
+                android:id="@+id/picProdutoHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/ImageViewContentDescription"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/nomeProdutoHorizontal"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_height="61dp"
                 android:maxLength="15"
                 android:text="@string/DefaultTextNomeDoProduto"
+                android:textColor="@color/lightBlack"
                 android:textSize="@dimen/TextSizeNomeProdutoPequeno"
                 android:textStyle="bold" />
 
@@ -46,10 +55,9 @@
                 android:id="@+id/valorProdutoHorizontal"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:maxLength="6"
                 android:text="@string/DefaultTextValorDoProduto"
-                android:textSize="@dimen/TextSizeNomeProduto"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
 

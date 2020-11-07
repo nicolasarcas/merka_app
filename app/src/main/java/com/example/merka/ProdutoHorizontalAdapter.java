@@ -4,20 +4,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ProdutoHorizontalAdapter extends RecyclerView.Adapter<ProdutoHorizontalViewHolder> {
+public class ProdutoHorizontalAdapter extends RecyclerView.Adapter <ProdutoHorizontalViewHolder> {
 
     private List<Produto> produtos;
     private Context context;
 
     ProdutoHorizontalAdapter(List<Produto> produtos, Context context){
-        this.produtos = produtos;
         this.context = context;
+        this.produtos = produtos;
     }
 
     @NonNull
@@ -31,9 +32,9 @@ public class ProdutoHorizontalAdapter extends RecyclerView.Adapter<ProdutoHorizo
     @Override
     public void onBindViewHolder(@NonNull ProdutoHorizontalViewHolder holder, int position) {
         Produto p = produtos.get(position);
-
         holder.txtNomeProduto.setText(p.nome);
-        holder.txtValorProduto.setText("R$ "+p.valor);
+        holder.txtValorProduto.setText("R$"+p.valor);
+        if(p.picUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
     }
 
     @Override

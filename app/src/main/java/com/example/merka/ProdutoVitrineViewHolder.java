@@ -1,6 +1,5 @@
 package com.example.merka;
 
-import android.view.ContextMenu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ public class ProdutoVitrineViewHolder extends RecyclerView.ViewHolder  {
     TextView txtValorProduto;
     TextView txtDescricaoProduto;
 
-    CardView cardProdutos;
     ImageView pic;
 
     ProdutoVitrineViewHolder(View v){

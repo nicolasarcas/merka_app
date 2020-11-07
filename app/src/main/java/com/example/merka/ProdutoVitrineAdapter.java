@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ProdutoVitrineAdapter extends RecyclerView.Adapter <ProdutoVitrineViewHolder> {
+
     private List<Produto> produtos;
     private Context context;
 
@@ -19,6 +20,7 @@ public class ProdutoVitrineAdapter extends RecyclerView.Adapter <ProdutoVitrineV
         this.produtos = produtos;
         this.context = context;
     }
+
     @NonNull
     @Override
     public ProdutoVitrineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
@@ -30,11 +32,10 @@ public class ProdutoVitrineAdapter extends RecyclerView.Adapter <ProdutoVitrineV
     @Override
     public void onBindViewHolder(@NonNull ProdutoVitrineViewHolder holder, int position){
         Produto p = produtos.get(position);
-
         holder.txtNomeProduto.setText(p.nome);
-        holder.txtValorProduto.setText("R$ "+p.valor);
+        holder.txtValorProduto.setText("R$"+p.valor);
         holder.txtDescricaoProduto.setText(p.descricao);
-        if(p.picUrl!=null) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
+        if(p.picUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
     }
 
     @Override

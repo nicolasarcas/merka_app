@@ -33,6 +33,7 @@ public class Tela_Inicial extends AppCompatActivity {
 
     private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
     private DatabaseReference refUser; // variável de acesso ao RealTime DataBase
+    private DatabaseReference refUserProduto;
     private ValueEventListener userListener;
     private FirebaseUser fireUser;
 
@@ -73,7 +74,7 @@ public class Tela_Inicial extends AppCompatActivity {
         produtos = new ArrayList<>();
         adapterProduto = new ProdutoHorizontalAdapter(produtos,this);
         produtosRecyclerView.setAdapter(adapterProduto);
-        LinearLayoutManager linearLayoutManagerProd = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        LinearLayoutManager linearLayoutManagerProd = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false); //***
         produtosRecyclerView.setLayoutManager(linearLayoutManagerProd);
 
         btnPerfil = findViewById(R.id.textViewPerfilPerfil);
@@ -141,22 +142,23 @@ public class Tela_Inicial extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        setupFirebaseProdutos();
         setupFirebaseLojas();
-
+        setupFirebaseProdutos();
     }
 
     private void setupFirebaseProdutos() {
 
-        refUser = FirebaseDatabase.getInstance().getReference().child("produtos");
+        refUserProduto = FirebaseDatabase.getInstance().getReference().child("produtos");
 
-        refUser.addValueEventListener(new ValueEventListener() {
+        refUserProduto.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     produtos.clear();
                     for(DataSnapshot ds : snapshot.getChildren()){
-                        produtos.add(ds.getValue(Produto.class));
+                        for(DataSnapshot d : ds.getChildren()){
+                            produtos.add(d.getValue(Produto.class));
+                        }
                     }
                     Collections.shuffle(produtos);
                     adapterProduto.notifyDataSetChanged();

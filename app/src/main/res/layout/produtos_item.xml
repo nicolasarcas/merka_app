@@ -65,7 +65,7 @@
                     android:paddingEnd="3sp"
                     android:text="@string/DefaultTextValorDoProduto"
                     android:textColor="@color/strongGray"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
