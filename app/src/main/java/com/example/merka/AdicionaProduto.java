@@ -4,13 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.solver.widgets.Rectangle;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -32,7 +41,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Random;
+
+import id.zelory.compressor.Compressor;
 
 public class AdicionaProduto extends AppCompatActivity {
 
@@ -50,6 +63,8 @@ public class AdicionaProduto extends AppCompatActivity {
     private StorageTask uploadTask;
 
     private boolean hasPicture = false;
+
+    private int STORAGE_PERMISSION_CODE = 1;
 
     private ProgressDialog progressDialog;
 
@@ -170,6 +185,13 @@ public class AdicionaProduto extends AppCompatActivity {
         writeNewProduto(userId, nome, valor, desc, url);
     }
 
+    private String getExtension(Uri uri){
+        ContentResolver cr= getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+
     private void Fileuploader(){
 
         StorageReference Ref=mStorageRef.child("Produtos").child(System.currentTimeMillis()+"."+getExtension(picUri));
@@ -205,17 +227,94 @@ public class AdicionaProduto extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==2 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
-            picUri = data.getData();
-            pic.setImageURI(picUri);
-            hasPicture = true;
+
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+
+                try {
+                Bitmap fotoBuscada = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+
+                picUri = redimensionar_e_compressao(fotoBuscada);
+                pic.setImageURI(picUri);
+                hasPicture = true;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }else{
+                requestStoragePermition();
+            }
         }
     }
 
-    private String getExtension(Uri uri){
-        ContentResolver cr= getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+    private void requestStoragePermition(){
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+            new AlertDialog.Builder(this)
+                    .setTitle("Permissão necessária para inserir uma imagem")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(AdicionaProduto.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                        }
+                    })
+                    .create().show();
+        }else{
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == STORAGE_PERMISSION_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Permissão aceita", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private Uri redimensionar_e_compressao(Bitmap fotoBuscada){
+
+        if (fotoBuscada.getWidth() >= fotoBuscada.getHeight()){
+
+            fotoBuscada = Bitmap.createBitmap(
+                    fotoBuscada,
+                    fotoBuscada.getWidth()/2 - fotoBuscada.getHeight()/2,
+                    0,
+                    fotoBuscada.getHeight(),
+                    fotoBuscada.getHeight()
+            );
+
+        }else{
+
+            fotoBuscada = Bitmap.createBitmap(
+                    fotoBuscada,
+                    0,
+                    fotoBuscada.getHeight()/2 - fotoBuscada.getWidth()/2,
+                    fotoBuscada.getWidth(),
+                    fotoBuscada.getWidth()
+            );
+        }
+
+        Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
+
+        return  getImageUri(this, fotoRedimensionada);
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
+        inImage.compress(Bitmap.CompressFormat.PNG, 30, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+
+        pic.setImageBitmap(inImage);
+
+        return Uri.parse(path);
+    }
+
 
     public String retonarValorFormatado(String valor){
 
@@ -248,9 +347,7 @@ public class AdicionaProduto extends AppCompatActivity {
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("produtos").child(userId).child(idProd).setValue(produto);
-            progressDialog.dismiss();
             goToProdutos();
-
 
         } catch (DatabaseException e) {
             Toast.makeText(AdicionaProduto.this, e.getMessage(),

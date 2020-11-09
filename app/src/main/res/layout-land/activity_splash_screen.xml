@@ -15,6 +15,6 @@
         android:gravity="center"
         android:text="@string/app_name"
         android:textAppearance="@style/textAppearance_Merka"
-        android:textSize="@dimen/TextSizeLogoMerka"
+        android:textSize="100sp"
         android:textStyle="bold" />
 </LinearLayout>

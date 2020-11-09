@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,66 +17,82 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textViewMerka"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/HeightLogoMerka"
-            android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
-            android:background="@drawable/logo_background"
-            android:gravity="center"
-            android:text="@string/app_name"
-            android:textAppearance="@style/textAppearance_Merka"
-            android:textSize="@dimen/TextSizeLogoMerka"
-            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editTextEmailAddress"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/TextViewHintNome"
+                android:ems="10"
+                android:hint="@string/TextViewHintNome"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/Hint"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/TextViewHintEmail"
+                android:ems="10"
+                android:hint="@string/TextViewHintEmail"
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/Hint"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:autofillHints="@string/TextViewHintEmail"
-            android:ems="10"
-            android:hint="@string/TextViewHintEmail"
-            android:inputType="textEmailAddress"
-            android:textSize="@dimen/Hint"
-            android:textStyle="bold" />
+            app:passwordToggleEnabled="true">
 
-        <EditText
-            android:id="@+id/editTextSenha"
+            <EditText
+                android:id="@+id/editNovaTextSenha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@+id/editTextNovaSenha"
+                android:ems="10"
+                android:hint="@string/TextViewHintSenha"
+                android:inputType="textPassword"
+                android:textSize="@dimen/Hint"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:autofillHints="@string/TextViewHintSenha"
-            android:ems="10"
-            android:hint="@string/TextViewHintSenha"
-            android:inputType="textPassword"
-            android:textSize="@dimen/Hint"
-            android:textStyle="bold" />
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/editTextConfirmaSenha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/MarginEntreElementos"
+                android:autofillHints="@string/TextViewHintConfirmaSenha"
+                android:ems="10"
+                android:hint="@string/TextViewHintConfirmaSenha"
+                android:inputType="textPassword"
+                android:textSize="@dimen/Hint"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/buttonIrParaLogin"
+            android:id="@+id/buttonCriarConta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/MarginGrandeEntreElementos"
-            android:background="@drawable/btn_login_registro_background"
-            android:text="@string/ButtonTextEntrar"
+            android:background="@drawable/background_button_red"
+            android:text="@string/ButtonTextCriarConta"
             android:textAppearance="@style/textAppearance_WhiteTextBtn" />
-
-        <TextView
-            android:id="@+id/textViewEsqueciSenha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/MarginGrandeEntreElementos"
-            android:text="@string/TextViewTextEsqueciASenha"
-            android:textAlignment="center"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="@dimen/TextSizeEsqueciSenha"
-            tools:layout_editor_absoluteX="130dp" />
 
     </LinearLayout>
 
@@ -103,6 +119,20 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/textViewMerka"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+            android:background="@drawable/background_title"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/app_name"
+            android:textAppearance="@style/textAppearance_Merka"
+            android:textSize="@dimen/TextSizeLogoMerka"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/textViewJaPossuiConta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -115,14 +145,13 @@
             android:textSize="@dimen/TextSizeJaPossuiUmaConta"/>
 
         <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
+            android:id="@+id/buttonIrParaLogin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/dialog_holo_dark_frame"
-            android:padding="15dp"
-            android:text="@string/ButtonTextInscreverseNoMerka"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/TextSizeEscrever" />
+            android:layout_marginBottom="@dimen/MarginEntreElementos"
+            android:background="@drawable/background_button_red"
+            android:text="@string/ButtonTextEntrar"
+            android:textAppearance="@style/textAppearance_WhiteTextBtn" />
 
 
     </LinearLayout>

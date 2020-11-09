@@ -11,30 +11,35 @@
     <TextView
         android:id="@+id/textViewMerka"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/HeightLogoMerka"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
-        android:background="@drawable/logo_background"
+        android:background="@drawable/background_title"
         android:gravity="center"
         android:text="@string/app_name"
         android:textAppearance="@style/textAppearance_Merka"
         android:textSize="@dimen/TextSizeLogoMerka"
-        android:textStyle="bold"
-        app:layout_constraintVertical_bias="0.097" />
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editTextEmailAddress"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:autofillHints="@string/TextViewHintEmail"
-        android:ems="10"
-        android:hint="@string/TextViewHintEmail"
-        android:inputType="textEmailAddress"
-        android:textSize="@dimen/Hint"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="292dp" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/editTextEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:autofillHints="@string/TextViewHintEmail"
+            android:ems="10"
+            android:hint="@string/TextViewHintEmail"
+            android:inputType="textEmailAddress"
+            android:textSize="@dimen/Hint"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="292dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -62,8 +67,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/MarginEntreElementos"
-        android:background="@drawable/btn_login_registro_background"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:background="@drawable/background_button_red"
         android:text="@string/ButtonTextEntrar"
         android:textAppearance="@style/textAppearance_WhiteTextBtn"
         tools:layout_editor_absoluteX="3dp"

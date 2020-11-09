@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         editTextSenha = findViewById(R.id.editNovaTextSenha);
         editTextConfirmaSenha = findViewById(R.id.editTextConfirmaSenha);
         firebaseAuth = FirebaseAuth.getInstance();
-
         btnLogin = findViewById(R.id.buttonIrParaLogin);
         btnCadastrar = findViewById(R.id.buttonCriarConta);
 

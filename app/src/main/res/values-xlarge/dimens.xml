@@ -6,8 +6,6 @@
     <dimen name="PaddingHorizontal">60dp</dimen>
     <dimen name="Hint">50sp</dimen>
     <dimen name="HintCadastro">30sp</dimen>
-    <dimen name="WidthLogoMerka">180dp</dimen>
-    <dimen name="HeightLogoMerka">150dp</dimen>
     <dimen name="TextSizeButton">60sp</dimen>
     <dimen name="TextSizeEscrever">30sp</dimen>
     <dimen name="TextSizeLogoMerka">110sp</dimen>

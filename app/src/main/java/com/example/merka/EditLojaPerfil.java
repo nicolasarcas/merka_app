@@ -1,14 +1,18 @@
 package com.example.merka;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +47,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.InputMismatchException;
 
@@ -73,6 +81,8 @@ public class EditLojaPerfil extends AppCompatActivity {
 
     private boolean hasPicture = false;
     private boolean picChanged = false;
+
+    private int STORAGE_PERMISSION_CODE = 1;
 
     private String idLoja;
     private String oldUrl;
@@ -202,11 +212,94 @@ public class EditLojaPerfil extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==3 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
-            picUri = data.getData();
-            pic.setImageURI(picUri);
-            picChanged = true;
-            hasPicture = true;
+
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                try {
+                    Bitmap fotoBuscada = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+
+
+                    picUri = redimensionar_e_compressao(fotoBuscada);
+                    pic.setImageURI(picUri);
+                    hasPicture = true;
+                    picChanged = true;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                requestStoragePermition();
+            }
+
         }
+    }
+
+    private void requestStoragePermition(){
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+            new AlertDialog.Builder(this)
+                    .setTitle("Permissão necessária para inserir uma imagem")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(EditLojaPerfil.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                        }
+                    })
+                    .create().show();
+        }else{
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == STORAGE_PERMISSION_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Permissão aceita", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private Uri redimensionar_e_compressao(Bitmap fotoBuscada){
+
+        if (fotoBuscada.getWidth() >= fotoBuscada.getHeight()){
+
+            fotoBuscada = Bitmap.createBitmap(
+                    fotoBuscada,
+                    fotoBuscada.getWidth()/2 - fotoBuscada.getHeight()/2,
+                    0,
+                    fotoBuscada.getHeight(),
+                    fotoBuscada.getHeight()
+            );
+
+        }else{
+
+            fotoBuscada = Bitmap.createBitmap(
+                    fotoBuscada,
+                    0,
+                    fotoBuscada.getHeight()/2 - fotoBuscada.getWidth()/2,
+                    fotoBuscada.getWidth(),
+                    fotoBuscada.getWidth()
+            );
+        }
+
+        Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
+
+        return  getImageUri(this, fotoRedimensionada);
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
+        inImage.compress(Bitmap.CompressFormat.PNG, 30, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+
+        pic.setImageBitmap(inImage);
+
+        return Uri.parse(path);
     }
 
     private void validar_e_confirmarAlteracao(){

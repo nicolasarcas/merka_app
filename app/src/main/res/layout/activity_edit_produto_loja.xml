@@ -62,7 +62,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/botao_fundobranco_bordavermelha"
+            android:background="@drawable/background_button_white_border_red"
             android:text="@string/ButtonTextConfirmar" />
 
         <Button
@@ -73,7 +73,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/botao_fundobranco_bordavermelha"
+            android:background="@drawable/background_button_white_border_red"
             android:text="@string/ButtonTextCancelar" />
     </LinearLayout>
 
