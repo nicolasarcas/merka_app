@@ -9,8 +9,10 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VitrineLoja extends AppCompatActivity {
+public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private ImageView vitrineLojaImage;
     private TextView vitrineNomeLoja;
@@ -65,12 +67,6 @@ public class VitrineLoja extends AppCompatActivity {
             }
         });
         vitrineEnderecoLoja =findViewById(R.id.vitrineEnderecoLoja);
-        vitrineEnderecoLoja.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                abrirMapa();
-            }
-        });
         vitrineDeliveryLoja=findViewById(R.id.vitrineDeliveryLoja);
         vitrineDescricaoLoja=findViewById(R.id.vitrineDescricaoLoja);
 
@@ -157,7 +153,14 @@ public class VitrineLoja extends AppCompatActivity {
         setupFirebase();
     }
 
-    private void abrirMapa(){
+    public void decisaoMaps(View v){
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.inflate(R.menu.endereco_menu);
+        popupMenu.show();
+    }
+
+    private void rotas(){
 
         String destino = vitrineEnderecoLoja.getText().toString().trim();
 
@@ -183,6 +186,48 @@ public class VitrineLoja extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             //Start activity
             startActivity(intent);
+        }
+    }
+    private void localizacao(){
+
+        String destino = vitrineEnderecoLoja.getText().toString().trim();
+
+        try{
+            //When maps is installed
+            //Initialize Uri
+            Uri uri = Uri.parse("https://www.google.co.in/maps/place/"+destino);
+            //Initialize intent with action view
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            //Set package
+            intent.setPackage("com.google.android.apps.maps");
+            //Set flag
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //Start activity
+            startActivity(intent);
+        }catch (ActivityNotFoundException e){
+            //When google maps is not installed
+            //Initialize uri
+            Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.apps.maps");
+            //Initialize intent with action view
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            //Set flag
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //Start activity
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.maps1:
+                rotas();
+                return true;
+            case R.id.maps2:
+                localizacao();
+                return true;
+            default:
+                return false;
         }
     }
 }

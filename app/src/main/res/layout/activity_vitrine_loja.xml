@@ -84,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints="@string/TextViewHintEndereco"
-
+                    android:onClick="decisaoMaps"
                     android:textColor="#81F386"
                     android:textSize="20sp" />
             </LinearLayout>

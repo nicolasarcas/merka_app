@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/maps1"
+        android:title="Rotas"/>
+
+    <item
+        android:id="@+id/maps2"
+        android:title="Localização"/>
+
+</menu>
