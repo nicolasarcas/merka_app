@@ -356,7 +356,6 @@ public class CriarLoja extends AppCompatActivity {
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("lojas").child(userId).setValue(loja);
-            progressDialog.dismiss();
             goToLoja();
 
 
@@ -470,6 +469,8 @@ public class CriarLoja extends AppCompatActivity {
     }
 
     private String justNumbers(String contato) {
-        return contato.substring(0,2) + contato.substring(3);
+
+        if(contato.length() > 0) return contato.substring(0,2) + contato.substring(3);
+        return contato;
     }
 }

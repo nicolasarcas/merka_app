@@ -365,7 +365,6 @@ public class EditProdutoLoja extends AppCompatActivity {
 
         refUser.child("produtos").child(userId).child(id).setValue(produto);
 
-        progressDialog.dismiss();
         goToProdutos();
     }
 

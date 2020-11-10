@@ -372,15 +372,14 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         refUser.child("lojas").child(userId).setValue(loja);
 
-        progressDialog.dismiss();
-
         printToast(getString(R.string.ToastDadosAtualizados));
         goToLoja();
     }
 
     private String justNumbers(String contato) {
 
-        return contato.replaceAll("\\s+","");
+        if(contato.length() > 0) return contato.replaceAll("\\s+","");
+        return contato;
     }
 
     private String maskAplication(String contato) {
