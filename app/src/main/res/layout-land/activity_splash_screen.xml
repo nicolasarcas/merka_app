@@ -5,7 +5,7 @@
     android:background="#DB1D26"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/PaddingHorizontal">
+    android:paddingHorizontal="130dp">
 
     <TextView
         android:id="@+id/TextViewMerka"

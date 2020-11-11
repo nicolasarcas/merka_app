@@ -91,6 +91,7 @@ public class EditLojaPerfil extends AppCompatActivity {
     private ImageView pic;
     private Uri picUri;
     private Uri picUrl;
+    private Uri picData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,10 +203,16 @@ public class EditLojaPerfil extends AppCompatActivity {
         });
     }
     private void choosePic(){
-        Intent intent= new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,3);
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            Intent intent= new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent,3);
+        }
+        else{
+            requestStoragePermition();
+        }
+
     }
 
     @Override
@@ -213,22 +220,19 @@ public class EditLojaPerfil extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==3 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
 
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            picData = data.getData();
 
-                try {
-                    Bitmap fotoBuscada = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+            try {
+                Bitmap fotoBuscada = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
 
 
-                    picUri = redimensionar_e_compressao(fotoBuscada);
-                    pic.setImageURI(picUri);
-                    hasPicture = true;
-                    picChanged = true;
+                picUri = redimensionar_e_compressao(fotoBuscada);
+                pic.setImageURI(picUri);
+                hasPicture = true;
+                picChanged = true;
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                requestStoragePermition();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
         }
@@ -256,6 +260,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         if(requestCode == STORAGE_PERMISSION_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this, "Permissão aceita", Toast.LENGTH_SHORT).show();
+
             }else{
                 Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
             }

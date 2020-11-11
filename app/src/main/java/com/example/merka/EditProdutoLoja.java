@@ -148,10 +148,14 @@ public class EditProdutoLoja extends AppCompatActivity {
     }
 
     private void choosePic(){
-        Intent intent= new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,4);
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            Intent intent= new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent,4);
+        }else{
+            requestStoragePermition();
+        }
     }
 
     @Override
@@ -159,21 +163,18 @@ public class EditProdutoLoja extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==4 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
 
-                if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-                    try {
-                        Bitmap fotoBuscada = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+            try {
+                Bitmap fotoBuscada = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
 
-                        picUri = redimensionar_e_compressao(fotoBuscada);
-                        pic.setImageURI(picUri);
-                        hasPicture = true;
-                        picChanged = true;
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    requestStoragePermition();
-                }
+                picUri = redimensionar_e_compressao(fotoBuscada);
+                pic.setImageURI(picUri);
+                hasPicture = true;
+                picChanged = true;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
