@@ -203,7 +203,7 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
         String numero = vitrineContatoLoja.getText().toString().trim();
         try{
             //When WhatsApp is installed
-            Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=55"+numero);
+            Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=55"+numero+"&text=Olá,%20encontrei%20a%20loja%20de%20vocês%20no%20Merka!");
             Intent intent = new Intent(Intent.ACTION_VIEW,uri);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
