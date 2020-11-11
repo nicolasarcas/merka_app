@@ -62,7 +62,8 @@
                     android:layout_height="wrap_content"
                     android:autofillHints="@string/TextViewTextIndicaContato"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:onClick="decisaoContato"/>
             </LinearLayout>
 
             <LinearLayout

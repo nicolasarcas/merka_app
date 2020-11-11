@@ -60,12 +60,6 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
         vitrineLojaImage = findViewById(R.id.vitrineLojaImage);
         vitrineNomeLoja = findViewById(R.id.vitrineNomeLoja);
         vitrineContatoLoja=findViewById(R.id.vitrineContatoLoja);
-        vitrineContatoLoja.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openCall();
-            }
-        });
         vitrineEnderecoLoja =findViewById(R.id.vitrineEnderecoLoja);
         vitrineDeliveryLoja=findViewById(R.id.vitrineDeliveryLoja);
         vitrineDescricaoLoja=findViewById(R.id.vitrineDescricaoLoja);
@@ -79,19 +73,35 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
 
         configVitrine();
     }
-    private void openCall() {
-        String uri = "tel:" + vitrineContatoLoja.getText().toString() ;
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse(uri));
-        startActivity(intent);
-    }
+    private void configVitrine(){
+        i = getIntent();
+        idLoja = i.getStringExtra("idLoja");
+        comingFrom = i.getStringExtra("comingFrom");
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        decisaoVolta();
-    }
+        refUser = refUser.child(idLoja);
 
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Loja loja = snapshot.getValue(Loja.class);
+
+                vitrineNomeLoja.setText(loja.nome);
+                vitrineContatoLoja.setText(loja.contato);
+                vitrineEnderecoLoja.setText((loja.endereco));
+                vitrineDescricaoLoja.setText(loja.descricao);
+                vitrineDeliveryLoja.setText(loja.delivery);
+                if(loja.PicUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) vitrineLojaImage).execute(loja.PicUrl);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(VitrineLoja.this, "Falha ao carregar dados da loja.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        };
+        refUser.addListenerForSingleValueEvent(userListener);
+        setupFirebase();
+    }
     private void decisaoVolta(){
         if(comingFrom.equals("busca"))
             startActivity(new Intent(VitrineLoja.this,TelaBusca.class));
@@ -123,41 +133,17 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
         });
     }
 
-    private void configVitrine(){
-        i = getIntent();
-        idLoja = i.getStringExtra("idLoja");
-        comingFrom = i.getStringExtra("comingFrom");
-
-        refUser = refUser.child(idLoja);
-
-        userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Loja loja = snapshot.getValue(Loja.class);
-
-                vitrineNomeLoja.setText(loja.nome);
-                vitrineContatoLoja.setText(loja.contato);
-                vitrineEnderecoLoja.setText((loja.endereco));
-                vitrineDescricaoLoja.setText(loja.descricao);
-                vitrineDeliveryLoja.setText(loja.delivery);
-                if(loja.PicUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) vitrineLojaImage).execute(loja.PicUrl);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(VitrineLoja.this, "Falha ao carregar dados da loja.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        };
-        refUser.addListenerForSingleValueEvent(userListener);
-        setupFirebase();
-    }
-
     public void decisaoMaps(View v){
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.setOnMenuItemClickListener(this);
         popupMenu.inflate(R.menu.endereco_menu);
         popupMenu.show();
+    }
+    public void decisaoContato(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.contato_menu);
+        popup.show();
     }
 
     private void rotas(){
@@ -165,26 +151,17 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
         String destino = vitrineEnderecoLoja.getText().toString().trim();
 
         try{
-            //When maps is installed
-            //Initialize Uri
+            //When Maps is installed
             Uri uri = Uri.parse("https://www.google.co.in/maps/dir//"+destino);
-            //Initialize intent with action view
             Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-            //Set package
             intent.setPackage("com.google.android.apps.maps");
-            //Set flag
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //Start activity
             startActivity(intent);
         }catch (ActivityNotFoundException e){
-            //When google maps is not installed
-            //Initialize uri
+            //When Maps is not installed
             Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.apps.maps");
-            //Initialize intent with action view
             Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-            //Set flag
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //Start activity
             startActivity(intent);
         }
     }
@@ -216,6 +193,28 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
             startActivity(intent);
         }
     }
+    private void openCall() {
+        String uri = "tel:" + vitrineContatoLoja.getText().toString() ;
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse(uri));
+        startActivity(intent);
+    }
+    private void openWhatsapp(){
+        String numero = vitrineContatoLoja.getText().toString().trim();
+        try{
+            //When WhatsApp is installed
+            Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=55"+numero);
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }catch (ActivityNotFoundException e){
+            //When WhatsApp maps is not installed
+            Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.whatsapp");
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -226,8 +225,19 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
             case R.id.maps2:
                 localizacao();
                 return true;
+            case R.id.contato1:
+                openCall();
+                return true;
+            case R.id.contato2:
+                openWhatsapp();
+                return true;
             default:
                 return false;
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        decisaoVolta();
     }
 }
