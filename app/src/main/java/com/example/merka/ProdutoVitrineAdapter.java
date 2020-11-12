@@ -33,7 +33,7 @@ public class ProdutoVitrineAdapter extends RecyclerView.Adapter <ProdutoVitrineV
     public void onBindViewHolder(@NonNull ProdutoVitrineViewHolder holder, int position){
         Produto p = produtos.get(position);
         holder.txtNomeProduto.setText(p.nome);
-        holder.txtValorProduto.setText("R$"+p.valor);
+        holder.txtValorProduto.setText("R$ "+p.valor);
         holder.txtDescricaoProduto.setText(p.descricao);
         if(p.picUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
     }

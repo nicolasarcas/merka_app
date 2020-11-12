@@ -257,12 +257,12 @@ public class CriarLoja extends AppCompatActivity {
     }
 
     private void criarLoja(){
-        final String nome = retornaNomeFormatado(txtNomeLoja.getEditableText().toString());
+        final String nome = primeiraLetraMaiuscula(txtNomeLoja.getEditableText().toString());
         final String contato = justNumbers(txtContatoLoja.getEditableText().toString());
-        final String endereco = txtEnderecoLoja.getEditableText().toString();
-        final String descricao = txtDescricaoLoja.getEditableText().toString();
+        final String endereco = primeiraLetraMaiuscula(txtEnderecoLoja.getEditableText().toString());
+        final String descricao = primeiraLetraMaiuscula(txtDescricaoLoja.getEditableText().toString());
         final String cpf = txtCpfLoja.getEditableText().toString();
-        final String responsavel=txtResponsavelLoja.getEditableText().toString();
+        final String responsavel=primeiraLetraMaiuscula(txtResponsavelLoja.getEditableText().toString());
         final String url = (hasPicture) ? String.valueOf(picUrl) : "";
 
         radioCadastro = findViewById(radioGroupCadastro.getCheckedRadioButtonId());
@@ -277,8 +277,11 @@ public class CriarLoja extends AppCompatActivity {
         writeNewLoja(userId, nome, contato, endereco, descricao,delivery,cpf, url, responsavel);
     }
 
-    public String retornaNomeFormatado(String nome){
-        return nome.substring(0, 1).toUpperCase() + nome.substring(1);
+    public String primeiraLetraMaiuscula(String text){
+        if(text.length()>1){
+            return text.substring(0, 1).toUpperCase() + text.substring(1);
+        }
+        return text;
     }
 
     public void goToLoja(){

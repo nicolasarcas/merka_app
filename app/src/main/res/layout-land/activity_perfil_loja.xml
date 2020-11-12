@@ -168,6 +168,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/MarginEntreElementos"
                 android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+                android:gravity="center"
                 android:text="@string/TextViewTextNomeDaLoja"
                 android:textColor="@color/black"
                 android:textSize="26sp"

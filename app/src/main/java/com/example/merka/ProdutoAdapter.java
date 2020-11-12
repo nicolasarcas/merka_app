@@ -30,7 +30,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ProdutoViewHolder holder, int position){
         Produto p = produtos.get(position);
-        final String valor = "R$" + p.valor;
+        final String valor = "R$ " + p.valor;
 
         holder.txtNomeProduto.setText(p.nome);
         holder.txtValorProduto.setText(valor);

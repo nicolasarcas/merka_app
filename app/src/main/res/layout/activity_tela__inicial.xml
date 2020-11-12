@@ -24,6 +24,7 @@
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:scrollbars="none"
+            android:overScrollMode="never"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/produtos_item_horizontal" />

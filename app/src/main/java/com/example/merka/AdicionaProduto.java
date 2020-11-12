@@ -174,9 +174,9 @@ public class AdicionaProduto extends AppCompatActivity {
 
     private void adicionaProduto() {
 
-        final String nome = retornaNomeFormatado(txtAdicionaNomeProduto.getEditableText().toString());
+        final String nome = primeiraLetraMaiuscula(txtAdicionaNomeProduto.getEditableText().toString());
         final String valor = retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
-        final String desc = txtAdicionaDescricaoProduto.getEditableText().toString();
+        final String desc = primeiraLetraMaiuscula(txtAdicionaDescricaoProduto.getEditableText().toString());
         final String url = (hasPicture) ? String.valueOf(picUrl) : "";
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -328,8 +328,11 @@ public class AdicionaProduto extends AppCompatActivity {
         return valor.replace('.', ',');
     }
 
-    public String retornaNomeFormatado(String nome){
-        return nome.substring(0, 1).toUpperCase() + nome.substring(1);
+    public String primeiraLetraMaiuscula(String nome){
+        if(nome.length()>1){
+            return nome.substring(0, 1).toUpperCase() + nome.substring(1);
+        }
+        return nome;
     }
 
     private void writeNewProduto(String userId, String nome, String valor, String descricao, String url) {

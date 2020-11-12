@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/MarginEntreElementos"
+                android:gravity="center"
                 android:text="@string/TextViewTextNomeDaLoja"
                 android:textColor="@color/black"
                 android:textSize="26sp"
