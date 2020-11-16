@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Recyclerview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,13 +9,18 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.merka.Activity.EditLojaPerfil;
+import com.example.merka.Models.Produto;
+import com.example.merka.R;
+import com.example.merka.Utils.DownloadImageTask;
+
 import java.util.List;
 
 public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
     private List<Produto> produtos;
     private Context context;
 
-    ProdutoAdapter(List<Produto> produtos,Context context){
+    public ProdutoAdapter(List<Produto> produtos, Context context){
         this.produtos = produtos;
         this.context = context;
     }
@@ -35,7 +40,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
         holder.txtNomeProduto.setText(p.nome);
         holder.txtValorProduto.setText(valor);
         holder.txtDescricaoProduto.setText(p.descricao);
-        if(p.picUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
+        if(p.picUrl.length() > 0) new DownloadImageTask((ImageView) holder.pic).execute(p.picUrl);
     }
 
     @Override

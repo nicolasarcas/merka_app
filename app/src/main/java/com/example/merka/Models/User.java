@@ -1,6 +1,4 @@
-package com.example.merka;
-
-import android.media.Image;
+package com.example.merka.Models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -21,4 +19,13 @@ public class User {
         this.password = password;
         this.store=store;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }

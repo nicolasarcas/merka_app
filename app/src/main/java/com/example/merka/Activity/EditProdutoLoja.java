@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +17,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -26,6 +25,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.merka.Models.Produto;
+import com.example.merka.R;
+import com.example.merka.Utils.DownloadImageTask;
+import com.example.merka.Utils.PicMethods;
+import com.example.merka.Utils.TextMethods;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -231,19 +235,7 @@ public class EditProdutoLoja extends AppCompatActivity {
 
         Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
 
-        return  getImageUri(this, fotoRedimensionada);
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
-        inImage.compress(Bitmap.CompressFormat.PNG, 30, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-
-        pic.setImageBitmap(inImage);
-
-        return Uri.parse(path);
+        return PicMethods.getImageUri(this, fotoRedimensionada, pic);
     }
 
     private String getExtension(Uri uri){
@@ -300,9 +292,9 @@ public class EditProdutoLoja extends AppCompatActivity {
 
     private void validar_e_confirmarAlteracao(){
 
-        final String nome = txtEditNomePrduto.getEditableText().toString();
-        final String valor = retonaValorFormatado(txtEditValorPrduto.getEditableText().toString());
-        final String desc = txtEditDescricaoPrduto.getEditableText().toString();
+        final String nome = TextMethods.formatText(txtEditNomePrduto.getEditableText().toString());
+        final String valor = TextMethods.retonarValorFormatado(txtEditValorPrduto.getEditableText().toString());
+        final String desc = TextMethods.formatText(txtEditDescricaoPrduto.getEditableText().toString());
 
         if(validateFields(nome,valor,desc)){
             AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
@@ -353,9 +345,9 @@ public class EditProdutoLoja extends AppCompatActivity {
     private void atualizarProduto() {
 
         final String id = idProd;
-        final String nome = retornaNomeFormatado(txtEditNomePrduto.getEditableText().toString());
-        final String valor = retonaValorFormatado(txtEditValorPrduto.getEditableText().toString());
-        final String desc = txtEditDescricaoPrduto.getEditableText().toString();
+        final String nome = TextMethods.formatText(txtEditNomePrduto.getEditableText().toString());
+        final String valor = TextMethods.retonarValorFormatado(txtEditValorPrduto.getEditableText().toString());
+        final String desc = TextMethods.formatText(txtEditDescricaoPrduto.getEditableText().toString());
         final String url = getFinalPictureUrl();
 
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
@@ -367,19 +359,6 @@ public class EditProdutoLoja extends AppCompatActivity {
         refUser.child("produtos").child(userId).child(id).setValue(produto);
 
         goToProdutos();
-    }
-
-    public String retornaNomeFormatado(String nome){
-        return nome.substring(0, 1).toUpperCase() + nome.substring(1);
-    }
-
-
-    public String retonaValorFormatado(String valor){
-
-        if(valor.indexOf('.') == -1){
-            return valor + ",00";
-        }
-        return valor.substring(0, (valor.indexOf('.')+3)).replace('.',',');
     }
 
     public boolean validateFields(String nome, String valor,  String desc){
@@ -416,7 +395,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                     oldUrl = produto.picUrl;
 
                     if (oldUrl.length() > 0) {
-                        new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(produto.picUrl);
+                        new DownloadImageTask((ImageView) pic).execute(produto.picUrl);
                         hasPicture = true;
                     }
                 }

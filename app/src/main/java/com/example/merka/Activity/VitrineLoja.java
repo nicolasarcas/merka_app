@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +16,11 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.merka.Models.Loja;
+import com.example.merka.Models.Produto;
+import com.example.merka.R;
+import com.example.merka.Recyclerview.ProdutoVitrineAdapter;
+import com.example.merka.Utils.DownloadImageTask;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -90,7 +95,7 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
                 vitrineEnderecoLoja.setText((loja.endereco));
                 vitrineDescricaoLoja.setText(loja.descricao);
                 vitrineDeliveryLoja.setText(loja.delivery);
-                if(loja.PicUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) vitrineLojaImage).execute(loja.PicUrl);
+                if(loja.PicUrl.length() > 0) new DownloadImageTask((ImageView) vitrineLojaImage).execute(loja.PicUrl);
             }
 
             @Override
@@ -104,9 +109,9 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
     }
     private void decisaoVolta(){
         if(comingFrom.equals("busca"))
-            startActivity(new Intent(VitrineLoja.this,TelaBusca.class));
+            startActivity(new Intent(VitrineLoja.this, TelaBusca.class));
         else
-            startActivity(new Intent(VitrineLoja.this,Tela_Inicial.class));
+            startActivity(new Intent(VitrineLoja.this, Tela_Inicial.class));
         finish();
     }
 

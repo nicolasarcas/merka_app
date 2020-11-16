@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -8,14 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -32,6 +29,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.merka.Utils.DownloadImageTask;
+import com.example.merka.Utils.FirebaseMethods;
+import com.example.merka.Models.Loja;
+import com.example.merka.Models.Produto;
+import com.example.merka.Recyclerview.ProdutoHorizontalAdapter;
+import com.example.merka.R;
+import com.example.merka.Utils.PicMethods;
+import com.example.merka.Utils.TextMethods;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -49,8 +54,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 
 public class EditLojaPerfil extends AppCompatActivity {
 
@@ -93,10 +99,17 @@ public class EditLojaPerfil extends AppCompatActivity {
     private Uri picUrl;
     private Uri picData;
 
+    private ProdutoHorizontalAdapter adapterProduto;
+    private DatabaseReference refUserProduto;
+    private List<Produto> produtos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_loja_perfil);
+
+        produtos = new ArrayList<>();
+        adapterProduto = new ProdutoHorizontalAdapter(produtos,this);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Atualizando dados");
@@ -292,59 +305,23 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
 
-        return  getImageUri(this, fotoRedimensionada);
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
-        inImage.compress(Bitmap.CompressFormat.PNG, 30, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-
-        pic.setImageBitmap(inImage);
-
-        return Uri.parse(path);
+        return PicMethods.getImageUri(this, fotoRedimensionada, pic);
     }
 
     private void validar_e_confirmarAlteracao(){
 
-        String responsavel = txtResponsavel.getEditableText().toString();
-        String nome = txtNomeLoja.getEditableText().toString();
+        String nome = TextMethods.formatText(txtNomeLoja.getEditableText().toString());
+        String responsavel = TextMethods.formatText(txtResponsavel.getEditableText().toString());
         String contato = justNumbers(txtContatoLoja.getEditableText().toString());
-        String endereco = txtEnderecoLoja.getEditableText().toString();
-        String descricao = txtDescricaoLoja.getEditableText().toString();
+        String endereco = TextMethods.formatText(txtEnderecoLoja.getEditableText().toString());
+        String descricao = TextMethods.formatText(txtDescricaoLoja.getEditableText().toString());
         String cpf = txtCpfLoja.getEditableText().toString();
 
         if(validateFields(nome,contato,endereco,descricao,responsavel)){
             if(cpfValido(cpf)){
-                if(validateMinAndMaxLengthNumber(contato)){
+                if(TextMethods.validateMinAndMaxLengthNumber(this, contato, 9, 11)){
 
-                    AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-                    msgBox.setTitle("Alteração de dados");
-                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                    msgBox.setMessage("Deseja alterar os dados da sua loja?");
-                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                            progressDialog.show();
-
-                            if(picChanged) {
-                                fileDeleteFromFirebase();
-
-                                if(hasPicture) Fileuploader();
-                                else atualizarLoja();
-                            }
-                            else atualizarLoja();
-                        }
-                    });
-                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    msgBox.show();
+                    validarDadosExistentes(cpf, contato);
                 }
             }
             else printToast(getString(R.string.ToastDigiteCPFvalido));
@@ -352,16 +329,72 @@ public class EditLojaPerfil extends AppCompatActivity {
         else printToast(getString(R.string.ToastPreenchaTodosCampos));
     }
 
+    private void validarDadosExistentes(final String cpf, final String contato){
+
+        final FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+        final String userId = fbuser.getUid();
+
+        refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
+
+        refUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(!progressDialog.isShowing()){
+                    if(!FirebaseMethods.checkCPFExists(cpf, snapshot, userId)){
+                        if(!FirebaseMethods.checkContatoExists(contato, snapshot, userId)){
+
+                            AlertDialog.Builder msgBox = new AlertDialog.Builder(EditLojaPerfil.this);
+                            msgBox.setTitle("Alteração de dados");
+                            msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                            msgBox.setMessage("Deseja alterar os dados da sua loja?");
+                            msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    progressDialog.show();
+
+                                    if(picChanged) {
+                                        fileDeleteFromFirebase();
+
+                                        if(hasPicture) Fileuploader();
+                                        else atualizarLoja();
+                                    }
+                                    else atualizarLoja();
+                                }
+                            });
+                            msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            });
+                            msgBox.show();
+
+
+                        }
+                        else printToast("Este contato já está sendo utilizado!");
+                    }
+                    else printToast("Este CPF já está sendo utilizado!");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(EditLojaPerfil.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void printToast(String value){
         Toast.makeText(EditLojaPerfil.this, value, Toast.LENGTH_SHORT).show();
     }
 
     private void atualizarLoja(){
-        final String nome = primeiraLetraMaiuscula(txtNomeLoja.getEditableText().toString());
-        final String responsavel = primeiraLetraMaiuscula(txtResponsavel.getEditableText().toString());
+        final String nome = TextMethods.formatText(txtNomeLoja.getEditableText().toString());
+        final String responsavel = TextMethods.formatText(txtResponsavel.getEditableText().toString());
         final String contato = justNumbers(txtContatoLoja.getEditableText().toString());
-        final String endereco = primeiraLetraMaiuscula(txtEnderecoLoja.getEditableText().toString());
-        final String descricao = primeiraLetraMaiuscula(txtDescricaoLoja.getEditableText().toString());
+        final String endereco = TextMethods.formatText(txtEnderecoLoja.getEditableText().toString());
+        final String descricao = TextMethods.formatText(txtDescricaoLoja.getEditableText().toString());
         final String cpf = txtCpfLoja.getEditableText().toString();
         final String url = getFinalPictureUrl();
 
@@ -403,13 +436,6 @@ public class EditLojaPerfil extends AppCompatActivity {
         return url;
     }
 
-    public String primeiraLetraMaiuscula(String text){
-        if(text.length()>1){
-            return text.substring(0, 1).toUpperCase() + text.substring(1);
-        }
-        return text;
-    }
-
     public void goToLoja(){
         startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
         finish();
@@ -417,19 +443,6 @@ public class EditLojaPerfil extends AppCompatActivity {
 
     public boolean validateFields(String nome, String contato, String endereco,String desc,String responsavel){
         return !nome.isEmpty() && !contato.isEmpty() && !endereco.isEmpty() && !desc.isEmpty() && !responsavel.isEmpty();
-    }
-
-    public boolean validateMinAndMaxLengthNumber(String num){
-
-        if (num.replaceAll("\\s+","").length() < 9){
-            printToast(getString(R.string.ToastMinimoDeDigitos));
-            return false;
-        }
-        else if (num.replaceAll("\\s+","").length() > 11){
-            printToast(getString(R.string.ToastMaximoDeDigitos));
-            return false;
-        }
-        return true;
     }
 
     public static boolean cpfValido(String CPF) {
@@ -525,7 +538,7 @@ public class EditLojaPerfil extends AppCompatActivity {
     }
 
     private void goToMenu(){
-        startActivity(new Intent(EditLojaPerfil.this,Tela_Inicial.class));
+        startActivity(new Intent(EditLojaPerfil.this, Tela_Inicial.class));
         finish();
     }
 
@@ -535,33 +548,48 @@ public class EditLojaPerfil extends AppCompatActivity {
 
         refUser = FirebaseDatabase.getInstance().getReference();
         refUser.child("lojas").child(userId).removeValue();
+
+        DatabaseReference refUserProduto;
+
+        refUserProduto = FirebaseDatabase.getInstance().getReference().child("produtos").child(userId);
+
+        refUserProduto.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+
+                    for(DataSnapshot ds : snapshot.getChildren()){
+
+                        Produto prod = ds.getValue(Produto.class);
+
+                        if(prod.picUrl.length() > 0){
+
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(prod.picUrl);
+
+                            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // File deleted successfully
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // File not deleted
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(EditLojaPerfil.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         refUser.child("produtos").child(userId).removeValue();
         refUser.child("users").child(userId).child("store").setValue(false);
-    }
-
-    static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
     }
 
     @Override

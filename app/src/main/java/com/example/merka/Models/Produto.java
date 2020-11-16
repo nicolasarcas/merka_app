@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Models;
 
 public class Produto {
 

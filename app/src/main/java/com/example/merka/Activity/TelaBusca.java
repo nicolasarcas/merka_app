@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.merka.Models.Loja;
+import com.example.merka.Models.User;
+import com.example.merka.R;
+import com.example.merka.Recyclerview.LojaAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -85,7 +89,7 @@ public class TelaBusca extends AppCompatActivity {
             @Override
             public void onLojaClick(int position) {
                 Loja l = lojas.get(position);
-                Intent i = new Intent(TelaBusca.this,VitrineLoja.class);
+                Intent i = new Intent(TelaBusca.this, VitrineLoja.class);
                 i.putExtra("idLoja",l.id.toString());
                 i.putExtra("comingFrom","busca");
                 startActivity(i);

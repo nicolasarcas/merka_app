@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,10 +8,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.merka.Models.Loja;
+import com.example.merka.Models.Produto;
+import com.example.merka.R;
+import com.example.merka.Recyclerview.LojaAdapter;
+import com.example.merka.Recyclerview.ProdutoHorizontalAdapter;
+import com.example.merka.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,7 +66,7 @@ public class Tela_Inicial extends AppCompatActivity {
             @Override
             public void onLojaClick(int position) {
                 Loja l = lojas.get(position);
-                Intent i = new Intent(Tela_Inicial.this,VitrineLoja.class);
+                Intent i = new Intent(Tela_Inicial.this, VitrineLoja.class);
                 i.putExtra("idLoja",l.id.toString());
                 i.putExtra("comingFrom","inicio");
                 startActivity(i);

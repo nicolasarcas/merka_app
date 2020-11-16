@@ -1,10 +1,9 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.solver.widgets.Rectangle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -16,11 +15,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -28,6 +25,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.merka.Models.Produto;
+import com.example.merka.R;
+import com.example.merka.Utils.PicMethods;
+import com.example.merka.Utils.TextMethods;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -44,8 +45,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Random;
-
-import id.zelory.compressor.Compressor;
 
 public class AdicionaProduto extends AppCompatActivity {
 
@@ -130,7 +129,7 @@ public class AdicionaProduto extends AppCompatActivity {
         btnAdicionaCancela.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AdicionaProduto.this,ProdutosLoja.class));
+                startActivity(new Intent(AdicionaProduto.this, ProdutosLoja.class));
             }
         });
 
@@ -146,9 +145,9 @@ public class AdicionaProduto extends AppCompatActivity {
 
     private void validar_e_confirmarAlteracao(){
 
-        String nome = txtAdicionaNomeProduto.getEditableText().toString();
+        String nome = TextMethods.formatText(txtAdicionaNomeProduto.getEditableText().toString());
         String valor = txtAdicionaValorProduto.getEditableText().toString();
-        String desc = txtAdicionaDescricaoProduto.getEditableText().toString();
+        String desc = TextMethods.formatText(txtAdicionaDescricaoProduto.getEditableText().toString());
 
         if(validateFields(nome, valor, desc)){
             if(valorValido(valor)){
@@ -174,9 +173,9 @@ public class AdicionaProduto extends AppCompatActivity {
 
     private void adicionaProduto() {
 
-        final String nome = primeiraLetraMaiuscula(txtAdicionaNomeProduto.getEditableText().toString());
-        final String valor = retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
-        final String desc = primeiraLetraMaiuscula(txtAdicionaDescricaoProduto.getEditableText().toString());
+        final String nome = TextMethods.formatText(txtAdicionaNomeProduto.getEditableText().toString());
+        final String valor = TextMethods.retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
+        final String desc = TextMethods.formatText(txtAdicionaDescricaoProduto.getEditableText().toString());
         final String url = (hasPicture) ? String.valueOf(picUrl) : "";
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -298,41 +297,7 @@ public class AdicionaProduto extends AppCompatActivity {
 
         Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
 
-        return  getImageUri(this, fotoRedimensionada);
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
-        inImage.compress(Bitmap.CompressFormat.PNG, 30, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-
-        pic.setImageBitmap(inImage);
-
-        return Uri.parse(path);
-    }
-
-
-    public String retonarValorFormatado(String valor){
-
-        if(valor.indexOf(".") == 0 || valor.indexOf(".") == valor.length() -1){
-            valor = valor.replace(".", "");
-        }
-
-        int index = valor.indexOf(".");
-
-        if (index == -1) return valor + ",00";
-        else if(index == valor.length()-2) valor += "0";
-
-        return valor.replace('.', ',');
-    }
-
-    public String primeiraLetraMaiuscula(String nome){
-        if(nome.length()>1){
-            return nome.substring(0, 1).toUpperCase() + nome.substring(1);
-        }
-        return nome;
+        return PicMethods.getImageUri(this, fotoRedimensionada, pic);
     }
 
     private void writeNewProduto(String userId, String nome, String valor, String descricao, String url) {

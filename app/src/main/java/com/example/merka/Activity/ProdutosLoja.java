@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -11,9 +11,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.merka.Models.Produto;
+import com.example.merka.R;
+import com.example.merka.Recyclerview.ProdutoAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -93,7 +95,7 @@ public class ProdutosLoja extends AppCompatActivity {
         switch (item.getItemId()){
             case 11:
                 Produto p = produtos.get(item.getGroupId());
-                Intent i = new Intent(ProdutosLoja.this,EditProdutoLoja.class);
+                Intent i = new Intent(ProdutosLoja.this, EditProdutoLoja.class);
                 i.putExtra("id",p.id);
                 startActivity(i);
                 return true;
@@ -161,7 +163,7 @@ public class ProdutosLoja extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(ProdutosLoja.this,PerfilLoja.class));
+        startActivity(new Intent(ProdutosLoja.this, PerfilLoja.class));
         finish();
     }
 }

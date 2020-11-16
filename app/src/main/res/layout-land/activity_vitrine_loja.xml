@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    tools:context=".VitrineLoja">
+    tools:context=".Activity.VitrineLoja">
 
     <LinearLayout
         android:layout_width="0dp"

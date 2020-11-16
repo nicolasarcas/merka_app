@@ -1,14 +1,17 @@
-package com.example.merka;
+package com.example.merka.Recyclerview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.merka.Models.Loja;
+import com.example.merka.R;
+import com.example.merka.Utils.DownloadImageTask;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ public class LojaAdapter extends RecyclerView.Adapter<LojaViewHolder> {
     private Context context;
     private OnLojaListener lojaListener;
 
-    LojaAdapter(List<Loja> lojas, Context context){
+    public LojaAdapter(List<Loja> lojas, Context context){
         this.context = context;
         this.lojas= lojas;
     }
@@ -37,7 +40,7 @@ public class LojaAdapter extends RecyclerView.Adapter<LojaViewHolder> {
         holder.txtEnderecoLoja.setText(l.endereco);
         holder.txtDescLoja.setText(l.descricao);
         holder.txtContatoLoja.setText(l.contato);
-        if(l.PicUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) holder.pic).execute(l.PicUrl);
+        if(l.PicUrl.length() > 0) new DownloadImageTask((ImageView) holder.pic).execute(l.PicUrl);
     }
 
     @Override

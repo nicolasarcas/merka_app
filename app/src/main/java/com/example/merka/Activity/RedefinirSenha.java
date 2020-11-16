@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.merka.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +40,7 @@ public class RedefinirSenha extends AppCompatActivity {
     }
 
     private void goToLogin(){
-        startActivity(new Intent(RedefinirSenha.this,Login.class));
+        startActivity(new Intent(RedefinirSenha.this, Login.class));
     }
 
     private  void resetSenha(View view){

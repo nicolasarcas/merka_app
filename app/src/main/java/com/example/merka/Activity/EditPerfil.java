@@ -1,4 +1,4 @@
-package com.example.merka;
+package com.example.merka.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -13,6 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.merka.Utils.FirebaseMethods;
+import com.example.merka.R;
+import com.example.merka.Utils.TextMethods;
+import com.example.merka.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,7 +67,7 @@ public class EditPerfil extends AppCompatActivity {
         btnCancelarAlteracao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(EditPerfil.this,Perfil.class));
+                startActivity(new Intent(EditPerfil.this, Perfil.class));
             }
         });
 
@@ -83,7 +87,7 @@ public class EditPerfil extends AppCompatActivity {
     }
 
     public void goToLogin(){
-        startActivity (new Intent(this, MainActivity.class));
+        startActivity (new Intent(this, Registrar.class));
         finish();
     }
 
@@ -93,42 +97,64 @@ public class EditPerfil extends AppCompatActivity {
     }
 
     public void atualizarUser(){
-        final String email = txtEmail.getEditableText().toString();
+        final String email = txtEmail.getEditableText().toString().trim();
         final String password = txtPass.getEditableText().toString();
         final String password2 = txtConfirmPass.getEditableText().toString();
-        final String name = txtNome.getEditableText().toString();
+        final String name = TextMethods.formatText(txtNome.getEditableText().toString());
+
+        final FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+        final String userId = fbuser.getUid();
+        refUser = FirebaseDatabase.getInstance().getReference().child("users");
 
         if(validateFields(email,password,password2,name)){
             if(Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                 if(validateMinLengthPassword(password,password2)){
                     if(validateEqualPasswords(password,password2)){
-                        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-                        msgBox.setTitle("Alteração de dados");
-                        msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                        msgBox.setMessage("Deseja alterar seus dados?");
-                        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+
+                        refUser.addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                                FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-                                String userId = fbuser.getUid();
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                User user = new User(name, email, password, temLoja);
+                                if(FirebaseMethods.checkEmailExists(email, snapshot, userId)){
+                                    Toast.makeText(EditPerfil.this, "Esse email já está cadastrado!", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                else{
+                                    AlertDialog.Builder msgBox = new AlertDialog.Builder(EditPerfil.this);
+                                    msgBox.setTitle("Alteração de dados");
+                                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                                    msgBox.setMessage("Deseja alterar seus dados?");
+                                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+                                            FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+                                            String userId = fbuser.getUid();
 
-                                refUser.child("users").child(userId).setValue(user);
-                                fbuser.updateEmail(email);
-                                fbuser.updatePassword(password2);
+                                            User user = new User(name, email, password, temLoja);
 
-                                goToMenu();
+                                            refUser.child("users").child(userId).setValue(user);
+                                            fbuser.updateEmail(email);
+                                            fbuser.updatePassword(password2);
+
+                                            goToMenu();
+                                        }
+                                    });
+                                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    });
+                                    msgBox.show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
                             }
                         });
-                        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-                        msgBox.show();
 
                     }else{
                         Toast.makeText(EditPerfil.this, getString(R.string.different_password_warning),

@@ -1,13 +1,6 @@
-package com.example.merka;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.merka.Activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,22 +8,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.merka.Models.Loja;
+import com.example.merka.R;
+import com.example.merka.Utils.DownloadImageTask;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class PerfilLoja extends AppCompatActivity {
 
@@ -76,7 +66,7 @@ public class PerfilLoja extends AppCompatActivity {
         btnEditarLoja.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PerfilLoja.this,EditLojaPerfil.class));
+                startActivity(new Intent(PerfilLoja.this, EditLojaPerfil.class));
                 finish();
             }
         });
@@ -135,7 +125,7 @@ public class PerfilLoja extends AppCompatActivity {
                 txtDescricao.setText(loja.descricao);
                 txtDeliveryLoja.setText(loja.delivery);
                 txtResponsavel.setText(loja.responsavel);
-                if(loja.PicUrl.length() > 0) new EditLojaPerfil.DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
+                if(loja.PicUrl.length() > 0) new DownloadImageTask((ImageView) pic).execute(loja.PicUrl);
             }
 
             @Override
@@ -145,33 +135,6 @@ public class PerfilLoja extends AppCompatActivity {
             }
         };
         refUser.addListenerForSingleValueEvent(userListener);
-      //  loadImage();
-    }
-
-    private void loadImage() {
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userId = user.getUid();
-        mStorageReference = FirebaseStorage.getInstance().getReference().child(userId).child("images/"+txtNomeLoja.getText().toString()+".jpg");
-
-        try {
-            final File localFile = File.createTempFile(txtNomeLoja.getText().toString(),"jpg");
-            mStorageReference.getFile(localFile)
-                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                            pic.setImageBitmap(bitmap);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(PerfilLoja.this, "Falha no carregamento da imagem", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

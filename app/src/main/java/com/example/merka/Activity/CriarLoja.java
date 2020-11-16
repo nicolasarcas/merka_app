@@ -1,11 +1,4 @@
-package com.example.merka;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+package com.example.merka.Activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -29,14 +22,25 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.example.merka.Utils.FirebaseMethods;
+import com.example.merka.Models.Loja;
+import com.example.merka.R;
+import com.example.merka.Utils.PicMethods;
+import com.example.merka.Utils.TextMethods;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -48,9 +52,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.Random;
-import java.util.UUID;
 
 public class CriarLoja extends AppCompatActivity {
 
@@ -74,10 +75,7 @@ public class CriarLoja extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    private FirebaseUser user;
-    private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
     private DatabaseReference refUser; // variável de acesso ao RealTime DataBase
-    private ValueEventListener userListener;
 
     private int STORAGE_PERMISSION_CODE = 2;
 
@@ -224,45 +222,64 @@ public class CriarLoja extends AppCompatActivity {
     }
 
     private void validar(){
-        final String nome = txtNomeLoja.getEditableText().toString();
-        final String contato = justNumbers(txtContatoLoja.getEditableText().toString());
-        final String endereco = txtEnderecoLoja.getEditableText().toString();
-        final String descricao = txtDescricaoLoja.getEditableText().toString();
+        final String nome = TextMethods.formatText(txtNomeLoja.getEditableText().toString());
+        final String contato = TextMethods.justNumbers(txtContatoLoja.getEditableText().toString());
+        final String endereco = TextMethods.formatText(txtEnderecoLoja.getEditableText().toString());
+        final String descricao = TextMethods.formatText(txtDescricaoLoja.getEditableText().toString());
+        final String responsavel= TextMethods.formatText(txtResponsavelLoja.getEditableText().toString());
         final String cpf = txtCpfLoja.getEditableText().toString();
-        final String responsavel=txtResponsavelLoja.getEditableText().toString();
 
-        if(validateFields(nome,contato,endereco,descricao,responsavel)){
-            if(cpfValido(cpf)){
-                if(validateMinLengthNumber(contato)){
+        if(TextMethods.validateLojaFields(nome,contato,endereco,descricao,responsavel)){
+            if(TextMethods.cpfValido(cpf)){
+                if(TextMethods.validateMinLengthNumber(contato, 9)){
 
-                    progressDialog.show();
-
-                    if(hasPicture) Fileuploader();
-                    else criarLoja();
+                    validarDadosExistentes(cpf, contato);
                 }
-                else{
-                    Toast.makeText(CriarLoja.this, getString(R.string.ToastMinimoDeDigitos),
-                            Toast.LENGTH_SHORT).show();
-                }
+                else printToast(getString(R.string.ToastMinimoDeDigitos));
             }
-            else{
-                Toast.makeText(CriarLoja.this, "Digite um CPF válido",
-                        Toast.LENGTH_SHORT).show();
-            }
+            else printToast("Digite um CPF válido");
         }
-        else{
-            Toast.makeText(CriarLoja.this, getString(R.string.ToastPreenchaTodosCampos),
-                    Toast.LENGTH_SHORT).show();
-        }
+        else printToast(getString(R.string.ToastPreenchaTodosCampos));
     }
 
+    private void validarDadosExistentes(final String cpf, final String contato){
+
+        refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
+
+        refUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(!progressDialog.isShowing()){
+                    if(!FirebaseMethods.checkCPFExists(cpf, snapshot)){
+                        if(!FirebaseMethods.checkContatoExists(contato, snapshot)){
+
+                            progressDialog.show();
+
+                            if(hasPicture) Fileuploader();
+                            else criarLoja();
+                        }
+                        else printToast("Este contato já está sendo utilizado!");
+                    }
+                    else printToast("Este CPF já está sendo utilizado!");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CriarLoja.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     private void criarLoja(){
-        final String nome = primeiraLetraMaiuscula(txtNomeLoja.getEditableText().toString());
-        final String contato = justNumbers(txtContatoLoja.getEditableText().toString());
-        final String endereco = primeiraLetraMaiuscula(txtEnderecoLoja.getEditableText().toString());
-        final String descricao = primeiraLetraMaiuscula(txtDescricaoLoja.getEditableText().toString());
+        final String nome = TextMethods.formatText(txtNomeLoja.getEditableText().toString());
+        final String contato = TextMethods.justNumbers(txtContatoLoja.getEditableText().toString());
+        final String endereco = TextMethods.formatText(txtEnderecoLoja.getEditableText().toString());
+        final String descricao = TextMethods.formatText(txtDescricaoLoja.getEditableText().toString());
         final String cpf = txtCpfLoja.getEditableText().toString();
-        final String responsavel=primeiraLetraMaiuscula(txtResponsavelLoja.getEditableText().toString());
+        final String responsavel=TextMethods.formatText(txtResponsavelLoja.getEditableText().toString());
         final String url = (hasPicture) ? String.valueOf(picUrl) : "";
 
         radioCadastro = findViewById(radioGroupCadastro.getCheckedRadioButtonId());
@@ -277,84 +294,16 @@ public class CriarLoja extends AppCompatActivity {
         writeNewLoja(userId, nome, contato, endereco, descricao,delivery,cpf, url, responsavel);
     }
 
-    public String primeiraLetraMaiuscula(String text){
-        if(text.length()>1){
-            return text.substring(0, 1).toUpperCase() + text.substring(1);
-        }
-        return text;
-    }
-
     public void goToLoja(){
         startActivity(new Intent(CriarLoja.this, PerfilLoja.class));
         finish();
-    }
-
-    public boolean validateFields(String nome, String contato, String endereco, String desc, String responsavel){
-        return !nome.isEmpty() && !contato.isEmpty() && !endereco.isEmpty() && !desc.isEmpty() && !responsavel.isEmpty();
-    }
-
-    public boolean validateMinLengthNumber(String num){
-        return num.length() > 9;
-    }
-    public static boolean cpfValido(String CPF) {
-        // considera-se erro CPF's formados por uma sequencia de numeros iguais
-        if (CPF.equals("00000000000") ||
-                CPF.equals("11111111111") ||
-                CPF.equals("22222222222") || CPF.equals("33333333333") ||
-                CPF.equals("44444444444") || CPF.equals("55555555555") ||
-                CPF.equals("66666666666") || CPF.equals("77777777777") ||
-                CPF.equals("88888888888") || CPF.equals("99999999999") ||
-                (CPF.length() != 11))
-            return(false);
-
-        char dig10, dig11;
-        int sm, i, r, num, peso;
-
-        // "try" - protege o codigo para eventuais erros de conversao de tipo (int)
-        try {
-            // Calculo do 1o. Digito Verificador
-            sm = 0;
-            peso = 10;
-            for (i=0; i<9; i++) {
-                // converte o i-esimo caractere do CPF em um numero:
-                // por exemplo, transforma o caractere '0' no inteiro 0
-                // (48 eh a posicao de '0' na tabela ASCII)
-                num = (int)(CPF.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso - 1;
-            }
-
-            r = 11 - (sm % 11);
-            if ((r == 10) || (r == 11))
-                dig10 = '0';
-            else dig10 = (char)(r + 48); // converte no respectivo caractere numerico
-
-            // Calculo do 2o. Digito Verificador
-            sm = 0;
-            peso = 11;
-            for(i=0; i<10; i++) {
-                num = (int)(CPF.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso - 1;
-            }
-
-            r = 11 - (sm % 11);
-            if ((r == 10) || (r == 11))
-                dig11 = '0';
-            else dig11 = (char)(r + 48);
-
-            // Verifica se os digitos calculados conferem com os digitos informados.
-            return (dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10));
-        } catch (InputMismatchException erro) {
-            return(false);
-        }
     }
 
     private void writeNewLoja(String userId, String nome, String contato, String endereco, String descricao,String delivery, String cpf, String ImageUrl,String responsavel) {
         //usando o mesmo UID do Firebase Authentication: userId
 
         try {//tentando cadastrar no banco
-            Loja loja = new Loja(userId,nome, contato, endereco, descricao,delivery,cpf, ImageUrl,responsavel);
+            Loja loja = new Loja(userId, nome, contato, endereco, descricao, delivery, cpf, ImageUrl, responsavel);
 
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
@@ -363,20 +312,19 @@ public class CriarLoja extends AppCompatActivity {
 
 
         } catch (DatabaseException e) {
-                      Toast.makeText(CriarLoja.this, e.getMessage(),
-                             Toast.LENGTH_SHORT).show();
+            printToast(e.getMessage());
         }
     }
     private void choosePic(){
+
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Intent intent= new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent,1);
         }
-        else{
-            requestStoragePermition();
-        }
+        else requestStoragePermition();
+
     }
 
     @Override
@@ -418,10 +366,9 @@ public class CriarLoja extends AppCompatActivity {
 
         if(requestCode == STORAGE_PERMISSION_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this, "Permissão aceita", Toast.LENGTH_SHORT).show();
+                printToast("Permissão aceita");
             }else{
-                Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
-            }
+                printToast("Permissão negada");            }
         }
     }
 
@@ -450,19 +397,7 @@ public class CriarLoja extends AppCompatActivity {
 
         Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
 
-        return  getImageUri(this, fotoRedimensionada);
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
-        inImage.compress(Bitmap.CompressFormat.PNG, 30, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-
-        pic.setImageBitmap(inImage);
-
-        return Uri.parse(path);
+        return PicMethods.getImageUri(this, fotoRedimensionada, pic);
     }
 
     @Override
@@ -472,9 +407,7 @@ public class CriarLoja extends AppCompatActivity {
         finish();
     }
 
-    private String justNumbers(String contato) {
-
-        if(contato.length() > 0) return contato.substring(0,2) + contato.substring(3);
-        return contato;
+    private void printToast(String value) {
+        Toast.makeText(this, value, Toast.LENGTH_SHORT).show();
     }
 }
