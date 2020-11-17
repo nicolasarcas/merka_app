@@ -43,6 +43,7 @@ public class Registrar extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
     private ProgressDialog progressDialog;
+    private boolean idf = false;
 
     private DatabaseReference refUser;
 
@@ -97,7 +98,7 @@ public class Registrar extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                 if(!progressDialog.isShowing()){
-                                    if(FirebaseMethods.checkEmailExists(login, snapshot)){
+                                    if(FirebaseMethods.checkEmailExists(login, snapshot, idf)){
                                         Toast.makeText(Registrar.this, "Esse email já está cadastrado!", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
@@ -111,12 +112,14 @@ public class Registrar extends AppCompatActivity {
                         });
 
                         progressDialog.show();
+
                         firebaseAuth.createUserWithEmailAndPassword(login,pass2).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
                                 if (task.isSuccessful()) {
 
+                                    idf = true;
                                     FirebaseUser user = firebaseAuth.getCurrentUser();
                                     String userId = user.getUid();
                                     writeNewUser(userId, nome, login, pass);
