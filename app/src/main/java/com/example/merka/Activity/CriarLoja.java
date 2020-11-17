@@ -217,6 +217,7 @@ public class CriarLoja extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         Toast.makeText(CriarLoja.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -312,6 +313,7 @@ public class CriarLoja extends AppCompatActivity {
 
 
         } catch (DatabaseException e) {
+            progressDialog.dismiss();
             printToast(e.getMessage());
         }
     }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,12 +42,17 @@ public class Registrar extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
 
+    private ProgressDialog progressDialog;
+
     private DatabaseReference refUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Efetuando cadastro...");
 
         editTextNome = findViewById(R.id.editTextNome);
         editTextEmail = findViewById(R.id.editTextEmailAddress);
@@ -74,13 +80,11 @@ public class Registrar extends AppCompatActivity {
     }
 
     private void criarNovoUsuario(View view){
-        final String login = editTextEmail.getEditableText().toString().trim();
+        final String login = editTextEmail.getEditableText().toString().trim().toLowerCase();
         final String pass = editTextSenha.getEditableText().toString();
         String pass2 = editTextConfirmaSenha.getEditableText().toString();
         final String nome = TextMethods.formatText(editTextNome.getEditableText().toString());
 
-        final FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-        final String userId = fbuser.getUid();
         refUser = FirebaseDatabase.getInstance().getReference().child("users");
 
         if(validateFields(login,pass,pass2,nome)){
@@ -92,9 +96,11 @@ public class Registrar extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                if(FirebaseMethods.checkEmailExists(login, snapshot, userId)){
-                                    Toast.makeText(Registrar.this, "Esse email já está cadastrado!", Toast.LENGTH_SHORT).show();
-                                    return;
+                                if(!progressDialog.isShowing()){
+                                    if(FirebaseMethods.checkEmailExists(login, snapshot)){
+                                        Toast.makeText(Registrar.this, "Esse email já está cadastrado!", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
                                 }
                             }
 
@@ -104,10 +110,11 @@ public class Registrar extends AppCompatActivity {
                             }
                         });
 
-
+                        progressDialog.show();
                         firebaseAuth.createUserWithEmailAndPassword(login,pass2).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+
                                 if (task.isSuccessful()) {
 
                                     FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -117,6 +124,7 @@ public class Registrar extends AppCompatActivity {
                                     confirmacaoCadastro();
 
                                 } else {
+                                    progressDialog.dismiss();
                                     // If sign in fails, display a message to the user.
                                     printToast(getString(R.string.registration_failure));
                                 }
@@ -148,6 +156,7 @@ public class Registrar extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
+                progressDialog.dismiss();
                 goToLogin();
             }
         });
@@ -196,8 +205,8 @@ public class Registrar extends AppCompatActivity {
 
         }
         catch(DatabaseException e){
-            Toast.makeText(Registrar.this, e.getMessage(),
-                    Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+            Toast.makeText(Registrar.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

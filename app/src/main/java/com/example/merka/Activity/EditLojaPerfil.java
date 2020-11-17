@@ -679,8 +679,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        printToast(getString(R.string.ToastUploadNaoFoiPossivel));
+                    public void onFailure(@NonNull Exception exception) { printToast(getString(R.string.ToastUploadNaoFoiPossivel));
                     }
                 });
     }

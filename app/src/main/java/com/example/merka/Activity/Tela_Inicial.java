@@ -103,6 +103,7 @@ public class Tela_Inicial extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Tela_Inicial.this, TelaBusca.class));
+                startActivity(new Intent(Tela_Inicial.this, TelaBusca.class));
                 finish();
             }
         });

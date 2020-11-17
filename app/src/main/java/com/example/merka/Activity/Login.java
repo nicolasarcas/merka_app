@@ -3,6 +3,7 @@ package com.example.merka.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,12 +29,17 @@ public class Login extends AppCompatActivity {
 
     private TextView txtForgotPass;
 
+    private ProgressDialog progressDialog;
+
     private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Efetuando Login...");
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -69,10 +75,12 @@ public class Login extends AppCompatActivity {
     }
 
     private void fazerLogin(View view){
-        String login = editTextEmail.getEditableText().toString();
+        String login = editTextEmail.getEditableText().toString().toLowerCase();
         String senha = editTextSenha.getEditableText().toString();
 
         if(validateFields(login,senha)){
+
+            progressDialog.show();
 
             firebaseAuth.signInWithEmailAndPassword(login,senha).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -82,7 +90,7 @@ public class Login extends AppCompatActivity {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         updateUI(user);
                     } else {
-
+                        progressDialog.dismiss();
                         // If sign in fails, display a message to the user.
                         Toast.makeText(Login.this, getString(R.string.authentication_failure),
                                 Toast.LENGTH_SHORT).show();

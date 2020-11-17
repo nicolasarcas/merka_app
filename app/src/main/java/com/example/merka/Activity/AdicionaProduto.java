@@ -114,7 +114,6 @@ public class AdicionaProduto extends AppCompatActivity {
                     });
                     msgBox.show();
                 }
-
                 return true;
             }
         });
@@ -146,7 +145,7 @@ public class AdicionaProduto extends AppCompatActivity {
     private void validar_e_confirmarAlteracao(){
 
         String nome = TextMethods.formatText(txtAdicionaNomeProduto.getEditableText().toString());
-        String valor = txtAdicionaValorProduto.getEditableText().toString();
+        String valor = TextMethods.retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
         String desc = TextMethods.formatText(txtAdicionaDescricaoProduto.getEditableText().toString());
 
         if(validateFields(nome, valor, desc)){
@@ -296,6 +295,8 @@ public class AdicionaProduto extends AppCompatActivity {
         }
 
         Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
+
+
 
         return PicMethods.getImageUri(this, fotoRedimensionada, pic);
     }
