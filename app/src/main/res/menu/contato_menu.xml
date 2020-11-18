@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/contato1"
-        android:title="Ligar"/>
+        android:title="@string/itemTitleLigar" />
 
     <item
         android:id="@+id/contato2"
-        android:title="WhatsApp"/>
+        android:title="@string/itemTitleWhatsApp" />
 </menu>
