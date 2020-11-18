@@ -1,10 +1,5 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +10,11 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.merka.Models.Loja;
 import com.example.merka.Models.Produto;
@@ -100,7 +100,7 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(VitrineLoja.this, "Falha ao carregar dados da loja.",
+                Toast.makeText(VitrineLoja.this, getString(R.string.ToastErroAoCarregarDadosLoja),
                         Toast.LENGTH_SHORT).show();
             }
         };

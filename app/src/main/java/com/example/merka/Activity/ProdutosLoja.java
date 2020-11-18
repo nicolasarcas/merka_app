@@ -1,17 +1,17 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.merka.Models.Produto;
 import com.example.merka.R;
@@ -108,10 +108,10 @@ public class ProdutosLoja extends AppCompatActivity {
     }
     private void confirmarExclusao(final int position){
         AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-        msgBox.setTitle("Excluir");
+        msgBox.setTitle(getString(R.string.msgBoxTitleExcluir));
         msgBox.setIcon(android.R.drawable.ic_menu_delete);
-        msgBox.setMessage("Deseja mesmo excluir o produto?");
-        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+        msgBox.setMessage(getString(R.string.msgBoxMessageDesejaExcluirProduto));
+        msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -138,7 +138,7 @@ public class ProdutosLoja extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

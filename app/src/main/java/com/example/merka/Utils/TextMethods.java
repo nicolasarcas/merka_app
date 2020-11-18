@@ -59,7 +59,7 @@ public class TextMethods {
     public static boolean validateMinAndMaxLengthNumber(Context context, String num, int minLimit, int maxLimit){
 
         if (num.replaceAll("\\s+","").length() < minLimit){
-            printToast(context.getString(R.string.ToastMinimoDeDigitos), context);
+            printToast(context.getString(R.string.ToastContatoComNoMinimoDezDigitos), context);
             return false;
         }
         else if (num.replaceAll("\\s+","").length() > maxLimit){

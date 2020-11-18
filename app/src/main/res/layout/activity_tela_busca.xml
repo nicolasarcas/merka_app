@@ -25,7 +25,7 @@
             android:layout_marginEnd="20dp"
             android:background="@drawable/layout_bg"
             android:padding="10dp"
-            app:queryHint="@string/hintBusca" />
+            app:queryHint="@string/SearchViewHintOqueProcura" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewBusca"

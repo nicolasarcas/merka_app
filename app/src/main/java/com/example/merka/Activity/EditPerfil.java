@@ -1,9 +1,5 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.merka.Utils.FirebaseMethods;
-import com.example.merka.R;
-import com.example.merka.Utils.TextMethods;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.merka.Models.User;
+import com.example.merka.R;
+import com.example.merka.Utils.FirebaseMethods;
+import com.example.merka.Utils.TextMethods;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -116,15 +116,15 @@ public class EditPerfil extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                 if(FirebaseMethods.checkEmailExists(email, snapshot, userId)){
-                                    Toast.makeText(EditPerfil.this, "Esse email já está cadastrado!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditPerfil.this, getString(R.string.ToastEmailJaCadastrado), Toast.LENGTH_SHORT).show();
                                     return;
                                 }
                                 else{
                                     AlertDialog.Builder msgBox = new AlertDialog.Builder(EditPerfil.this);
-                                    msgBox.setTitle("Alteração de dados");
+                                    msgBox.setTitle(getString(R.string.msgBoxTitleAlteraçãoDeDados));
                                     msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                                    msgBox.setMessage("Deseja alterar seus dados?");
-                                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    msgBox.setMessage(getString(R.string.msgBoxMessageDesejaAlterarDadosSeusDados));
+                                    msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
@@ -140,7 +140,7 @@ public class EditPerfil extends AppCompatActivity {
                                             goToMenu();
                                         }
                                     });
-                                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                    msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -157,31 +157,28 @@ public class EditPerfil extends AppCompatActivity {
                         });
 
                     }else{
-                        Toast.makeText(EditPerfil.this, getString(R.string.different_password_warning),
+                        Toast.makeText(EditPerfil.this, getString(R.string.ToastInsiraSenhasIguais),
                                 Toast.LENGTH_SHORT).show();
                     }
             }
             else {
-                Toast.makeText(EditPerfil.this, getString(R.string.min_length_password_warning),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditPerfil.this, getString(R.string.ToastSenhaComNoMinimoOitoDigitos), Toast.LENGTH_SHORT).show();
             }}
             else{
-                Toast.makeText(EditPerfil.this, getString(R.string.email_invalido),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditPerfil.this, getString(R.string.ToastEmailInvalido), Toast.LENGTH_SHORT).show();
             }
         }
         else{
-            Toast.makeText(EditPerfil.this, getString(R.string.ToastPreenchaTodosCampos),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPerfil.this, getString(R.string.ToastPreenchaTodosCampos), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void confirmarExclusao(){
         AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-        msgBox.setTitle("Excluir");
+        msgBox.setTitle(getString(R.string.msgBoxTitleExcluir));
         msgBox.setIcon(android.R.drawable.ic_menu_delete);
-        msgBox.setMessage("Deseja mesmo excluir sua conta?");
-        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+        msgBox.setMessage(getString(R.string.msgBoxMessageDesejaExcluirConta));
+        msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 excluiConta();
@@ -190,7 +187,7 @@ public class EditPerfil extends AppCompatActivity {
                 goToLogin();
             }
         });
-        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -207,10 +204,10 @@ public class EditPerfil extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(EditPerfil.this, getString(R.string.delete_success), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditPerfil.this, getString(R.string.ToastExcluidoComSucesso), Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            Toast.makeText(EditPerfil.this, getString(R.string.delete_failure), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditPerfil.this, getString(R.string.ToastFalhaNaExclusao), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -279,7 +276,7 @@ public class EditPerfil extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(EditPerfil.this, "Falha ao carregar dados do usuário.",
+                Toast.makeText(EditPerfil.this, getString(R.string.ToastErroAoCarregarDadosUsuario),
                         Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }

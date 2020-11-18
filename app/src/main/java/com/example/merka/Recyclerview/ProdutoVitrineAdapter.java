@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.merka.Utils.DownloadImageTask;
 import com.example.merka.Models.Produto;
 import com.example.merka.R;
+import com.example.merka.Utils.DownloadImageTask;
 
 import java.util.List;
 

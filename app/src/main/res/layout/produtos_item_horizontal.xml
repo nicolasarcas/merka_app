@@ -29,7 +29,7 @@
                 android:id="@+id/picProdutoHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/ImageViewContentDescription"
+                android:contentDescription="@string/ImageViewContentDescriptionProduto"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_image" />
         </androidx.cardview.widget.CardView>

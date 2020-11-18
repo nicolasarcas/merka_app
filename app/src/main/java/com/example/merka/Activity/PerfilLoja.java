@@ -130,7 +130,7 @@ public class PerfilLoja extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(PerfilLoja.this, "Falha ao carregar dados da loja.",
+                Toast.makeText(PerfilLoja.this, getString(R.string.ToastErroAoCarregarDadosLoja),
                         Toast.LENGTH_SHORT).show();
             }
         };

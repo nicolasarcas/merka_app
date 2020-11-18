@@ -1,11 +1,20 @@
 <resources>
     <string name="app_name">Merka</string>
 
+    <string name="ok">Ok</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+    <string name="excluir">Excluir</string>
+    <string name="alterar">Alterar</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="permissaoAceita">Permissão aceita</string>
+    <string name="permissaoNegada">Permissão negada</string>
+
     <string name="TextViewHintNome">Nome</string>
     <string name="TextViewHintSenha">Senha</string>
     <string name="TextViewHintEmail">Email</string>
-    <string name="TextViewHintContato">Contato</string>
     <string name="TextViewHintValor">Valor</string>
+    <string name="TextViewHintContato">Contato</string>
     <string name="TextViewHintEndereco">Endereço</string>
     <string name="TextViewHintTelefone">Telefone</string>
     <string name="TextViewHintDescricao">Descrição</string>
@@ -16,13 +25,6 @@
     <string name="TextViewTextLoja">Loja</string>
     <string name="TextViewTextBusca">Busca</string>
     <string name="TextViewTextPerfil">Perfil</string>
-    <string name="TextViewTextEsqueciASenha">Esqueci a senha</string>
-    <string name="TextViewTextProdutosDaLoja">Produtos da loja:</string>
-    <string name="TextViewTextNaoTemUmaConta">Não tem uma conta?</string>
-    <string name="TextViewTextJaPossuiConta">Já possui uma conta?</string>
-    <string name="TextViewTextInformacoesLoja">Informações da loja</string>
-    <string name="TextViewTextAlterarFotoPerfil">Alterar foto do perfil</string>
-    <string name="TextViewTextCadastrandoSuaLoja">Cadastrando sua loja!</string>
     <string name="TextViewTextIndicaNome">Nome:</string>
     <string name="TextViewTextIndicaEmail">Email:</string>
     <string name="TextViewTextIndicaContato">Contato:</string>
@@ -30,74 +32,89 @@
     <string name="TextViewTextIndicaEndereço">Endereço:</string>
     <string name="TextViewTextResponsavel">Responsável:</string>
     <string name="TextViewTextNomeDaLoja">Loja do merka</string>
+    <string name="TextViewTextFazDelivery">Faz delivery?</string>
     <string name="TextViewTextIndicaDescrição">Descrição:</string>
+    <string name="TextViewTextEsqueciASenha">Esqueci a senha</string>
+    <string name="TextViewTextProdutosDaLoja">Produtos da loja:</string>
+    <string name="TextViewTextNaoTemUmaConta">Não tem uma conta?</string>
+    <string name="TextViewTextJaPossuiConta">Já possui uma conta?</string>
+    <string name="TextViewTextInformacoesLoja">Informações da loja</string>
+    <string name="TextViewTextAlterarFotoPerfil">Alterar foto do perfil</string>
+    <string name="TextViewTextCadastrandoSuaLoja">Cadastrando sua loja!</string>
+
     <string name="ButtonTextEntrar">Entrar</string>
+    <string name="ButtonTextProdutos">Produtos</string>
     <string name="ButtonTextCancelar">Cancelar</string>
     <string name="ButtonTextLoja">Excluir loja</string>
+    <string name="ButtonTextConfirmar">Confirmar</string>
     <string name="ButtonTextEditarLoja">Editar loja</string>
     <string name="ButtonTextCriarConta">Criar conta</string>
-    <string name="ButtonTextConfirmar">Confirmar</string>
-    <string name="ButtonTextEditarPerfil">Editar perfil</string>
     <string name="ButtonTextExcluirLoja">Excluir loja</string>
     <string name="ButtonTextExcluirConta">Excluir conta</string>
+    <string name="ButtonTextEditarPerfil">Editar perfil</string>
     <string name="ButtonTextEncerrarSessao">Encerrar sessão</string>
     <string name="ButtonTextInscreverseNoMerka">Inscrever-se no merka</string>
-    <string name="ImageViewContentDescription">Imagem do produto</string>
+
+    <string name="SearchViewHintOqueProcura">O que procura?</string>
+
     <string name="RadioButtonTextSim">Sim</string>
     <string name="RadioButtonTextNao">Não</string>
-    <string name="DefaultTextNomeDoProduto">Nome do produto</string>
+
     <string name="DefaultTextValorDoProduto">R$00</string>
-    <string name="DefaultTextDescricaoDoProduto">Descrição do produto</string>
     <string name="DefaultTextNomeDaLoja">Nome da Loja</string>
     <string name="DefaultTextContatoDaLoja">Contato da Loja</string>
-    <string name="DefaultTextDescricaoDaLoja">Descrição da Loja</string>
+    <string name="DefaultTextNomeDoProduto">Nome do produto</string>
     <string name="DefaultTextEnderecoDaLoja">Endereço da Loja</string>
+    <string name="DefaultTextDescricaoDaLoja">Descrição da Loja</string>
+    <string name="DefaultTextDescricaoDoProduto">Descrição do produto</string>
 
+    <string name="progressDialogEfetuandoLogin">Efetuando Login...</string>
+    <string name="progressDialogAtualizandoDados">Atualizando dados</string>
+    <string name="progressDialogEfetuandoCadastro">Efetuando cadastro...</string>
+
+    <string name="ImageViewContentDescriptionLoja">Imagem da loja</string>
+    <string name="ImageViewContentDescriptionProduto">Imagem do produto</string>
+
+    <string name="msgBoxTitleExcluir">Excluir</string>
+    <string name="msgBoxTitleCadastro">Cadastro</string>
+    <string name="msgBoxTitleDesconectar">Desconectar</string>
+    <string name="msgBoxTitleExcluirImagem">Excluir imagem</string>
+    <string name="msgBoxTitleAlteraçãoDeDados">Alteração de dados</string>
+    <string name="msgBoxMessageDesejaSeDesconectar">Deseja mesmo se desconectar?</string>
+    <string name="msgBoxMessageDesejaExcluirLoja">Deseja mesmo excluir sua loja?</string>
+    <string name="msgBoxMessageDesejaExcluirConta">Deseja mesmo excluir sua conta?</string>
+    <string name="msgBoxMessageDesejaExcluirProduto">Deseja mesmo excluir seu produto?</string>
+    <string name="msgBoxMessageDesejaAlterarDadosSeusDados">Deseja alterar seus dados?</string>
+    <string name="msgBoxMessageDesejaRetirarImagem">Deseja retirar a imagem do produto?</string>
+    <string name="msgBoxMessageDesejaAlterarDadosDaLoja">Deseja alterar os dados da sua loja?</string>
+    <string name="msgBoxMessageDesejaAlterarDadosDoProduto">Deseja alterar os dados do produto?</string>
+    <string name="msgBoxMessageCadastroEfetuadoRealizeLogin">Cadastrado com sucesso! Realize seu login</string>
+
+    <string name="ToastFalhaNaExclusao">Falha na exclusão!</string>
+    <string name="ToastFalhaNoRegistro">Falha no registro!</string>
     <string name="ToastDigiteCPFvalido">Digite um CPF válido</string>
-    <string name="ToastPreenchaTodosCampos">Preencha todos os campos!</string>
-    <string name="ToastMinimoDeDigitos">Escreva um número com no mínimo 10 dígitos! Incluindo o DDD</string>
-    <string name="ToastMaximoDeDigitos">Escreva um número com no máximo 11 dígitos!</string>
-    <string name="ToastErrorLoadStoreData">Falha ao carregar dados da loja</string>
-    <string name="ToastUploadNaoFoiPossivel">Não foi possível fazer o upload da imagem</string>
-    <string name="ToastDadosAtualizados">Dados atualizados com sucesso!</string>
+    <string name="ToastEmailInvalido">Digite um e-mail válido!</string>
     <string name="ToastDigiteValorValido">Digite um valor válido!</string>
+    <string name="ToastInsiraSenhasIguais">Escreva senhas iguais!</string>
+    <string name="ToastFalhaNaAutenticacao">Falha na autenticação!</string>
+    <string name="ToastPreenchaTodosCampos">Preencha todos os campos!</string>
+    <string name="TextViewTextAdicionandoProduto">Adicionando produto</string>
+    <string name="ToastDadosAtualizados">Dados atualizados com sucesso!</string>
+    <string name="ToastEmailJaCadastrado">Este email já está cadastrado!</string>
+    <string name="ToastExcluidoComSucesso">Usuário excluido com sucesso!</string>
+    <string name="TextViewHintResponsavel">Nome do responsável pela loja</string>
+    <string name="ToastDadosDoProdutoAlterados">Dados do produto alterados!</string>
+    <string name="ToastCPFJaUtilizado">Este contato já está sendo utilizado!</string>
+    <string name="ToastErroAoCarregarDadosLoja">Falha ao carregar dados da loja</string>
+    <string name="ToastContatoJaUtilizado">Este contato já está sendo utilizado!</string>
+    <string name="ToastMaximoDeDigitos">Escreva um número com no máximo 11 dígitos!</string>
+    <string name="ToastErroAoCarregarDadosUsuario">Falha ao carregar dados do usuário</string>
+    <string name="ToastErroAoCarregarDadosProduto">Falha ao carregar dados do produto</string>
+    <string name="ToastEmailDeRecuperacaoEnviado">E-mail de alteração enviado com sucesso!</string>
+    <string name="ToastUploadImagemNaoFoiPossivel">Não foi possível fazer o upload da imagem</string>
+    <string name="ToastFalhaAoEnviarEmailDeRecuperacao">Falha no envio do e-mail de alteração!</string>
+    <string name="ToastSenhaComNoMinimoOitoDigitos">Escreva uma senha com no mínimo 8 dígitos!</string>
+    <string name="ToastContatoComNoMinimoDezDigitos">Escreva um número com no mínimo 10 dígitos! Incluindo o DDD</string>
 
-    warning
-    <string name="authentication_failure">Falha na autenticação!</string>
-    wargning
-    <string name="min_length_password_warning">Escreva uma senha com no mínimo 8 dígitos!</string>
-    wargning
-
-    wargning
-    <string name="different_password_warning">Escreva senhas iguais!</string>
-    wargning
-    <string name="registration_successful">Registrado com sucesso!</string>
-    wargning
-    <string name="registration_failure">Falha no registro!</string>
-    wargning
-    <string name="asas">style="@style/BtnCadastrar"</string>
-    <string name="resset_pass_successful">E-mail de alteração enviado com sucesso!</string>
-    <string name="resset_pass_failure">Falha no envio do e-mail de alteração!</string>
-    <string name="delete_failure">Falha na exclusão!</string>
-    <string name="delete_success">Usuário excluido com sucesso!</string>
-    <string name="title_activity_redefinir_senha">RedefinirSenha</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
-    <string name="email_invalido">Digite um e-mail válido!</string>
-    <string name="fazDelivery">Faz delivery?</string>
-    <string name="ButtonTextProdutosLoja">Produtos</string>
-    <string name="txtAdicionandoProduto">Adicionando um novo produto!</string>
-    <string name="hintBusca">O que procura?</string>
-
-    <string name="excluir">Excluir</string>
-    <string name="alterar">Alterar</string>
-    <string name="hintResponsavel">Nome do responsável pela loja</string>
-    <string name="title_activity_maps">Map</string>
-
+    <string name="AlertDialogTitlePermissaoNecessariaImagem">Permissão necessária para inserir uma imagem</string>
 </resources>

@@ -1,14 +1,14 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.merka.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -54,12 +54,12 @@ public class RedefinirSenha extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(RedefinirSenha.this, getString(R.string.resset_pass_successful),
+                                Toast.makeText(RedefinirSenha.this, getString(R.string.ToastEmailDeRecuperacaoEnviado),
                                         Toast.LENGTH_SHORT).show();
                                 goToLogin();
                             }
                             else{
-                                Toast.makeText(RedefinirSenha.this, getString(R.string.resset_pass_failure),
+                                Toast.makeText(RedefinirSenha.this, getString(R.string.ToastFalhaAoEnviarEmailDeRecuperacao),
                                         Toast.LENGTH_SHORT).show();
                             }
                         }

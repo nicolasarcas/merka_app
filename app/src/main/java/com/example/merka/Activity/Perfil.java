@@ -1,8 +1,5 @@
 package com.example.merka.Activity;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +8,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.merka.R;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.merka.Models.User;
+import com.example.merka.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -138,8 +138,7 @@ public class Perfil extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(Perfil.this, "Falha ao carregar dados do usuário.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(Perfil.this, getString(R.string.ToastErroAoCarregarDadosUsuario), Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }
         };
@@ -154,17 +153,17 @@ public class Perfil extends AppCompatActivity {
     public void deslogar(){
 
         AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-        msgBox.setTitle("Desconectar");
+        msgBox.setTitle(getString(R.string.msgBoxTitleDesconectar));
         msgBox.setIcon(android.R.drawable.ic_dialog_alert);
-        msgBox.setMessage("Deseja se desconectar?");
-        msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+        msgBox.setMessage(getString(R.string.msgBoxMessageDesejaSeDesconectar));
+        msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 FirebaseAuth.getInstance().signOut();
                 goToLogin();
             }
         });
-        msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+        msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

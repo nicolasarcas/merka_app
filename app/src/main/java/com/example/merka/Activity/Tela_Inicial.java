@@ -1,22 +1,22 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.merka.Models.Loja;
 import com.example.merka.Models.Produto;
+import com.example.merka.Models.User;
 import com.example.merka.R;
 import com.example.merka.Recyclerview.LojaAdapter;
 import com.example.merka.Recyclerview.ProdutoHorizontalAdapter;
-import com.example.merka.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -130,7 +130,7 @@ public class Tela_Inicial extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(Tela_Inicial.this, "Falha ao carregar dados do usuário.",
+                Toast.makeText(Tela_Inicial.this, getString(R.string.ToastErroAoCarregarDadosUsuario),
                         Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }

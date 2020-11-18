@@ -3,7 +3,6 @@ package com.example.merka.Activity;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,9 +28,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.merka.Utils.FirebaseMethods;
 import com.example.merka.Models.Loja;
 import com.example.merka.R;
+import com.example.merka.Utils.FirebaseMethods;
 import com.example.merka.Utils.PicMethods;
 import com.example.merka.Utils.TextMethods;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,7 +49,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class CriarLoja extends AppCompatActivity {
@@ -107,10 +105,10 @@ public class CriarLoja extends AppCompatActivity {
 
                 if(hasPicture){
                     AlertDialog.Builder msgBox = new AlertDialog.Builder(CriarLoja.this);
-                    msgBox.setTitle("Excluir imagem");
+                    msgBox.setTitle(getString(R.string.msgBoxTitleExcluir));
                     msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                    msgBox.setMessage("Deseja retirar a imagem da loja?");
-                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    msgBox.setMessage(getString(R.string.msgBoxMessageDesejaRetirarImagem));
+                    msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -118,7 +116,7 @@ public class CriarLoja extends AppCompatActivity {
                             hasPicture = false;
                         }
                     });
-                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -216,7 +214,7 @@ public class CriarLoja extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(CriarLoja.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
+                        Toast.makeText(CriarLoja.this , getString(R.string.ToastUploadImagemNaoFoiPossivel),Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
                 });
@@ -236,9 +234,9 @@ public class CriarLoja extends AppCompatActivity {
 
                     validarDadosExistentes(cpf, contato);
                 }
-                else printToast(getString(R.string.ToastMinimoDeDigitos));
+                else printToast(getString(R.string.ToastContatoComNoMinimoDezDigitos));
             }
-            else printToast("Digite um CPF válido");
+            else printToast(getString(R.string.ToastDigiteCPFvalido));
         }
         else printToast(getString(R.string.ToastPreenchaTodosCampos));
     }
@@ -260,9 +258,9 @@ public class CriarLoja extends AppCompatActivity {
                             if(hasPicture) Fileuploader();
                             else criarLoja();
                         }
-                        else printToast("Este contato já está sendo utilizado!");
+                        else printToast(getString(R.string.ToastContatoJaUtilizado));
                     }
-                    else printToast("Este CPF já está sendo utilizado!");
+                    else printToast(getString(R.string.ToastCPFJaUtilizado));
                 }
             }
 
@@ -350,8 +348,8 @@ public class CriarLoja extends AppCompatActivity {
     private void requestStoragePermition(){
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
             new AlertDialog.Builder(this)
-                    .setTitle("Permissão necessária para inserir uma imagem")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setTitle(getString(R.string.AlertDialogTitlePermissaoNecessariaImagem))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ActivityCompat.requestPermissions(CriarLoja.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
@@ -367,10 +365,9 @@ public class CriarLoja extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         if(requestCode == STORAGE_PERMISSION_CODE){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                printToast("Permissão aceita");
-            }else{
-                printToast("Permissão negada");            }
+
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) printToast(getString(R.string.permissaoAceita));
+            else printToast(getString(R.string.permissaoNegada));
         }
     }
 

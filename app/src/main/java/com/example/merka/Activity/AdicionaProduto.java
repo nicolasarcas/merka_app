@@ -1,16 +1,8 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,6 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.merka.Models.Produto;
 import com.example.merka.R;
@@ -42,7 +41,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
@@ -77,7 +75,7 @@ public class AdicionaProduto extends AppCompatActivity {
         setContentView(R.layout.activity_adiciona_produto);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Atualizando dados");
+        progressDialog.setTitle(getString(R.string.progressDialogAtualizandoDados));
 
         firebaseAuth = FirebaseAuth.getInstance();
         refUser = FirebaseDatabase.getInstance().getReference().child("users");
@@ -95,10 +93,10 @@ public class AdicionaProduto extends AppCompatActivity {
 
                 if(hasPicture){
                     AlertDialog.Builder msgBox = new AlertDialog.Builder(AdicionaProduto.this);
-                    msgBox.setTitle("Excluir imagem");
+                    msgBox.setTitle(getString(R.string.msgBoxTitleExcluirImagem));
                     msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                    msgBox.setMessage("Deseja retirar a imagem do produto?");
-                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    msgBox.setMessage(getString(R.string.msgBoxMessageDesejaRetirarImagem));
+                    msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -106,7 +104,7 @@ public class AdicionaProduto extends AppCompatActivity {
                             hasPicture = false;
                         }
                     });
-                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -209,7 +207,7 @@ public class AdicionaProduto extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(AdicionaProduto.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
+                        Toast.makeText(AdicionaProduto.this , getString(R.string.ToastUploadImagemNaoFoiPossivel),Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -246,8 +244,8 @@ public class AdicionaProduto extends AppCompatActivity {
     private void requestStoragePermition(){
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
             new AlertDialog.Builder(this)
-                    .setTitle("Permissão necessária para inserir uma imagem")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setTitle(getString(R.string.AlertDialogTitlePermissaoNecessariaImagem))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ActivityCompat.requestPermissions(AdicionaProduto.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
@@ -264,9 +262,9 @@ public class AdicionaProduto extends AppCompatActivity {
 
         if(requestCode == STORAGE_PERMISSION_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this, "Permissão aceita", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permissaoAceita), Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permissaoNegada), Toast.LENGTH_SHORT).show();
             }
         }
     }

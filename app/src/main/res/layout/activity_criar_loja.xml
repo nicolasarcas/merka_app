@@ -70,8 +70,8 @@
             android:id="@+id/txtResponsavelLoja"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/hintResponsavel"
-            android:hint="@string/hintResponsavel"
+            android:autofillHints="@string/TextViewHintResponsavel"
+            android:hint="@string/TextViewHintResponsavel"
             android:inputType="text"
             android:maxLength="30"
             android:textSize="@dimen/HintCadastroLojasPequenos" />
@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/fazDelivery"
+                android:text="@string/TextViewTextFazDelivery"
                 android:textSize="20sp" />
 
             <RadioGroup

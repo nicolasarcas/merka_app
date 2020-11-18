@@ -1,8 +1,5 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.merka.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,7 +39,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Efetuando Login...");
+        progressDialog.setTitle(getString(R.string.progressDialogEfetuandoLogin));
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -92,7 +92,7 @@ public class Login extends AppCompatActivity {
                     } else {
                         progressDialog.dismiss();
                         // If sign in fails, display a message to the user.
-                        Toast.makeText(Login.this, getString(R.string.authentication_failure),
+                        Toast.makeText(Login.this, getString(R.string.ToastFalhaNaAutenticacao),
                                 Toast.LENGTH_SHORT).show();
                         updateUI(null);
                     }

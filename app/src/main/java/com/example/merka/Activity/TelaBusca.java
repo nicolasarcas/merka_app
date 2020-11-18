@@ -1,17 +1,16 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.widget.SearchView;
-
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.merka.Models.Loja;
 import com.example.merka.Models.User;
@@ -119,8 +118,7 @@ public class TelaBusca extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(TelaBusca.this, "Falha ao carregar dados do usuário.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(TelaBusca.this, getString(R.string.ToastErroAoCarregarDadosUsuario), Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }
         };

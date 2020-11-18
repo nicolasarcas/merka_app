@@ -1,16 +1,8 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,6 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.merka.Models.Produto;
 import com.example.merka.R;
@@ -45,7 +44,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class EditProdutoLoja extends AppCompatActivity {
@@ -85,7 +83,7 @@ public class EditProdutoLoja extends AppCompatActivity {
         setContentView(R.layout.activity_edit_produto_loja);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Atualizando dados");
+        progressDialog.setTitle(getString(R.string.progressDialogAtualizandoDados));
 
         pic = findViewById(R.id.picProduto);
         pic.setOnLongClickListener(new View.OnLongClickListener() {
@@ -95,10 +93,10 @@ public class EditProdutoLoja extends AppCompatActivity {
 
                 if(hasPicture){
                     AlertDialog.Builder msgBox = new AlertDialog.Builder(EditProdutoLoja.this);
-                    msgBox.setTitle("Excluir imagem");
+                    msgBox.setTitle(getString(R.string.msgBoxTitleExcluir));
                     msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                    msgBox.setMessage("Deseja retirar a imagem do produto?");
-                    msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    msgBox.setMessage(getString(R.string.msgBoxMessageDesejaRetirarImagem));
+                    msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -107,7 +105,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                             hasPicture = false;
                         }
                     });
-                    msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -185,8 +183,8 @@ public class EditProdutoLoja extends AppCompatActivity {
     private void requestStoragePermition(){
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
             new AlertDialog.Builder(this)
-                    .setTitle("Permissão necessária para inserir uma imagem")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setTitle(getString(R.string.AlertDialogTitlePermissaoNecessariaImagem))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ActivityCompat.requestPermissions(EditProdutoLoja.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
@@ -203,9 +201,9 @@ public class EditProdutoLoja extends AppCompatActivity {
 
         if(requestCode == STORAGE_PERMISSION_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this, "Permissão aceita", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permissaoAceita), Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permissaoNegada), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -272,7 +270,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Toast.makeText(EditProdutoLoja.this , "Dados do produto alterados!",Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditProdutoLoja.this, getString(R.string.ToastDadosDoProdutoAlterados),Toast.LENGTH_LONG).show();
 
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while (!urlTask.isSuccessful());
@@ -284,7 +282,7 @@ public class EditProdutoLoja extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(EditProdutoLoja.this , "Não foi possível fazer o upload da imagem",Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditProdutoLoja.this , getString(R.string.ToastUploadImagemNaoFoiPossivel),Toast.LENGTH_LONG).show();
                     }
                 });
         return true;
@@ -298,10 +296,10 @@ public class EditProdutoLoja extends AppCompatActivity {
 
         if(validateFields(nome,valor,desc)){
             AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-            msgBox.setTitle("Alteração de dados");
+            msgBox.setTitle(getString(R.string.msgBoxTitleAlteraçãoDeDados));
             msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-            msgBox.setMessage("Deseja alterar os dados do produto?");
-            msgBox.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            msgBox.setMessage(getString(R.string.msgBoxMessageDesejaAlterarDadosDoProduto));
+            msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -317,7 +315,7 @@ public class EditProdutoLoja extends AppCompatActivity {
 
                 }
             });
-            msgBox.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -403,8 +401,7 @@ public class EditProdutoLoja extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EditProdutoLoja.this, "Falha ao carregar dados do produto.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProdutoLoja.this, getString(R.string.ToastErroAoCarregarDadosProduto), Toast.LENGTH_SHORT).show();
             }
         };
         refUser.addListenerForSingleValueEvent(userListener);

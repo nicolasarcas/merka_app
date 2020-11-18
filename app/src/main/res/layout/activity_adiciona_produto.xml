@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/MarginEntreElementos"
-        android:text="@string/txtAdicionandoProduto"
+        android:text="@string/TextViewTextAdicionandoProduto"
         android:textSize="20sp" />
 
     <de.hdodenhof.circleimageview.CircleImageView

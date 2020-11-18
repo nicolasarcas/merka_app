@@ -1,9 +1,5 @@
 package com.example.merka.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,10 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.merka.Utils.FirebaseMethods;
-import com.example.merka.R;
-import com.example.merka.Utils.TextMethods;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.merka.Models.User;
+import com.example.merka.R;
+import com.example.merka.Utils.FirebaseMethods;
+import com.example.merka.Utils.TextMethods;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -53,7 +53,7 @@ public class Registrar extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Efetuando cadastro...");
+        progressDialog.setTitle(getString(R.string.progressDialogEfetuandoCadastro));
 
         editTextNome = findViewById(R.id.editTextNome);
         editTextEmail = findViewById(R.id.editTextEmailAddress);
@@ -99,7 +99,7 @@ public class Registrar extends AppCompatActivity {
 
                                 if(!progressDialog.isShowing()){
                                     if(FirebaseMethods.checkEmailExists(login, snapshot, idf)){
-                                        Toast.makeText(Registrar.this, "Esse email já está cadastrado!", Toast.LENGTH_SHORT).show();
+                                        printToast(getString(R.string.ToastEmailJaCadastrado));
                                         return;
                                     }
                                 }
@@ -129,18 +129,18 @@ public class Registrar extends AppCompatActivity {
                                 } else {
                                     progressDialog.dismiss();
                                     // If sign in fails, display a message to the user.
-                                    printToast(getString(R.string.registration_failure));
+                                    printToast(getString(R.string.ToastFalhaNoRegistro));
                                 }
                             }
                         });
 
                     }
-                    else printToast(getString(R.string.different_password_warning));
+                    else printToast(getString(R.string.ToastInsiraSenhasIguais));
 
                 }
-                else printToast(getString(R.string.min_length_password_warning));
+                else printToast(getString(R.string.ToastSenhaComNoMinimoOitoDigitos));
             }
-            else printToast(getString(R.string.email_invalido));
+            else printToast(getString(R.string.ToastEmailInvalido));
         }
         else printToast(getString(R.string.ToastPreenchaTodosCampos));
     }
@@ -152,10 +152,10 @@ public class Registrar extends AppCompatActivity {
     public void confirmacaoCadastro(){
 
         AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-        msgBox.setTitle("Cadastro");
+        msgBox.setTitle(getString(R.string.msgBoxTitleCadastro));
         msgBox.setIcon(android.R.drawable.ic_popup_reminder);
-        msgBox.setMessage("Cadastrado com sucesso! Realize seu login.");
-        msgBox.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+        msgBox.setMessage(getString(R.string.msgBoxMessageCadastroEfetuadoRealizeLogin));
+        msgBox.setPositiveButton(getString(R.string.confirmar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();

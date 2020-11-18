@@ -93,6 +93,21 @@ public class FirebaseMethods {
         }
         return false;
     }
+    public static boolean checkEmailExists(String email, DataSnapshot datasnapshot, Boolean idf){
+
+        if(idf) return false;
+
+        User user = new User();
+
+        for (DataSnapshot ds: datasnapshot.getChildren()){
+
+            user.setEmail(ds.getValue(User.class).getEmail());
+
+            if(user.getEmail().equals(email)) return true;
+        }
+        return false;
+    }
+
 
     public static boolean checkEmailExists(String email, DataSnapshot datasnapshot){
 
