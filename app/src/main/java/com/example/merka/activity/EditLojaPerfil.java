@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,7 +32,6 @@ import androidx.core.content.ContextCompat;
 import com.example.merka.models.Loja;
 import com.example.merka.models.Produto;
 import com.example.merka.R;
-import com.example.merka.utils.DownloadImageTask;
 import com.example.merka.utils.FirebaseMethods;
 import com.example.merka.utils.PicMethods;
 import com.example.merka.utils.TextMethods;
@@ -79,7 +79,7 @@ public class EditLojaPerfil extends AppCompatActivity {
     private final int STORAGE_PERMISSION_CODE = 1;
 
     private String idLoja;
-    private String oldUrl;
+    private String oldName;
     private String lastChar = " ";
 
     private ImageView pic;
@@ -202,10 +202,7 @@ public class EditLojaPerfil extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent,3);
         }
-        else{
-            requestStoragePermition();
-        }
-
+        else requestStoragePermition();
     }
 
     @Override
@@ -408,7 +405,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         String url = "";
 
         if(hasPicture){
-            if(oldUrl.length() > 0) url = oldUrl;
+            if(oldName.length() > 0) url = oldName;
             else url = picName;
         }
         return url;
@@ -486,8 +483,8 @@ public class EditLojaPerfil extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                if(oldUrl.length() > 0){
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+                if(oldName.length() > 0){
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images").child("Lojas").child(oldName);
 
                     storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -542,7 +539,8 @@ public class EditLojaPerfil extends AppCompatActivity {
 
                         if(Objects.requireNonNull(prod).pic.length() > 0){
 
-                            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(prod.pic);
+                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                            StorageReference storageReference = storage.getReference().child("Images").child("Produtos").child(prod.pic);
 
                             storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -591,10 +589,23 @@ public class EditLojaPerfil extends AppCompatActivity {
                     txtCpfLoja.setText(loja.cpf);
                     txtResponsavel.setText(loja.responsavel);
                     idLoja = loja.id;
-                    oldUrl = loja.pic;
+                    oldName = loja.pic;
 
-                    if (oldUrl.length() > 0) {
-                        new DownloadImageTask((ImageView) pic).execute(loja.pic);
+                    if (oldName.length() > 0) {
+
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference imageRef = storage.getReference()
+                                .child("Images").child("Lojas").child(oldName);
+
+                        imageRef.getBytes(1024*1024)
+                                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                    @Override
+                                    public void onSuccess(byte[] bytes) {
+                                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                        pic.setImageBitmap(bitmap);
+                                    }
+                                });
+
                         hasPicture = true;
                     }
 
@@ -622,13 +633,14 @@ public class EditLojaPerfil extends AppCompatActivity {
 
     private void fileDeleteFromFirebase(){
 
-        if(oldUrl.length() > 0){
-            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+        if(oldName.length() > 0){
+
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images").child("Lojas").child(oldName);
 
             storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    oldUrl = "";
+                    oldName = "";
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -650,9 +662,7 @@ public class EditLojaPerfil extends AppCompatActivity {
 
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
 
-                        while (!urlTask.isSuccessful()){
-                            continue;
-                        }
+                        while (!urlTask.isSuccessful()){}
 
                         if (urlTask.isSuccessful()){
                             picName = taskSnapshot.getStorage().getName();

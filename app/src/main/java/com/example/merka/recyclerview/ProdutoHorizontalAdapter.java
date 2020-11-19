@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.merka.models.Produto;
 import com.example.merka.R;
-import com.example.merka.utils.DownloadImageTask;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -47,9 +46,7 @@ public class ProdutoHorizontalAdapter extends RecyclerView.Adapter <ProdutoHoriz
 
         if(p.pic.length() > 0) {
 
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference imageRef = storage.getReference()
-                    .child("Images").child("Produtos").child(p.pic);
+            StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("Images").child("Produtos").child(p.pic);
 
             imageRef.getBytes(1024*1024)
                     .addOnSuccessListener(new OnSuccessListener<byte[]>() {

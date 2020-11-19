@@ -115,7 +115,8 @@ public class ProdutosLoja extends AppCompatActivity {
                 Produto p = produtos.get(position);
 
                 if(p.pic.length() > 0){
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(p.pic);
+
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images").child("Produtos").child(p.pic);
 
                     storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

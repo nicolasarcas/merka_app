@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.merka.models.Produto;
 import com.example.merka.R;
-import com.example.merka.utils.DownloadImageTask;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -59,7 +58,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter <ProdutoViewHolder> {
                             holder.pic.setImageBitmap(bitmap);
                         }
                     });
-        };
+        }
     }
 
     @Override

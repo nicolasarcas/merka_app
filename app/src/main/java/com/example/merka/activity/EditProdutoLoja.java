@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -26,7 +27,6 @@ import androidx.core.content.ContextCompat;
 
 import com.example.merka.models.Produto;
 import com.example.merka.R;
-import com.example.merka.utils.DownloadImageTask;
 import com.example.merka.utils.PicMethods;
 import com.example.merka.utils.TextMethods;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -61,7 +61,7 @@ public class EditProdutoLoja extends AppCompatActivity {
     private boolean picChanged = false;
 
     private String idProd;
-    private String oldUrl;
+    private String oldName;
 
     private ImageView pic;
     private Uri picUri;
@@ -237,13 +237,13 @@ public class EditProdutoLoja extends AppCompatActivity {
     }
     private void fileDeleteFromFirebase(){
 
-        if(oldUrl.length() > 0){
-            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldUrl);
+        if(oldName.length() > 0){
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images").child("Produtos").child(oldName);
 
             storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    oldUrl = "";
+                    oldName = "";
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -329,7 +329,7 @@ public class EditProdutoLoja extends AppCompatActivity {
         String url = "";
 
         if(hasPicture){
-            if(oldUrl.length() > 0) url = oldUrl;
+            if(oldName.length() > 0) url = oldName;
             else url = picName;
         }
         return url;
@@ -385,10 +385,22 @@ public class EditProdutoLoja extends AppCompatActivity {
                     txtEditNomePrduto.setText(Objects.requireNonNull(produto).nome);
                     txtEditValorPrduto.setText(produto.valor.replace(',', '.'));
                     txtEditDescricaoPrduto.setText(produto.descricao);
-                    oldUrl = produto.pic;
+                    oldName = produto.pic;
 
-                    if (oldUrl.length() > 0) {
-                        new DownloadImageTask((ImageView) pic).execute(produto.pic);
+                    if (oldName.length() > 0) {
+
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference imageRef = storage.getReference()
+                                .child("Images").child("Produtos").child(oldName);
+
+                        imageRef.getBytes(1024*1024)
+                                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                    @Override
+                                    public void onSuccess(byte[] bytes) {
+                                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                        pic.setImageBitmap(bitmap);
+                                    }
+                                });
                         hasPicture = true;
                     }
                 }

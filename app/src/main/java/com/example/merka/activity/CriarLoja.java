@@ -199,9 +199,7 @@ public class CriarLoja extends AppCompatActivity {
 
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
 
-                        while (!urlTask.isSuccessful()){
-                            continue;
-                        }
+                        while (!urlTask.isSuccessful()){}
 
                         if (urlTask.isSuccessful()){
                             picName = taskSnapshot.getStorage().getName();

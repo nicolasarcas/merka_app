@@ -2,6 +2,8 @@ package com.example.merka.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -20,12 +22,14 @@ import com.example.merka.models.Loja;
 import com.example.merka.models.Produto;
 import com.example.merka.R;
 import com.example.merka.recyclerview.ProdutoVitrineAdapter;
-import com.example.merka.utils.DownloadImageTask;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ import java.util.Objects;
 
 public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
-    private ImageView vitrineLojaImage;
+    private ImageView pic;
     private TextView vitrineNomeLoja;
     private TextView vitrineContatoLoja;
     private TextView vitrineEnderecoLoja;
@@ -55,7 +59,7 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
 
         refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
 
-        vitrineLojaImage = findViewById(R.id.vitrineLojaImage);
+        pic = findViewById(R.id.vitrineLojaImage);
         vitrineNomeLoja = findViewById(R.id.vitrineNomeLoja);
         vitrineContatoLoja=findViewById(R.id.vitrineContatoLoja);
         vitrineEnderecoLoja =findViewById(R.id.vitrineEnderecoLoja);
@@ -89,8 +93,9 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
                 vitrineDescricaoLoja.setText(loja.descricao);
                 vitrineDeliveryLoja.setText(loja.delivery);
 
-                if (loja.pic.length() > 0)
-                    new DownloadImageTask((ImageView) vitrineLojaImage).execute(loja.pic);
+                if (loja.pic.length() > 0){
+                    setImage(loja.pic);
+                }
             }
 
             @Override
@@ -102,6 +107,23 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
         refUser.addListenerForSingleValueEvent(userListener);
         setupFirebase();
     }
+
+    private void setImage(String picName){
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference imageRef = storage.getReference()
+                .child("Images").child("Lojas").child(picName);
+
+        imageRef.getBytes(1024*1024)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        pic.setImageBitmap(bitmap);
+                    }
+                });
+    }
+
     private void decisaoVolta(){
         if(comingFrom.equals("busca"))
             startActivity(new Intent(VitrineLoja.this, TelaBusca.class));
