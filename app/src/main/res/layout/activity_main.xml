@@ -17,7 +17,6 @@
 
 
         <TextView
-            android:id="@+id/TextViewMerka"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/MarginEntreElementos"
@@ -117,7 +116,6 @@
             android:focusable="false" />
 
         <TextView
-            android:id="@+id/textViewJaPossuiConta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/MarginEntreElementos"

@@ -5,11 +5,10 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Activity.RedefinirSenha"
+    tools:context=".activity.RedefinirSenha"
     android:paddingHorizontal="@dimen/PaddingHorizontal">
 
     <TextView
-        android:id="@+id/textViewMerka2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

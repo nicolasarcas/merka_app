@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.AdicionaProduto"
+    tools:context=".activity.AdicionaProduto"
     android:orientation="vertical"
     android:layout_marginHorizontal="@dimen/MarginGrandeEntreElementos"
     android:layout_marginTop="@dimen/MarginEntreElementos">

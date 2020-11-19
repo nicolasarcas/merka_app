@@ -4,8 +4,8 @@
     <string name="ok">OK</string>
     <string name="sim">Sim</string>
     <string name="nao">Não</string>
-    <string name="excluir">Excluir</string>
-    <string name="alterar">Alterar</string>
+    <string name="reais">R$</string>
+    <string name="reaisEspaco">R$ </string>
     <string name="confirmar">Confirmar</string>
     <string name="permissaoAceita">Permissão aceita</string>
     <string name="permissaoNegada">Permissão negada</string>
@@ -16,7 +16,6 @@
     <string name="TextViewHintValor">Valor</string>
     <string name="TextViewHintContato">Contato</string>
     <string name="TextViewHintEndereco">Endereço</string>
-    <string name="TextViewHintTelefone">Telefone</string>
     <string name="TextViewHintDescricao">Descrição</string>
     <string name="TextViewHintConfirmaSenha">Confirmar senha</string>
     <string name="TextViewHintPreencherEmail">Insira seu e-mail</string>
@@ -39,13 +38,11 @@
     <string name="TextViewTextNaoTemUmaConta">Não tem uma conta?</string>
     <string name="TextViewTextJaPossuiConta">Já possui uma conta?</string>
     <string name="TextViewTextInformacoesLoja">Informações da loja</string>
-    <string name="TextViewTextAlterarFotoPerfil">Alterar foto do perfil</string>
     <string name="TextViewTextCadastrandoSuaLoja">Cadastrando sua loja!</string>
 
     <string name="ButtonTextEntrar">Entrar</string>
     <string name="ButtonTextProdutos">Produtos</string>
     <string name="ButtonTextCancelar">Cancelar</string>
-    <string name="ButtonTextLoja">Excluir loja</string>
     <string name="ButtonTextConfirmar">Confirmar</string>
     <string name="ButtonTextEditarLoja">Editar loja</string>
     <string name="ButtonTextCriarConta">Criar conta</string>
@@ -73,9 +70,9 @@
     <string name="DefaultTextDescricaoDaLoja">Descrição da Loja</string>
     <string name="DefaultTextDescricaoDoProduto">Descrição do produto</string>
 
-    <string name="progressDialogEfetuandoLogin">Efetuando Login...</string>
+    <string name="progressDialogEfetuandoLogin">Efetuando Login…</string>
     <string name="progressDialogAtualizandoDados">Atualizando dados</string>
-    <string name="progressDialogEfetuandoCadastro">Efetuando cadastro...</string>
+    <string name="progressDialogEfetuandoCadastro">Efetuando cadastro…</string>
 
     <string name="ImageViewContentDescriptionLoja">Imagem da loja</string>
     <string name="ImageViewContentDescriptionProduto">Imagem do produto</string>

@@ -13,19 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <activity android:name=".Activity.VitrineLoja" />
-        <activity android:name=".Activity.TelaBusca" />
-        <activity android:name=".Activity.EditProdutoLoja" />
-        <activity android:name=".Activity.AdicionaProduto" />
-        <activity android:name=".Activity.ProdutosLoja" />
-        <activity android:name=".Activity.EditLojaPerfil" />
-        <activity android:name=".Activity.PerfilLoja" />
-        <activity android:name=".Activity.CriarLoja" />
-        <activity android:name=".Activity.RedefinirSenha" />
-        <activity android:name=".Activity.EditPerfil" />
-        <activity android:name=".Activity.Perfil" />
+        <activity android:name=".activity.VitrineLoja" />
+        <activity android:name=".activity.TelaBusca" />
+        <activity android:name=".activity.EditProdutoLoja" />
+        <activity android:name=".activity.AdicionaProduto" />
+        <activity android:name=".activity.ProdutosLoja" />
+        <activity android:name=".activity.EditLojaPerfil" />
+        <activity android:name=".activity.PerfilLoja" />
+        <activity android:name=".activity.CriarLoja" />
+        <activity android:name=".activity.RedefinirSenha" />
+        <activity android:name=".activity.EditPerfil" />
+        <activity android:name=".activity.Perfil" />
         <activity
-            android:name=".Activity.SplashScreen"
+            android:name=".activity.SplashScreen"
             android:theme="@style/AppCompat.TelaCheia">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,9 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Tela_Inicial" />
-        <activity android:name=".Activity.Login" />
-        <activity android:name=".Activity.Registrar" />
+        <activity android:name=".activity.Tela_Inicial" />
+        <activity android:name=".activity.Login" />
+        <activity android:name=".activity.Registrar" />
     </application>
 
 </manifest>

@@ -1,5 +1,4 @@
 <resources>
-
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -21,23 +20,15 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="textAppearance_Button">
-        <item name="background">@drawable/background_button_red</item>
-        <item name="fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
     <style name="textAppearance_Esqueci_A_Senha">
         <item name="fontFamily">sans-serif</item>
         <item name="android:textColor">@color/red</item>
         <item name="android:textSize">@dimen/TextSizeEsqueciSenha</item>
     </style>
 
-    <!-- Outros temas -->
     <style name="AppCompat.TelaCheia" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+        <item name="android:background">@color/merkaRed</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
-
-
 </resources>

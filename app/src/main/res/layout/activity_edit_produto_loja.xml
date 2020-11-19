@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/PaddingLayout"
-    tools:context=".Activity.AdicionaProduto">
+    tools:context=".activity.AdicionaProduto">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/picProduto"

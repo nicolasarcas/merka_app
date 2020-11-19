@@ -9,7 +9,6 @@
     android:paddingHorizontal="@dimen/PaddingHorizontal">
 
     <TextView
-        android:id="@+id/textViewMerka"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -98,7 +97,6 @@
         tools:layout_editor_absoluteY="520dp" />
 
     <TextView
-        android:id="@+id/textViewJaPossuiConta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

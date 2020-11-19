@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DB1D26"
     android:gravity="center"
+    android:theme="@style/AppCompat.TelaCheia"
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/PaddingHorizontal">
 
     <TextView
-        android:id="@+id/TextViewMerka"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_title"
