@@ -62,6 +62,7 @@ public class CriarLoja extends AppCompatActivity {
     private EditText txtResponsavelLoja;
 
     private RadioGroup radioGroupCadastro;
+    private RadioButton radioCadastro;
 
     private ImageView pic;
 
@@ -277,7 +278,8 @@ public class CriarLoja extends AppCompatActivity {
         final String responsavel=TextMethods.formatText(txtResponsavelLoja.getEditableText().toString());
         final String url = (hasPicture) ? picName : "";
 
-        RadioButton radioCadastro = findViewById(radioGroupCadastro.getCheckedRadioButtonId());
+        int radioId = radioGroupCadastro.getCheckedRadioButtonId();
+        radioCadastro = findViewById(radioId);
         final String delivery = radioCadastro.getText().toString();
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
