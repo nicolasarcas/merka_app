@@ -62,6 +62,9 @@
     <string name="itemTitleWhatsApp">WhatsApp</string>
     <string name="itemTitleLocalizacao">Localização</string>
 
+    <string name="DefaultLojaImage">com.example.merka:drawable/store_icon</string>
+    <string name="DefaultProductImage">com.example.merka:drawable/produto_icon</string>
+
     <string name="DefaultTextValorDoProduto">R$00</string>
     <string name="DefaultTextNomeDaLoja">Nome da Loja</string>
     <string name="DefaultTextContatoDaLoja">Contato da Loja</string>
@@ -105,11 +108,9 @@
     <string name="ToastEmailJaCadastrado">Este email já está cadastrado!</string>
     <string name="ToastExcluidoComSucesso">Usuário excluido com sucesso!</string>
     <string name="TextViewHintResponsavel">Nome do responsável pela loja</string>
-    <string name="ToastDadosDoProdutoAlterados">Dados do produto alterados!</string>
-    <string name="ToastCPFJaUtilizado">Este contato já está sendo utilizado!</string>
+    <string name="ToastCPFJaUtilizado">Este CPF já está sendo utilizado!</string>
     <string name="ToastErroAoCarregarDadosLoja">Falha ao carregar dados da loja</string>
     <string name="ToastContatoJaUtilizado">Este contato já está sendo utilizado!</string>
-    <string name="ToastMaximoDeDigitos">Escreva um número com no máximo 11 dígitos!</string>
     <string name="ToastErroAoCarregarDadosUsuario">Falha ao carregar dados do usuário</string>
     <string name="ToastErroAoCarregarDadosProduto">Falha ao carregar dados do produto</string>
     <string name="ToastEmailDeRecuperacaoEnviado">E-mail de alteração enviado com sucesso!</string>

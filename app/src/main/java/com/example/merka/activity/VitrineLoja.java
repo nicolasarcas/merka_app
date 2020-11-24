@@ -87,14 +87,14 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Loja loja = snapshot.getValue(Loja.class);
 
-                vitrineNomeLoja.setText(Objects.requireNonNull(loja).nome);
-                vitrineContatoLoja.setText(loja.contato);
-                vitrineEnderecoLoja.setText((loja.endereco));
-                vitrineDescricaoLoja.setText(loja.descricao);
-                vitrineDeliveryLoja.setText(loja.delivery);
+                vitrineNomeLoja.setText(Objects.requireNonNull(loja).getNome());
+                vitrineContatoLoja.setText(loja.getContato());
+                vitrineEnderecoLoja.setText((loja.getEndereco()));
+                vitrineDescricaoLoja.setText(loja.getDescricao());
+                vitrineDeliveryLoja.setText(loja.getDelivery());
 
-                if (loja.pic.length() > 0){
-                    setImage(loja.pic);
+                if (loja.getPic().length() > 0){
+                    setImage(loja.getPic());
                 }
             }
 

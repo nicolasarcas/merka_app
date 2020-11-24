@@ -1,16 +1,20 @@
 package com.example.merka.utils;
 
 import android.content.Context;
-import android.util.Log;
+import android.util.Patterns;
 import android.widget.Toast;
 
 import com.example.merka.R;
+import com.example.merka.activity.Registrar;
+import com.example.merka.models.Loja;
+import com.example.merka.models.Produto;
+import com.example.merka.models.User;
 
 import java.util.InputMismatchException;
 
 public class TextMethods {
 
-    public static String retonarValorFormatado(String valor){
+    public static String returnFormatedValue(String valor){
 
         valor = valor.replaceFirst("^0+(?!$)", "");
 
@@ -21,26 +25,32 @@ public class TextMethods {
         int index = valor.indexOf(".");
         if (index == -1) return valor + ",00";
 
-        Log.d("TESTE", "1" + index);
-        Log.d("TESTE", "2" + valor.length());
-
         if(index < valor.length()-2) valor = valor.substring(0, index+3);
         else valor += "0";
 
         return valor.replace('.', ',');
     }
 
-    public static String primeiraLetraMaiuscula(String text){
+    public static String firstLetterUpper(String text){
+
         if(text.length()>1){
             return text.substring(0, 1).toUpperCase() + text.substring(1);
         }
         return text;
     }
 
-    public static String formatText(String text){
+    public static String returnFormatedText(String text){
 
         text = text.trim();
-        return primeiraLetraMaiuscula(text);
+        return firstLetterUpper(text);
+    }
+
+    public static boolean validateEqualPasswords(String password1, String password2){
+        return password1.equals(password2);
+    }
+
+    public static boolean validateMinLengthPassword(String password1, String password2){
+        return password1.length() > 7 || password2.length() > 7;
     }
 
     public static String justNumbers(String text){
@@ -48,30 +58,28 @@ public class TextMethods {
         return text.replace(" ","");
     }
 
-    public static boolean validateLojaFields(String nome, String contato, String endereco, String desc, String responsavel){
-        return !nome.isEmpty() && !contato.isEmpty() && !endereco.isEmpty() && !desc.isEmpty() && !responsavel.isEmpty();
+    public static boolean fieldsNotEmpty(String nome, String contato, String endereco, String desc, String responsavel, String cpf){
+        return !nome.isEmpty() && !contato.isEmpty() && !endereco.isEmpty() && !desc.isEmpty() && !responsavel.isEmpty() && !cpf.isEmpty();
+    }
+
+    public static boolean fieldsNotEmpty(String nome, String valor, String desc){
+        return !nome.isEmpty() && !valor.isEmpty() && !desc.isEmpty();
+    }
+
+    public static boolean fieldsNotEmpty(String login, String password1){
+        return !login.isEmpty() && !password1.isEmpty();
+    }
+
+    public static boolean  fieldsNotEmpty(String login, String password1, String password2, String name){
+        return !login.isEmpty() && !password1.isEmpty() && !password2.isEmpty() && !name.isEmpty();
+    }
+
+    public static boolean validValue(String valor){
+        return valor.replace(".", "").length() > 0;
     }
 
     public static boolean validateMinLengthNumber(String num, int minLimit){
         return num.length() > minLimit;
-    }
-
-    public static boolean validateMinAndMaxLengthNumber(Context context, String num, int minLimit, int maxLimit){
-
-        if (num.replaceAll("\\s+","").length() < minLimit){
-            printToast(context.getString(R.string.ToastContatoComNoMinimoDezDigitos), context);
-            return false;
-        }
-        else if (num.replaceAll("\\s+","").length() > maxLimit){
-            printToast(context.getString(R.string.ToastMaximoDeDigitos), context);
-            return false;
-        }
-        return true;
-    }
-
-
-    private static void printToast(String value, Context context){
-        Toast.makeText(context, value, Toast.LENGTH_SHORT).show();
     }
 
     public static boolean cpfValido(String CPF) {
@@ -97,7 +105,7 @@ public class TextMethods {
                 // converte o i-esimo caractere do CPF em um numero:
                 // por exemplo, transforma o caractere '0' no inteiro 0
                 // (48 eh a posicao de '0' na tabela ASCII)
-                num = (int)(CPF.charAt(i) - 48);
+                num = CPF.charAt(i) - 48;
                 sm = sm + (num * peso);
                 peso = peso - 1;
             }
@@ -111,7 +119,7 @@ public class TextMethods {
             sm = 0;
             peso = 11;
             for(i=0; i<10; i++) {
-                num = (int)(CPF.charAt(i) - 48);
+                num = CPF.charAt(i) - 48;
                 sm = sm + (num * peso);
                 peso = peso - 1;
             }
@@ -127,4 +135,62 @@ public class TextMethods {
             return(false);
         }
     }
+
+
+    public static boolean validStoreFields(Context context, Loja loja){
+
+        if(fieldsNotEmpty(loja.getNome(), loja.getContato(), loja.getEndereco(), loja.getDescricao(), loja.getResponsavel(), loja.getCpf())){
+
+            if(cpfValido(loja.getCpf())){
+                if(TextMethods.validateMinLengthNumber(loja.getContato(), 9)){
+
+                    return true;
+                }
+                else Toast.makeText(context, context.getString(R.string.ToastContatoComNoMinimoDezDigitos), Toast.LENGTH_SHORT).show();
+            }
+            else Toast.makeText(context, context.getString(R.string.ToastDigiteCPFvalido), Toast.LENGTH_SHORT).show();
+        }
+        else Toast.makeText(context, context.getString(R.string.ToastPreenchaTodosCampos), Toast.LENGTH_SHORT).show();
+
+        return false;
+    }
+
+    public static boolean validUserFields(Context context, User user, String confirmarSenha){
+
+        if(fieldsNotEmpty(user.getNome(), user.getEmail(), user.getPassword(), confirmarSenha)) {
+
+            if(Patterns.EMAIL_ADDRESS.matcher(user.getEmail()).matches()) {
+
+                if(validateMinLengthPassword(user.getPassword(), confirmarSenha)) {
+                    if (validateEqualPasswords(user.getPassword(), confirmarSenha)) {
+                        return true;
+                    }
+                    else Toast.makeText(context, context.getString(R.string.ToastInsiraSenhasIguais), Toast.LENGTH_SHORT).show();
+                }
+                else Toast.makeText(context, context.getString(R.string.ToastSenhaComNoMinimoOitoDigitos), Toast.LENGTH_SHORT).show();
+            }
+            else Toast.makeText(context, context.getString(R.string.ToastEmailInvalido), Toast.LENGTH_SHORT).show();
+        }
+        else Toast.makeText(context, context.getString(R.string.ToastPreenchaTodosCampos), Toast.LENGTH_SHORT).show();
+
+        return false;
+    }
+
+    public static String maskAplication(String contato) {
+
+        return contato.substring(0,2) + " " + contato.substring(2);
+    }
+
+    public static boolean validProductFields(Context context, Produto prod){
+
+        if(fieldsNotEmpty(prod.getNome(), prod.getValor(), prod.getDescricao())){
+
+            if(validValue(prod.getValor())) return true;
+            else Toast.makeText(context, context.getString(R.string.ToastDigiteValorValido), Toast.LENGTH_SHORT).show();
+        }
+        else Toast.makeText(context, context.getString(R.string.ToastPreenchaTodosCampos), Toast.LENGTH_SHORT).show();
+
+        return false;
+    }
+
 }

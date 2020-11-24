@@ -83,7 +83,7 @@ public class TelaBusca extends AppCompatActivity {
             public void onLojaClick(int position) {
                 Loja l = lojas.get(position);
                 Intent i = new Intent(TelaBusca.this, VitrineLoja.class);
-                i.putExtra("idLoja", l.id);
+                i.putExtra("idLoja", l.getId());
                 i.putExtra("comingFrom","busca");
                 startActivity(i);
                 finish();
@@ -103,7 +103,7 @@ public class TelaBusca extends AppCompatActivity {
                 // Get Post object and use the values to update the UI
                 User user = dataSnapshot.getValue(User.class);
                 // [START_EXCLUDE]
-                if (Objects.requireNonNull(user).store) {
+                if (Objects.requireNonNull(user).getLoja()) {
                     startActivity(new Intent(TelaBusca.this, PerfilLoja.class));
                 } else {
                     startActivity(new Intent(TelaBusca.this, CriarLoja.class));

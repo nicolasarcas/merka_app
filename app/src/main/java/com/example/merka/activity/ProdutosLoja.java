@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.merka.models.Produto;
 import com.example.merka.R;
 import com.example.merka.recyclerview.ProdutoAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,12 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.merka.utils.PicMethods.deleteImageFromFirebaseStorage;
 
 public class ProdutosLoja extends AppCompatActivity {
 
@@ -58,11 +56,12 @@ public class ProdutosLoja extends AppCompatActivity {
 
         RecyclerView produtosRecyclerView = findViewById(R.id.recyclerViewProdutos);
         produtos = new ArrayList<>();
-        adapter = new ProdutoAdapter(produtos,this);
+        adapter = new ProdutoAdapter(produtos, this);
         produtosRecyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         produtosRecyclerView.setLayoutManager(linearLayoutManager);
     }
+
     private void setupFirebase() {
         FirebaseUser fireUser = FirebaseAuth.getInstance().getCurrentUser();
         refUser = FirebaseDatabase.getInstance().getReference().child("produtos").child(Objects.requireNonNull(fireUser).getUid());
@@ -70,9 +69,9 @@ public class ProdutosLoja extends AppCompatActivity {
         refUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     produtos.clear();
-                    for(DataSnapshot ds : snapshot.getChildren()){
+                    for (DataSnapshot ds : snapshot.getChildren()) {
                         produtos.add(ds.getValue(Produto.class));
                     }
                     adapter.notifyDataSetChanged();
@@ -89,11 +88,11 @@ public class ProdutosLoja extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case 11:
                 Produto p = produtos.get(item.getGroupId());
                 Intent i = new Intent(ProdutosLoja.this, EditProdutoLoja.class);
-                i.putExtra("id",p.id);
+                i.putExtra("id", p.getId());
                 startActivity(i);
                 return true;
             case 22:
@@ -103,7 +102,8 @@ public class ProdutosLoja extends AppCompatActivity {
                 return super.onContextItemSelected(item);
         }
     }
-    private void confirmarExclusao(final int position){
+
+    private void confirmarExclusao(final int position) {
         AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
         msgBox.setTitle(getString(R.string.msgBoxTitleExcluir));
         msgBox.setIcon(android.R.drawable.ic_menu_delete);
@@ -113,26 +113,11 @@ public class ProdutosLoja extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 Produto p = produtos.get(position);
+                String ProdId = p.getId();
 
-                if(p.pic.length() > 0){
-
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images").child("Produtos").child(p.pic);
-
-                    storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // File deleted successfully
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // File not deleted
-                        }
-                    });
-                }
-
+                deleteImageFromFirebaseStorage(p.getPic(), "Produtos");
                 produtos.remove(p);
-                deleteUserData(p.id);
+                deleteUserData(ProdId);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -144,7 +129,9 @@ public class ProdutosLoja extends AppCompatActivity {
         });
         msgBox.show();
     }
-    public void deleteUserData(String prodId){//deletar dados do usuário do banco de dados
+
+    public void deleteUserData(String prodId) {//deletar dados do usuário do banco de dados
+
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userId = Objects.requireNonNull(user).getUid();
 

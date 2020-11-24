@@ -58,7 +58,7 @@ public class Tela_Inicial extends AppCompatActivity {
             public void onLojaClick(int position) {
                 Loja l = lojas.get(position);
                 Intent i = new Intent(Tela_Inicial.this, VitrineLoja.class);
-                i.putExtra("idLoja", l.id);
+                i.putExtra("idLoja", l.getId());
                 i.putExtra("comingFrom","inicio");
                 startActivity(i);
                 finish();
@@ -112,7 +112,7 @@ public class Tela_Inicial extends AppCompatActivity {
                 // Get Post object and use the values to update the UI
                 User user = dataSnapshot.getValue(User.class);
                 // [START_EXCLUDE]
-                if (Objects.requireNonNull(user).store) {
+                if (Objects.requireNonNull(user).getLoja()) {
                     startActivity(new Intent(Tela_Inicial.this, PerfilLoja.class));
                 } else {
                     startActivity(new Intent(Tela_Inicial.this, CriarLoja.class));

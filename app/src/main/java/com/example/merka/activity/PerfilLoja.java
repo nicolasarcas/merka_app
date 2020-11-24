@@ -116,18 +116,18 @@ public class PerfilLoja extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Loja loja = snapshot.getValue(Loja.class);
 
-                txtNomeLoja.setText(Objects.requireNonNull(loja).nome);
-                txtContatoLoja.setText(loja.contato);
-                txtEnderecoLoja.setText(loja.endereco);
-                txtDescricao.setText(loja.descricao);
-                txtDeliveryLoja.setText(loja.delivery);
-                txtResponsavel.setText(loja.responsavel);
+                txtNomeLoja.setText(Objects.requireNonNull(loja).getNome());
+                txtContatoLoja.setText(loja.getContato());
+                txtEnderecoLoja.setText(loja.getEndereco());
+                txtDescricao.setText(loja.getDescricao());
+                txtDeliveryLoja.setText(loja.getDelivery());
+                txtResponsavel.setText(loja.getResponsavel());
 
-                if(loja.pic.length() > 0) {
+                if(loja.getPic().length() > 0) {
 
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference imageRef = storage.getReference()
-                            .child("Images").child("Lojas").child(loja.pic);
+                            .child("Images").child("Lojas").child(loja.getPic());
 
                     imageRef.getBytes(1024*1024)
                             .addOnSuccessListener(new OnSuccessListener<byte[]>() {

@@ -2,19 +2,16 @@ package com.example.merka.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,12 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.merka.models.Loja;
-import com.example.merka.models.Produto;
 import com.example.merka.R;
-import com.example.merka.utils.FirebaseMethods;
-import com.example.merka.utils.PicMethods;
-import com.example.merka.utils.TextMethods;
+import com.example.merka.models.Loja;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -50,41 +43,48 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.Objects;
+
+import static com.example.merka.utils.FirebaseMethods.checkCPFExists;
+import static com.example.merka.utils.FirebaseMethods.checkContatoExists;
+import static com.example.merka.utils.FirebaseMethods.deleteUserData;
+import static com.example.merka.utils.PicMethods.deleteImageFromFirebaseStorage;
+import static com.example.merka.utils.PicMethods.getExtension;
+import static com.example.merka.utils.PicMethods.getImageCompressed;
+import static com.example.merka.utils.PicMethods.loadPic;
+import static com.example.merka.utils.PicMethods.resize;
+import static com.example.merka.utils.TextMethods.maskAplication;
+import static com.example.merka.utils.TextMethods.validStoreFields;
 
 public class EditLojaPerfil extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference refUser;
+    private StorageReference mStorageRef;
+    private ProgressDialog progressDialog;
 
+    private ImageView pic;
     private EditText txtNomeLoja;
     private EditText txtContatoLoja;
     private EditText txtEnderecoLoja;
     private EditText txtDescricaoLoja;
     private EditText txtCpfLoja;
     private EditText txtResponsavel;
-
     private RadioGroup radioGroupAlteracao;
     private RadioButton radioEditSim;
     private RadioButton radioEditNao;
 
-    private ProgressDialog progressDialog;
-
-    private StorageReference mStorageRef;
-
     private boolean hasPicture = false;
     private boolean picChanged = false;
 
-    private final int STORAGE_PERMISSION_CODE = 1;
-
-    private String idLoja;
+    final Loja loja = new Loja();
+    private Uri picUri;
     private String oldName;
+    private String picName;
     private String lastChar = " ";
 
-    private ImageView pic;
-    private Uri picUri;
-    private String picName;
+    private final int STORAGE_REQUEST_CODE = 1;
+    private final int IMAGE_REQUEST_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +124,7 @@ public class EditLojaPerfil extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
-                            pic.setImageResource(getResources().getIdentifier("com.example.merka:drawable/store_icon", null, null));
+                            pic.setImageResource(getResources().getIdentifier(getString(R.string.DefaultLojaImage), null, null));
                             picChanged = true;
                             hasPicture = false;
                         }
@@ -175,7 +175,54 @@ public class EditLojaPerfil extends AppCompatActivity {
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validar_e_confirmarAlteracao();
+
+                loja.setFields(txtNomeLoja, txtContatoLoja, txtEnderecoLoja, txtDescricaoLoja, txtResponsavel, txtCpfLoja);
+
+                if(validStoreFields(EditLojaPerfil.this, loja)) {
+                    FirebaseDatabase.getInstance().getReference().child("lojas").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            if (checkCPFExists(EditLojaPerfil.this, snapshot, loja)) {
+                                if (checkContatoExists(EditLojaPerfil.this, snapshot, loja)) {
+
+                                    if(!progressDialog.isShowing()){
+                                        AlertDialog.Builder msgBox = new AlertDialog.Builder(EditLojaPerfil.this);
+                                        msgBox.setTitle(getString(R.string.msgBoxTitleAlteraçãoDeDados));
+                                        msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                                        msgBox.setMessage(R.string.msgBoxMessageDesejaAlterarDadosDaLoja);
+                                        msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                progressDialog.show();
+
+                                                if (picChanged) {
+                                                    deleteImageFromFirebaseStorage(oldName, "Lojas");
+
+                                                    if (hasPicture) Fileuploader();
+                                                    else writeNewLoja();
+                                                }
+                                                else writeNewLoja();
+                                            }
+                                        });
+                                        msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        });
+                                        msgBox.show();
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
             }
         });
 
@@ -195,26 +242,150 @@ public class EditLojaPerfil extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        firebaseAuth.getCurrentUser();
+        refUser = refUser.child(Objects.requireNonNull(firebaseAuth.getUid()));
+
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (txtNomeLoja.getText().length() == 0) {
+                    Loja loja = dataSnapshot.getValue(Loja.class);
+
+                    txtNomeLoja.setText(Objects.requireNonNull(loja).getNome());
+                    txtContatoLoja.setText(maskAplication(loja.getContato()));
+                    txtEnderecoLoja.setText(loja.getEndereco());
+                    txtDescricaoLoja.setText(loja.getDescricao());
+                    txtCpfLoja.setText(loja.getCpf());
+                    txtResponsavel.setText(loja.getResponsavel());
+                    oldName = loja.getPic();
+
+                    if (oldName.length() > 0) {
+
+                        loadPic(pic, oldName, "Lojas");
+                        hasPicture = true;
+                    }
+
+                    if (loja.getDelivery().equals("Sim")) {
+                        radioEditSim.setChecked(true);
+                    } else {
+                        radioEditNao.setChecked(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(EditLojaPerfil.this, getString(R.string.ToastErroAoCarregarDadosLoja), Toast.LENGTH_SHORT).show();
+            }
+        };
+        refUser.addListenerForSingleValueEvent(userListener);
+    }
+
     private void choosePic(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+
+        if(ContextCompat.checkSelfPermission(EditLojaPerfil.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Intent intent= new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent,3);
+            startActivityForResult(intent,IMAGE_REQUEST_CODE);
         }
         else requestStoragePermition();
+    }
+
+    private void Fileuploader(){
+
+        StorageReference Ref=mStorageRef.child("Lojas").child(System.currentTimeMillis()+"."+getExtension(EditLojaPerfil.this, picUri));
+
+        Ref.putFile(picUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+
+                        while (!urlTask.isSuccessful()){}
+
+                        if (urlTask.isSuccessful()){
+                            picName = taskSnapshot.getStorage().getName();
+                            writeNewLoja();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast.makeText(EditLojaPerfil.this, getString(R.string.ToastUploadImagemNaoFoiPossivel), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void writeNewLoja(){
+
+        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
+        int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
+        RadioButton radioAlteracao = findViewById(radioIdAlteracao);
+
+        loja.setPic(getFinalPicture());
+        loja.setDelivery(radioAlteracao.getText().toString());
+        loja.setId(Objects.requireNonNull(fbuser).getUid());
+
+        refUser.child("lojas").child(loja.getId()).setValue(loja);
+
+        Toast.makeText(EditLojaPerfil.this, getString(R.string.ToastDadosAtualizados), Toast.LENGTH_SHORT).show();
+        goToLoja();
+    }
+
+    private void confirmarExclusao(){
+        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
+        msgBox.setTitle(getString(R.string.msgBoxTitleExcluir));
+        msgBox.setIcon(android.R.drawable.ic_menu_delete);
+        msgBox.setMessage(getString(R.string.msgBoxMessageDesejaExcluirLoja));
+        msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if(oldName.length() > 0) deleteImageFromFirebaseStorage(oldName, "Lojas");
+
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                String userId = Objects.requireNonNull(user).getUid();
+                deleteUserData(EditLojaPerfil.this, userId);
+
+                goToMenu();
+            }
+        });
+        msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        msgBox.show();
+    }
+
+    public void goToLoja(){
+        startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
+        finish();
+    }
+
+    private void goToMenu(){
+        startActivity(new Intent(EditLojaPerfil.this, Tela_Inicial.class));
+        finish();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==3 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+        if(requestCode==IMAGE_REQUEST_CODE && resultCode==RESULT_OK && data!=null && data.getData()!=null){
 
             try {
-                Bitmap fotoBuscada = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-
-
-                picUri = redimensionar_e_compressao(fotoBuscada);
+                Bitmap foto = resize(MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData()));
+                picUri = getImageCompressed(this, foto);
                 pic.setImageURI(picUri);
                 hasPicture = true;
                 picChanged = true;
@@ -233,19 +404,19 @@ public class EditLojaPerfil extends AppCompatActivity {
                     .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(EditLojaPerfil.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                            ActivityCompat.requestPermissions(EditLojaPerfil.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
                         }
                     })
                     .create().show();
         }else{
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if(requestCode == STORAGE_PERMISSION_CODE){
+        if(requestCode == STORAGE_REQUEST_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this, getString(R.string.permissaoAceita), Toast.LENGTH_SHORT).show();
 
@@ -255,152 +426,7 @@ public class EditLojaPerfil extends AppCompatActivity {
         }
     }
 
-    private Uri redimensionar_e_compressao(Bitmap fotoBuscada){
-
-        if (fotoBuscada.getWidth() >= fotoBuscada.getHeight()){
-
-            fotoBuscada = Bitmap.createBitmap(
-                    fotoBuscada,
-                    fotoBuscada.getWidth()/2 - fotoBuscada.getHeight()/2,
-                    0,
-                    fotoBuscada.getHeight(),
-                    fotoBuscada.getHeight()
-            );
-
-        }else{
-
-            fotoBuscada = Bitmap.createBitmap(
-                    fotoBuscada,
-                    0,
-                    fotoBuscada.getHeight()/2 - fotoBuscada.getWidth()/2,
-                    fotoBuscada.getWidth(),
-                    fotoBuscada.getWidth()
-            );
-        }
-
-        Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
-
-        return PicMethods.getImageUri(this, fotoRedimensionada, pic);
-    }
-
-    private void validar_e_confirmarAlteracao(){
-
-        String nome = TextMethods.formatText(txtNomeLoja.getEditableText().toString());
-        String responsavel = TextMethods.formatText(txtResponsavel.getEditableText().toString());
-        String contato = justNumbers(txtContatoLoja.getEditableText().toString());
-        String endereco = TextMethods.formatText(txtEnderecoLoja.getEditableText().toString());
-        String descricao = TextMethods.formatText(txtDescricaoLoja.getEditableText().toString());
-        String cpf = txtCpfLoja.getEditableText().toString();
-
-        if(validateFields(nome,contato,endereco,descricao,responsavel)){
-            if(cpfValido(cpf)){
-                if(TextMethods.validateMinAndMaxLengthNumber(this, contato, 9, 11)){
-
-                    validarDadosExistentes(cpf, contato);
-                }
-            }
-            else printToast(getString(R.string.ToastDigiteCPFvalido));
-        }
-        else printToast(getString(R.string.ToastPreenchaTodosCampos));
-    }
-
-    private void validarDadosExistentes(final String cpf, final String contato){
-
-        final FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-        final String userId = Objects.requireNonNull(fbuser).getUid();
-
-        refUser = FirebaseDatabase.getInstance().getReference().child("lojas");
-
-        refUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                if(!progressDialog.isShowing()){
-                    if(!FirebaseMethods.checkCPFExists(cpf, snapshot, userId)){
-                        if(!FirebaseMethods.checkContatoExists(contato, snapshot, userId)){
-
-                            AlertDialog.Builder msgBox = new AlertDialog.Builder(EditLojaPerfil.this);
-                            msgBox.setTitle(getString(R.string.msgBoxTitleAlteraçãoDeDados));
-                            msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                            msgBox.setMessage(R.string.msgBoxMessageDesejaAlterarDadosDaLoja);
-                            msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    progressDialog.show();
-
-                                    if(picChanged) {
-                                        fileDeleteFromFirebase();
-
-                                        if(hasPicture) Fileuploader();
-                                        else atualizarLoja();
-                                    }
-                                    else atualizarLoja();
-                                }
-                            });
-                            msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                }
-                            });
-                            msgBox.show();
-
-
-                        }
-                        else printToast(getString(R.string.ToastContatoJaUtilizado));
-                    }
-                    else printToast(getString(R.string.ToastCPFJaUtilizado));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EditLojaPerfil.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void printToast(String value){
-        Toast.makeText(EditLojaPerfil.this, value, Toast.LENGTH_SHORT).show();
-    }
-
-    private void atualizarLoja(){
-        final String nome = TextMethods.formatText(txtNomeLoja.getEditableText().toString());
-        final String responsavel = TextMethods.formatText(txtResponsavel.getEditableText().toString());
-        final String contato = justNumbers(txtContatoLoja.getEditableText().toString());
-        final String endereco = TextMethods.formatText(txtEnderecoLoja.getEditableText().toString());
-        final String descricao = TextMethods.formatText(txtDescricaoLoja.getEditableText().toString());
-        final String cpf = txtCpfLoja.getEditableText().toString();
-        final String url = getFinalPictureUrl();
-
-        int radioIdAlteracao = radioGroupAlteracao.getCheckedRadioButtonId();
-        RadioButton radioAlteracao = findViewById(radioIdAlteracao);
-        final String delivery = radioAlteracao.getText().toString();
-
-        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-        String userId = Objects.requireNonNull(fbuser).getUid();
-
-        Loja loja = new Loja(idLoja, nome, contato, endereco, descricao, delivery, cpf, url, responsavel);
-
-        refUser.child("lojas").child(userId).setValue(loja);
-
-        printToast(getString(R.string.ToastDadosAtualizados));
-        goToLoja();
-    }
-
-    private String justNumbers(String contato) {
-
-        if(contato.length() > 0) return contato.replaceAll("\\s+","");
-        return contato;
-    }
-
-    private String maskAplication(String contato) {
-
-        return contato.substring(0,2) + " " + contato.substring(2);
-    }
-
-    private String getFinalPictureUrl(){
+    private String getFinalPicture(){
 
         String url = "";
 
@@ -409,273 +435,6 @@ public class EditLojaPerfil extends AppCompatActivity {
             else url = picName;
         }
         return url;
-    }
-
-    public void goToLoja(){
-        startActivity(new Intent(EditLojaPerfil.this, PerfilLoja.class));
-        finish();
-    }
-
-    public boolean validateFields(String nome, String contato, String endereco,String desc,String responsavel){
-        return !nome.isEmpty() && !contato.isEmpty() && !endereco.isEmpty() && !desc.isEmpty() && !responsavel.isEmpty();
-    }
-
-    public static boolean cpfValido(String CPF) {
-        // considera-se erro CPF's formados por uma sequencia de numeros iguais
-        if (CPF.equals("00000000000") ||
-                CPF.equals("11111111111") ||
-                CPF.equals("22222222222") || CPF.equals("33333333333") ||
-                CPF.equals("44444444444") || CPF.equals("55555555555") ||
-                CPF.equals("66666666666") || CPF.equals("77777777777") ||
-                CPF.equals("88888888888") || CPF.equals("99999999999") ||
-                (CPF.length() != 11))
-            return(false);
-
-        char dig10, dig11;
-        int sm, i, r, num, peso;
-
-        // "try" - protege o codigo para eventuais erros de conversao de tipo (int)
-        try {
-            // Calculo do 1o. Digito Verificador
-            sm = 0;
-            peso = 10;
-            for (i=0; i<9; i++) {
-                // converte o i-esimo caractere do CPF em um numero:
-                // por exemplo, transforma o caractere '0' no inteiro 0
-                // (48 eh a posicao de '0' na tabela ASCII)
-                num = (int)(CPF.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso - 1;
-            }
-
-            r = 11 - (sm % 11);
-            if ((r == 10) || (r == 11))
-                dig10 = '0';
-            else dig10 = (char)(r + 48); // converte no respectivo caractere numerico
-
-            // Calculo do 2o. Digito Verificador
-            sm = 0;
-            peso = 11;
-            for(i=0; i<10; i++) {
-                num = (int)(CPF.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso - 1;
-            }
-
-            r = 11 - (sm % 11);
-            if ((r == 10) || (r == 11))
-                dig11 = '0';
-            else dig11 = (char)(r + 48);
-
-            // Verifica se os digitos calculados conferem com os digitos informados.
-            return (dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10));
-        } catch (InputMismatchException erro) {
-            return(false);
-        }
-    }
-
-    private void confirmarExclusao(){
-        AlertDialog.Builder msgBox = new AlertDialog.Builder(this);
-        msgBox.setTitle(getString(R.string.msgBoxTitleExcluir));
-        msgBox.setIcon(android.R.drawable.ic_menu_delete);
-        msgBox.setMessage(getString(R.string.msgBoxMessageDesejaExcluirLoja));
-        msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                if(oldName.length() > 0){
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images").child("Lojas").child(oldName);
-
-                    storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // File deleted successfully
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // File not deleted
-                        }
-                    });
-                }
-
-                deleteUserData();
-                goToMenu();
-            }
-        });
-        msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        msgBox.show();
-    }
-
-    private void goToMenu(){
-        startActivity(new Intent(EditLojaPerfil.this, Tela_Inicial.class));
-        finish();
-    }
-
-    public void deleteUserData(){//deletar dados do usuário do banco de dados
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userId = Objects.requireNonNull(user).getUid();
-
-        refUser = FirebaseDatabase.getInstance().getReference();
-        refUser.child("lojas").child(userId).removeValue();
-
-        DatabaseReference refUserProduto;
-
-        refUserProduto = FirebaseDatabase.getInstance().getReference().child("produtos").child(userId);
-
-        refUserProduto.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-
-                    for(DataSnapshot ds : snapshot.getChildren()){
-
-                        Produto prod = ds.getValue(Produto.class);
-
-                        if(Objects.requireNonNull(prod).pic.length() > 0){
-
-                            FirebaseStorage storage = FirebaseStorage.getInstance();
-                            StorageReference storageReference = storage.getReference().child("Images").child("Produtos").child(prod.pic);
-
-                            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    // File deleted successfully
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // File not deleted
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EditLojaPerfil.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        refUser.child("produtos").child(userId).removeValue();
-        refUser.child("users").child(userId).child("store").setValue(false);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        firebaseAuth.getCurrentUser();
-        refUser = refUser.child(Objects.requireNonNull(firebaseAuth.getUid()));
-
-        ValueEventListener userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if (txtNomeLoja.getText().length() == 0) {
-                    Loja loja = dataSnapshot.getValue(Loja.class);
-
-                    txtNomeLoja.setText(Objects.requireNonNull(loja).nome);
-                    txtContatoLoja.setText(maskAplication(loja.contato));
-                    txtEnderecoLoja.setText(loja.endereco);
-                    txtDescricaoLoja.setText(loja.descricao);
-                    txtCpfLoja.setText(loja.cpf);
-                    txtResponsavel.setText(loja.responsavel);
-                    idLoja = loja.id;
-                    oldName = loja.pic;
-
-                    if (oldName.length() > 0) {
-
-                        FirebaseStorage storage = FirebaseStorage.getInstance();
-                        StorageReference imageRef = storage.getReference()
-                                .child("Images").child("Lojas").child(oldName);
-
-                        imageRef.getBytes(1024*1024)
-                                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                                    @Override
-                                    public void onSuccess(byte[] bytes) {
-                                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                                        pic.setImageBitmap(bitmap);
-                                    }
-                                });
-
-                        hasPicture = true;
-                    }
-
-                    if (loja.delivery.equals("Sim")) {
-                        radioEditSim.setChecked(true);
-                    } else {
-                        radioEditNao.setChecked(true);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                printToast(getString(R.string.ToastErroAoCarregarDadosLoja));
-            }
-        };
-        refUser.addListenerForSingleValueEvent(userListener);
-    }
-
-    private String getExtension(Uri uri){
-        ContentResolver cr= getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
-    }
-
-    private void fileDeleteFromFirebase(){
-
-        if(oldName.length() > 0){
-
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images").child("Lojas").child(oldName);
-
-            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    oldName = "";
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-
-                }
-            });
-        }
-    }
-
-    private void Fileuploader(){
-
-        StorageReference Ref=mStorageRef.child("Lojas").child(System.currentTimeMillis()+"."+getExtension(picUri));
-
-        Ref.putFile(picUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-
-                        while (!urlTask.isSuccessful()){}
-
-                        if (urlTask.isSuccessful()){
-                            picName = taskSnapshot.getStorage().getName();
-                            atualizarLoja();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        printToast(getString(R.string.ToastUploadImagemNaoFoiPossivel));
-                    }
-                });
     }
 
     @Override

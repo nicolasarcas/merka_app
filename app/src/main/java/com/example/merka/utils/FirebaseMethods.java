@@ -1,96 +1,131 @@
 package com.example.merka.utils;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.example.merka.R;
 import com.example.merka.models.Loja;
+import com.example.merka.models.Produto;
 import com.example.merka.models.User;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+import static com.example.merka.utils.PicMethods.deleteImageFromFirebaseStorage;
+
 public class FirebaseMethods {
 
-    public static boolean checkCPFExists(String cpf, DataSnapshot datasnapshot){
+    public static boolean checkCPFExists(final Context context, DataSnapshot dataSnap, Loja loja){
 
-        Loja loja = new Loja();
+        boolean cpfExists = false;
 
-        for (DataSnapshot ds: datasnapshot.getChildren()){
+        for (DataSnapshot ds: dataSnap.getChildren()){
 
-            loja.setCpf(Objects.requireNonNull(ds.getValue(Loja.class)).getCpf());
+            if (loja.getCpf().equals(ds.getValue(Loja.class).getCpf())){
 
-            if(loja.getCpf().equals(cpf)) return true;
+                if(!loja.getNome().equals((ds.getValue(Loja.class).getNome()))){
 
+                    Toast.makeText(context, context.getString(R.string.ToastCPFJaUtilizado), Toast.LENGTH_SHORT).show();
+                    cpfExists = true;
+                }
+            }
         }
-        return false;
+
+        return !cpfExists;
     }
 
-    public static boolean checkCPFExists(String cpf, DataSnapshot datasnapshot, String userId){
+    public static boolean checkContatoExists(final Context context, DataSnapshot dataSnap, Loja loja){
 
-        Loja loja = new Loja();
+        boolean contatoExists = false;
 
-        if(cpf.equals(Objects.requireNonNull(datasnapshot.child(userId).child("cpf").getValue()).toString())) return false;
+        for (DataSnapshot ds: dataSnap.getChildren()){
 
-        for (DataSnapshot ds: datasnapshot.getChildren()){
+            if (loja.getContato().equals(ds.getValue(Loja.class).getContato())){
 
-            loja.setCpf(Objects.requireNonNull(ds.getValue(Loja.class)).getCpf());
+                if(!loja.getNome().equals((ds.getValue(Loja.class).getNome()))){
 
-            if(loja.getCpf().equals(cpf)) return true;
+                    Toast.makeText(context, context.getString(R.string.ToastContatoJaUtilizado), Toast.LENGTH_SHORT).show();
+                    contatoExists = true;
+                }
+            }
         }
-        return false;
+
+        return !contatoExists;
     }
 
-    public static boolean checkContatoExists(String contato, DataSnapshot datasnapshot, String userId){
+    public static boolean checkEmailExists(final Context context, DataSnapshot dataSnap, User user){
 
-        Loja loja = new Loja();
+        boolean emailExists = false;
 
-        if(contato.equals(Objects.requireNonNull(datasnapshot.child(userId).child("contato").getValue()).toString())) return false;
+        for (DataSnapshot ds: dataSnap.getChildren()){
 
-        for (DataSnapshot ds: datasnapshot.getChildren()){
+            if (user.getEmail().equals(ds.getValue(User.class).getEmail())){
 
-            loja.setContato(Objects.requireNonNull(ds.getValue(Loja.class)).getContato());
+                if(!user.getNome().equals((ds.getValue(User.class).getNome()))){
 
-            if(loja.getContato().equals(contato)) return true;
+                    Toast.makeText(context, context.getString(R.string.ToastEmailJaCadastrado), Toast.LENGTH_SHORT).show();
+                    emailExists = true;
+                }
+            }
         }
-        return false;
+
+        return !emailExists;
     }
 
-    public static boolean checkContatoExists(String contato, DataSnapshot datasnapshot){
+    public static boolean checkEmailExists(final Context context, DataSnapshot dataSnap, User user, String userId){
 
-        Loja loja = new Loja();
+        boolean emailExists = false;
+        DataSnapshot atual = dataSnap.child(userId);
 
-        for (DataSnapshot ds: datasnapshot.getChildren()){
+        for (DataSnapshot ds: dataSnap.getChildren()){
 
-            loja.setContato(Objects.requireNonNull(ds.getValue(Loja.class)).getContato());
+            if(ds == atual) continue;
 
-            if(loja.getContato().equals(contato)) return true;
+            if (user.getEmail().equals(ds.getValue(User.class).getEmail())){
+
+                Toast.makeText(context, context.getString(R.string.ToastEmailJaCadastrado), Toast.LENGTH_SHORT).show();
+                emailExists = true;
+            }
         }
-        return false;
+
+        return !emailExists;
     }
 
-    public static boolean checkEmailExists(String email, DataSnapshot datasnapshot, String userId){
+    public static void deleteUserData(final Context context, String userId){//deletar dados da loja e produtos do usuário
 
-        User user = new User();
+        DatabaseReference refUser;
+        refUser = FirebaseDatabase.getInstance().getReference();
+        refUser.child("lojas").child(userId).removeValue();
 
-        if(email.equals(Objects.requireNonNull(datasnapshot.child(userId).child("email").getValue()).toString())) return false;
+        DatabaseReference refUserProduto = FirebaseDatabase.getInstance().getReference().child("produtos").child(userId);
 
-        for (DataSnapshot ds: datasnapshot.getChildren()){
+        refUserProduto.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
 
-            user.setEmail(Objects.requireNonNull(ds.getValue(User.class)).getEmail());
+                    for(DataSnapshot ds : snapshot.getChildren()){
 
-            if(user.getEmail().equals(email)) return true;
-        }
-        return false;
-    }
-    public static boolean checkEmailExists(String email, DataSnapshot datasnapshot, Boolean idf){
+                        Produto prod = ds.getValue(Produto.class);
+                        deleteImageFromFirebaseStorage(prod.getPic(), "Produtos");
+                    }
+                }
+            }
 
-        if(idf) return false;
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        User user = new User();
-
-        for (DataSnapshot ds: datasnapshot.getChildren()){
-
-            user.setEmail(Objects.requireNonNull(ds.getValue(User.class)).getEmail());
-
-            if(user.getEmail().equals(email)) return true;
-        }
-        return false;
+        refUser.child("produtos").child(userId).removeValue();
+        refUser.child("users").child(userId).child("store").setValue(false);
     }
 }

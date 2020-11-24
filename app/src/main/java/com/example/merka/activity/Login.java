@@ -19,14 +19,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import static com.example.merka.utils.TextMethods.fieldsNotEmpty;
+
 public class Login extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
 
     private EditText editTextEmail;
     private EditText editTextSenha;
-
-    private ProgressDialog progressDialog;
-
-    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +71,11 @@ public class Login extends AppCompatActivity {
     }
 
     private void fazerLogin(){
-        String login = editTextEmail.getEditableText().toString().toLowerCase();
+
+        String login = editTextEmail.getEditableText().toString().trim().toLowerCase();
         String senha = editTextSenha.getEditableText().toString();
 
-        if(validateFields(login,senha)){
+        if(fieldsNotEmpty(login,senha)){
 
             progressDialog.show();
 
@@ -97,18 +99,13 @@ public class Login extends AppCompatActivity {
             });
         }
         else{
-            Toast.makeText(Login.this, getString(R.string.ToastPreenchaTodosCampos),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(Login.this, getString(R.string.ToastPreenchaTodosCampos), Toast.LENGTH_SHORT).show();
         }
     }
 
     public void goToMenu(){
         startActivity (new Intent(this, Tela_Inicial.class));
         finish();
-    }
-
-    public boolean validateFields(String login, String password1){
-        return !login.isEmpty() && !password1.isEmpty();
     }
 
     private void updateUI(FirebaseUser user) {

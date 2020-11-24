@@ -122,11 +122,11 @@ public class Perfil extends AppCompatActivity {
                 // Get Post object and use the values to update the UI
                 User user = dataSnapshot.getValue(User.class);
                 // [START_EXCLUDE]
-                txtNomeUser.setText(Objects.requireNonNull(user).name);
-                txtEmailUser.setText(user.email);
+                txtNomeUser.setText(Objects.requireNonNull(user).getNome());
+                txtEmailUser.setText(user.getEmail());
                 // [END_EXCLUDE]
 
-                loja = user.store;
+                loja = user.getLoja();
             }
 
             @Override

@@ -2,7 +2,6 @@ package com.example.merka.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,8 +24,6 @@ import androidx.core.content.ContextCompat;
 
 import com.example.merka.models.Produto;
 import com.example.merka.R;
-import com.example.merka.utils.PicMethods;
-import com.example.merka.utils.TextMethods;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -41,44 +37,58 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
+
+import static com.example.merka.utils.PicMethods.getExtension;
+import static com.example.merka.utils.PicMethods.getImageCompressed;
+import static com.example.merka.utils.PicMethods.resize;
+import static com.example.merka.utils.TextMethods.returnFormatedText;
+import static com.example.merka.utils.TextMethods.returnFormatedValue;
+import static com.example.merka.utils.TextMethods.validProductFields;
 
 public class AdicionaProduto extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+    private StorageReference mStorageRef;
+    private ProgressDialog progressDialog;
 
+    private ImageView pic;
     private EditText txtAdicionaNomeProduto;
     private EditText txtAdicionaValorProduto;
     private EditText txtAdicionaDescricaoProduto;
 
-    private StorageReference mStorageRef;
+    final Produto prod = new Produto();
+    private String picName;
+    private Uri picUri;
 
     private boolean hasPicture = false;
 
-    private final int STORAGE_PERMISSION_CODE = 1;
-
-    private ProgressDialog progressDialog;
-
-    private ImageView pic;
-    private Uri picUri;
-    private String picName;
+    private final int STORAGE_REQUEST_CODE = 1;
+    private final int IMAGE_REQUEST_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adiciona_produto);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle(getString(R.string.progressDialogAtualizandoDados));
-
         firebaseAuth = FirebaseAuth.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(getString(R.string.progressDialogAtualizandoDados));
 
         txtAdicionaNomeProduto = findViewById(R.id.txtAdicionaNomeProduto);
         txtAdicionaValorProduto = findViewById(R.id.txtAdicionaValorProduto);
         txtAdicionaDescricaoProduto = findViewById(R.id.txtAdicionaDescricaoProduto);
 
         pic = findViewById(R.id.picProduto);
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choosePic();
+            }
+        });
         pic.setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
@@ -93,7 +103,7 @@ public class AdicionaProduto extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
-                            pic.setImageResource(getResources().getIdentifier("com.example.merka:drawable/store_icon", null, null));
+                            pic.setImageResource(getResources().getIdentifier(getString(R.string.DefaultProductImage), null, null));
                             hasPicture = false;
                         }
                     });
@@ -108,13 +118,22 @@ public class AdicionaProduto extends AppCompatActivity {
                 return true;
             }
         });
-        pic.setOnClickListener(new View.OnClickListener() {
+
+        Button btnAdicionaConfirma = findViewById(R.id.btnConfirmarAdicionarProduto);
+        btnAdicionaConfirma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choosePic();
+
+                prod.setFields(txtAdicionaNomeProduto, txtAdicionaValorProduto, txtAdicionaDescricaoProduto);
+
+                if(validProductFields(AdicionaProduto.this, prod)){
+
+                    progressDialog.show();
+                    if(hasPicture) Fileuploader();
+                    else writeNewProduto();
+                }
             }
         });
-
         Button btnAdicionaCancela = findViewById(R.id.btnCancelarAdicionarProduto);
         btnAdicionaCancela.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,84 +141,34 @@ public class AdicionaProduto extends AppCompatActivity {
                 startActivity(new Intent(AdicionaProduto.this, ProdutosLoja.class));
             }
         });
-
-        Button btnAdicionaConfirma = findViewById(R.id.btnConfirmarAdicionarProduto);
-        btnAdicionaConfirma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                validar_e_confirmarAlteracao();
-            }
-        });
     }
 
-    private void validar_e_confirmarAlteracao(){
+    private void choosePic(){
 
-        String nome = TextMethods.formatText(txtAdicionaNomeProduto.getEditableText().toString());
-        String valor = TextMethods.retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
-        String desc = TextMethods.formatText(txtAdicionaDescricaoProduto.getEditableText().toString());
-
-        if(validateFields(nome, valor, desc)){
-            if(valorValido(valor)){
-
-                progressDialog.show();
-
-                if(hasPicture) Fileuploader();
-                else adicionaProduto();
-            }
-            else Toast.makeText(AdicionaProduto.this, getString(R.string.ToastDigiteValorValido), Toast.LENGTH_SHORT).show();
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, IMAGE_REQUEST_CODE);
         }
-        else Toast.makeText(AdicionaProduto.this, getString(R.string.ToastPreenchaTodosCampos), Toast.LENGTH_SHORT).show();
-
+        else requestStoragePermition();
     }
-
-    public boolean validateFields(String nome, String valor, String desc){
-        return !nome.isEmpty() && !valor.isEmpty() && !desc.isEmpty();
-    }
-
-    public boolean valorValido(String valor){
-        return valor.replace(".", "").length() > 0;
-    }
-
-    private void adicionaProduto() {
-
-        final String nome = TextMethods.formatText(txtAdicionaNomeProduto.getEditableText().toString());
-        final String valor = TextMethods.retonarValorFormatado(txtAdicionaValorProduto.getEditableText().toString());
-        final String desc = TextMethods.formatText(txtAdicionaDescricaoProduto.getEditableText().toString());
-        final String url = (hasPicture) ? picName : "";
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        assert user != null;
-        String userId = user.getUid();
-
-        writeNewProduto(userId, nome, valor, desc, url);
-    }
-
-    private String getExtension(Uri uri){
-        ContentResolver cr= getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
-    }
-
 
     private void Fileuploader(){
 
-        StorageReference Ref=mStorageRef.child("Produtos").child(System.currentTimeMillis()+"."+getExtension(picUri));
+        StorageReference Ref=mStorageRef.child("Produtos").child(System.currentTimeMillis()+"."+getExtension(this, picUri));
 
-        Ref.putFile(picUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        Ref.putFile(picUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-
                         while (!urlTask.isSuccessful()){}
 
                         if (urlTask.isSuccessful()){
                             picName = taskSnapshot.getStorage().getName();
-                            adicionaProduto();
+                            writeNewProduto();
                         }
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -210,111 +179,73 @@ public class AdicionaProduto extends AppCompatActivity {
                 });
     }
 
-    private void choosePic(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent, 2);
-        }else{
-            requestStoragePermition();
+    private void writeNewProduto() {
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userId = Objects.requireNonNull(user).getUid();
+
+        //usando o mesmo UID do Firebase Authentication: userId
+        Random rand = new Random();
+        int id = rand.nextInt(10000)+1;
+
+        prod.setId(String.valueOf(id));
+        prod.setNome(returnFormatedText(txtAdicionaNomeProduto.getEditableText().toString()));
+        prod.setValor(returnFormatedValue(txtAdicionaValorProduto.getEditableText().toString()));
+        prod.setDescricao(returnFormatedText(txtAdicionaDescricaoProduto.getEditableText().toString()));
+        prod.setPic((hasPicture) ? picName : "");
+
+        try {//tentando cadastrar no banco
+            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+            refUser.child("produtos").child(userId).child(prod.getId()).setValue(prod);
+            goToProdutos();
+
+        } catch (DatabaseException e) {
+            Toast.makeText(AdicionaProduto.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==2 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+        if(requestCode== IMAGE_REQUEST_CODE && resultCode==RESULT_OK && data!=null && data.getData()!=null){
 
             try {
-                Bitmap fotoBuscada = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-
-                picUri = redimensionar_e_compressao(fotoBuscada);
+                Bitmap foto = resize(MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData()));
+                picUri = getImageCompressed(this, foto);
                 pic.setImageURI(picUri);
                 hasPicture = true;
 
-            } catch (IOException e) {
+            } catch (IOException e){
                 e.printStackTrace();
             }
         }
     }
 
     private void requestStoragePermition(){
+
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.AlertDialogTitlePermissaoNecessariaImagem))
                     .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(AdicionaProduto.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                            ActivityCompat.requestPermissions(AdicionaProduto.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
                         }
                     })
                     .create().show();
-        }else{
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
         }
+        else ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if(requestCode == STORAGE_PERMISSION_CODE){
+        if(requestCode == STORAGE_REQUEST_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this, getString(R.string.permissaoAceita), Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(this, getString(R.string.permissaoNegada), Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    private Uri redimensionar_e_compressao(Bitmap fotoBuscada){
-
-        if (fotoBuscada.getWidth() >= fotoBuscada.getHeight()){
-
-            fotoBuscada = Bitmap.createBitmap(
-                    fotoBuscada,
-                    fotoBuscada.getWidth()/2 - fotoBuscada.getHeight()/2,
-                    0,
-                    fotoBuscada.getHeight(),
-                    fotoBuscada.getHeight()
-            );
-
-        }else{
-
-            fotoBuscada = Bitmap.createBitmap(
-                    fotoBuscada,
-                    0,
-                    fotoBuscada.getHeight()/2 - fotoBuscada.getWidth()/2,
-                    fotoBuscada.getWidth(),
-                    fotoBuscada.getWidth()
-            );
-        }
-
-        Bitmap fotoRedimensionada = Bitmap.createScaledBitmap(fotoBuscada, 300, 300, true);
-
-
-
-        return PicMethods.getImageUri(this, fotoRedimensionada, pic);
-    }
-
-    private void writeNewProduto(String userId, String nome, String valor, String descricao, String url) {
-        //usando o mesmo UID do Firebase Authentication: userId
-
-        Random rand = new Random();
-        int id = rand.nextInt(10000)+1;
-        String idProd = String.valueOf(id);
-
-        try {//tentando cadastrar no banco
-            Produto produto = new Produto(idProd,nome,valor, descricao, url);
-
-            // variável de acesso ao RealTime DataBase
-            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-            refUser.child("produtos").child(userId).child(idProd).setValue(produto);
-            goToProdutos();
-
-        } catch (DatabaseException e) {
-            Toast.makeText(AdicionaProduto.this, e.getMessage(),
-                    Toast.LENGTH_SHORT).show();
         }
     }
 

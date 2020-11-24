@@ -32,17 +32,23 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+import static com.example.merka.utils.FirebaseMethods.checkEmailExists;
+import static com.example.merka.utils.TextMethods.fieldsNotEmpty;
+import static com.example.merka.utils.TextMethods.validUserFields;
+import static com.example.merka.utils.TextMethods.validateEqualPasswords;
+import static com.example.merka.utils.TextMethods.validateMinLengthPassword;
+
 public class Registrar extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
 
     private EditText editTextNome;
     private EditText editTextEmail;
     private EditText editTextSenha;
-    private  EditText editTextConfirmaSenha;
+    private EditText editTextConfirmaSenha;
 
-    private FirebaseAuth firebaseAuth;
-
-    private ProgressDialog progressDialog;
-    private boolean idf = false;
+    User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +69,44 @@ public class Registrar extends AppCompatActivity {
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                criarNovoUsuario();
+
+                user.setFields(editTextNome, editTextEmail, editTextSenha, false);
+
+                if(validUserFields(Registrar.this, user, editTextConfirmaSenha.getEditableText().toString())){
+
+                    FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            if(!progressDialog.isShowing()){
+                                if (checkEmailExists(Registrar.this, snapshot, user)) {
+
+                                    progressDialog.show();
+                                    firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(Registrar.this, new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                            if (task.isSuccessful()) {
+
+                                                writeNewUser();
+                                                FirebaseAuth.getInstance().signOut();
+                                                confirmacaoCadastro();
+                                            } else {
+                                                progressDialog.dismiss();
+                                                // If sign in fails, display a message to the user.
+                                                Toast.makeText(Registrar.this, getString(R.string.ToastFalhaNoRegistro), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
             }
         });
 
@@ -75,74 +118,6 @@ public class Registrar extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void criarNovoUsuario(){
-        final String login = editTextEmail.getEditableText().toString().trim().toLowerCase();
-        final String pass = editTextSenha.getEditableText().toString();
-        String pass2 = editTextConfirmaSenha.getEditableText().toString();
-        final String nome = TextMethods.formatText(editTextNome.getEditableText().toString());
-
-        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference().child("users");
-
-        if(validateFields(login,pass,pass2,nome)){
-            if(Patterns.EMAIL_ADDRESS.matcher(login).matches()){
-                if(validateMinLengthPassword(pass,pass2)){
-                    if(validateEqualPasswords(pass,pass2)){
-
-                        refUser.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                if(!progressDialog.isShowing()){
-                                    if(FirebaseMethods.checkEmailExists(login, snapshot, idf)){
-                                        printToast(getString(R.string.ToastEmailJaCadastrado));
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                        progressDialog.show();
-
-                        firebaseAuth.createUserWithEmailAndPassword(login,pass2).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                if (task.isSuccessful()) {
-
-                                    idf = true;
-                                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                                    String userId = Objects.requireNonNull(user).getUid();
-                                    writeNewUser(userId, nome, login, pass);
-                                    FirebaseAuth.getInstance().signOut();
-                                    confirmacaoCadastro();
-
-                                } else {
-                                    progressDialog.dismiss();
-                                    // If sign in fails, display a message to the user.
-                                    printToast(getString(R.string.ToastFalhaNoRegistro));
-                                }
-                            }
-                        });
-
-                    }
-                    else printToast(getString(R.string.ToastInsiraSenhasIguais));
-
-                }
-                else printToast(getString(R.string.ToastSenhaComNoMinimoOitoDigitos));
-            }
-            else printToast(getString(R.string.ToastEmailInvalido));
-        }
-        else printToast(getString(R.string.ToastPreenchaTodosCampos));
-    }
-
-    private void printToast(String value){
-        Toast.makeText(this, value, Toast.LENGTH_SHORT).show();
     }
 
     public void confirmacaoCadastro(){
@@ -167,28 +142,16 @@ public class Registrar extends AppCompatActivity {
         startActivity (new Intent(this, Login.class));
     }
 
-    public boolean validateFields(String login, String password1, String password2, String name){
-        return !login.isEmpty() && !password1.isEmpty() && !password2.isEmpty() && !name.isEmpty();
-    }
 
-    public boolean validateEqualPasswords(String password1, String password2){
-        return password1.equals(password2);
-    }
-
-    public boolean validateMinLengthPassword(String password1, String password2){
-        return password1.length() > 7 || password2.length() > 7;
-    }
-
-
-    private void writeNewUser(String userId, String name, String email, String password){
+    private void writeNewUser(){
         //usando o mesmo UID do Firebase Authentication: userId
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        String userId = Objects.requireNonNull(firebaseUser).getUid();
 
         try {//tentando cadastrar no banco
-            User user = new User(name, email, password, false);
             // variável de acesso ao RealTime DataBase
             DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
             refUser.child("users").child(userId).setValue(user);
-
         }
         catch(DatabaseException e){
             progressDialog.dismiss();

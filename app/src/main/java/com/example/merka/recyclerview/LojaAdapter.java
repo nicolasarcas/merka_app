@@ -3,8 +3,6 @@ package com.example.merka.recyclerview;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,18 +39,16 @@ public class LojaAdapter extends RecyclerView.Adapter<LojaViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final LojaViewHolder holder, int position) {
         Loja l = lojas.get(position);
-        holder.txtNomeLoja.setText(l.nome);
-        holder.txtEnderecoLoja.setText(l.endereco);
-        holder.txtDescLoja.setText(l.descricao);
-        holder.txtContatoLoja.setText(l.contato);
+        holder.txtNomeLoja.setText(l.getNome());
+        holder.txtEnderecoLoja.setText(l.getEndereco());
+        holder.txtDescLoja.setText(l.getDescricao());
+        holder.txtContatoLoja.setText(l.getContato());
 
-        if(l.pic.length() > 0) {
-
-            Log.d("teste", l.pic);
+        if(l.getPic().length() > 0) {
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference imageRef = storage.getReference()
-                    .child("Images").child("Lojas").child(l.pic);
+                    .child("Images").child("Lojas").child(l.getPic());
 
             imageRef.getBytes(1024*1024)
                 .addOnSuccessListener(new OnSuccessListener<byte[]>() {
