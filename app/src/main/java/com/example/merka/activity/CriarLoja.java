@@ -67,6 +67,7 @@ public class CriarLoja extends AppCompatActivity {
     private EditText txtCpfLoja;
     private EditText txtResponsavelLoja;
     private RadioGroup radioGroupCadastro;
+    private RadioButton radioCadastro;
 
     final Loja loja = new Loja();
     private Uri picUri;
@@ -244,8 +245,8 @@ public class CriarLoja extends AppCompatActivity {
     private void writeNewLoja(){
 
         int radioId = radioGroupCadastro.getCheckedRadioButtonId();
+        radioCadastro = findViewById(radioId);
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        RadioButton radioCadastro = findViewById(radioId);
 
         loja.setPic((hasPicture) ? picName : "");
         loja.setId(Objects.requireNonNull(user).getUid());
