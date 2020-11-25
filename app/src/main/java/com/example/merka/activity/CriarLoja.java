@@ -252,7 +252,7 @@ public class CriarLoja extends AppCompatActivity {
         loja.setDelivery(radioCadastro.getText().toString());
 
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-        refUser.child("users").child(loja.getId()).child("store").setValue(true);
+        refUser.child("users").child(loja.getId()).child("loja").setValue(true);
 
         try {//tentando cadastrar no banco
 

@@ -178,13 +178,16 @@ public class EditLojaPerfil extends AppCompatActivity {
 
                 loja.setFields(txtNomeLoja, txtContatoLoja, txtEnderecoLoja, txtDescricaoLoja, txtResponsavel, txtCpfLoja);
 
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                final String userId = Objects.requireNonNull(user).getUid();
+
                 if(validStoreFields(EditLojaPerfil.this, loja)) {
                     FirebaseDatabase.getInstance().getReference().child("lojas").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                            if (checkCPFExists(EditLojaPerfil.this, snapshot, loja)) {
-                                if (checkContatoExists(EditLojaPerfil.this, snapshot, loja)) {
+                            if (checkCPFExists(EditLojaPerfil.this, snapshot, loja, userId)) {
+                                if (checkContatoExists(EditLojaPerfil.this, snapshot, loja, userId)) {
 
                                     if(!progressDialog.isShowing()){
                                         AlertDialog.Builder msgBox = new AlertDialog.Builder(EditLojaPerfil.this);

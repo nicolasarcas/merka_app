@@ -1,7 +1,6 @@
 package com.example.merka.utils;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
 
 import static com.example.merka.utils.PicMethods.deleteImageFromFirebaseStorage;
 
@@ -41,6 +38,25 @@ public class FirebaseMethods {
         return !cpfExists;
     }
 
+    public static boolean checkCPFExists(final Context context, DataSnapshot dataSnap, Loja loja, String userId){
+
+        boolean cpfExists = false;
+        DataSnapshot atual = dataSnap.child(userId);
+
+        for (DataSnapshot ds: dataSnap.getChildren()){
+
+            if (loja.getCpf().equals(ds.getValue(Loja.class).getCpf())){
+
+                if(!ds.getValue().equals(atual.getValue())) {
+                    Toast.makeText(context, context.getString(R.string.ToastCPFJaUtilizado), Toast.LENGTH_SHORT).show();
+                    cpfExists = true;
+                }
+            }
+        }
+
+        return !cpfExists;
+    }
+
     public static boolean checkContatoExists(final Context context, DataSnapshot dataSnap, Loja loja){
 
         boolean contatoExists = false;
@@ -53,6 +69,28 @@ public class FirebaseMethods {
 
                     Toast.makeText(context, context.getString(R.string.ToastContatoJaUtilizado), Toast.LENGTH_SHORT).show();
                     contatoExists = true;
+                }
+            }
+        }
+
+        return !contatoExists;
+    }
+
+    public static boolean checkContatoExists(final Context context, DataSnapshot dataSnap, Loja loja, String userId){
+
+        boolean contatoExists = false;
+        DataSnapshot atual = dataSnap.child(userId);
+
+        for (DataSnapshot ds: dataSnap.getChildren()){
+
+            if (loja.getContato().equals(ds.getValue(Loja.class).getContato())){
+
+                if(!loja.getNome().equals((ds.getValue(Loja.class).getNome()))){
+
+                    if(!ds.getValue().equals(atual.getValue())) {
+                        Toast.makeText(context, context.getString(R.string.ToastContatoJaUtilizado), Toast.LENGTH_SHORT).show();
+                        contatoExists = true;
+                    }
                 }
             }
         }
@@ -86,12 +124,12 @@ public class FirebaseMethods {
 
         for (DataSnapshot ds: dataSnap.getChildren()){
 
-            if(ds == atual) continue;
-
             if (user.getEmail().equals(ds.getValue(User.class).getEmail())){
 
-                Toast.makeText(context, context.getString(R.string.ToastEmailJaCadastrado), Toast.LENGTH_SHORT).show();
-                emailExists = true;
+                if(!ds.getValue().equals(atual.getValue())){
+                    Toast.makeText(context, context.getString(R.string.ToastEmailJaCadastrado), Toast.LENGTH_SHORT).show();
+                    emailExists = true;
+                }
             }
         }
 
@@ -126,6 +164,6 @@ public class FirebaseMethods {
         });
 
         refUser.child("produtos").child(userId).removeValue();
-        refUser.child("users").child(userId).child("store").setValue(false);
+        refUser.child("users").child(userId).child("loja").setValue(false);
     }
 }

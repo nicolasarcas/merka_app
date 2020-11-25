@@ -1,5 +1,6 @@
 package com.example.merka.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class EditPerfil extends AppCompatActivity {
 
     private FirebaseAuth mAuth; //variável de acesso ao Firebase autenticatiton
     private DatabaseReference refUser; // variável de acesso ao RealTime DataBase
+    private ProgressDialog progressDialog;
 
     private EditText txtNome;
     private EditText txtEmail;
@@ -52,6 +54,9 @@ public class EditPerfil extends AppCompatActivity {
         setContentView(R.layout.activity_edit_perfil);
 
         mAuth = FirebaseAuth.getInstance();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(getString(R.string.progressDialogAtualizandoDados));
 
         txtNome = findViewById(R.id.txtNome);
         txtEmail = findViewById(R.id.txtEmail);
@@ -103,8 +108,9 @@ public class EditPerfil extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-                user.setFields(txtNome, txtEmail, txtPass,false);
+                user.setFields(txtNome, txtEmail, txtPass, temLoja);
+                FirebaseUser fireUser = FirebaseAuth.getInstance().getCurrentUser();
+                final String userId = Objects.requireNonNull(fireUser).getUid();
 
                 if(validUserFields(EditPerfil.this, user, txtConfirmPass.getEditableText().toString())){
 
@@ -112,34 +118,38 @@ public class EditPerfil extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                            if(checkEmailExists(EditPerfil.this, snapshot, user, FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                            if(checkEmailExists(EditPerfil.this, snapshot, user, userId)){
 
-                                AlertDialog.Builder msgBox = new AlertDialog.Builder(EditPerfil.this);
-                                msgBox.setTitle(getString(R.string.msgBoxTitleAlteraçãoDeDados));
-                                msgBox.setIcon(android.R.drawable.ic_menu_info_details);
-                                msgBox.setMessage(getString(R.string.msgBoxMessageDesejaAlterarDadosSeusDados));
-                                msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                if(!progressDialog.isShowing()){
 
-                                        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-                                        FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
-                                        String userId = fbuser.getUid();
+                                    AlertDialog.Builder msgBox = new AlertDialog.Builder(EditPerfil.this);
+                                    msgBox.setTitle(getString(R.string.msgBoxTitleAlteraçãoDeDados));
+                                    msgBox.setIcon(android.R.drawable.ic_menu_info_details);
+                                    msgBox.setMessage(getString(R.string.msgBoxMessageDesejaAlterarDadosSeusDados));
+                                    msgBox.setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                                        refUser.child("users").child(userId).setValue(user);
-                                        fbuser.updateEmail(user.getEmail());
-                                        fbuser.updatePassword(user.getPassword());
+                                            progressDialog.show();
 
-                                        goToMenu();
-                                    }
-                                });
-                                msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                            DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
+                                            FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
 
-                                    }
-                                });
-                                msgBox.show();
+                                            refUser.child("users").child(userId).setValue(user);
+                                            fbuser.updateEmail(user.getEmail());
+                                            fbuser.updatePassword(user.getPassword());
+
+                                            goToMenu();
+                                        }
+                                    });
+                                    msgBox.setNegativeButton(getString(R.string.nao), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    });
+                                    msgBox.show();
+                                }
                             }
                         }
 
@@ -215,7 +225,6 @@ public class EditPerfil extends AppCompatActivity {
                 txtPass.setText(user.getPassword());
                 txtConfirmPass.setText(user.getPassword());
                 // [END_EXCLUDE]
-
                 temLoja = user.getLoja();
             }
 
