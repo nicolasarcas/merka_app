@@ -126,6 +126,6 @@ public class FirebaseMethods {
         });
 
         refUser.child("produtos").child(userId).removeValue();
-        refUser.child("users").child(userId).child("store").setValue(false);
+        refUser.child("users").child(userId).child("loja").setValue(false);
     }
 }

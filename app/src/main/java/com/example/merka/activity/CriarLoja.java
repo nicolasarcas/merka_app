@@ -67,6 +67,7 @@ public class CriarLoja extends AppCompatActivity {
     private EditText txtCpfLoja;
     private EditText txtResponsavelLoja;
     private RadioGroup radioGroupCadastro;
+    private RadioButton radioCadastro;
 
     final Loja loja = new Loja();
     private Uri picUri;
@@ -244,15 +245,15 @@ public class CriarLoja extends AppCompatActivity {
     private void writeNewLoja(){
 
         int radioId = radioGroupCadastro.getCheckedRadioButtonId();
+        radioCadastro = findViewById(radioId);
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        RadioButton radioCadastro = findViewById(radioId);
 
         loja.setPic((hasPicture) ? picName : "");
         loja.setId(Objects.requireNonNull(user).getUid());
         loja.setDelivery(radioCadastro.getText().toString());
 
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference();
-        refUser.child("users").child(loja.getId()).child("store").setValue(true);
+        refUser.child("users").child(loja.getId()).child("loja").setValue(true);
 
         try {//tentando cadastrar no banco
 
