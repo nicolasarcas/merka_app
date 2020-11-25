@@ -29,7 +29,7 @@
     <string name="TextViewTextIndicaContato">Contato:</string>
     <string name="TextViewTextIndicaDelivery">Delivery:</string>
     <string name="TextViewTextIndicaEndereço">Endereço:</string>
-    <string name="TextViewTextResponsavel">Responsável:</string>
+    <string name="TextViewTextIndicaResponsavel">Responsável:</string>
     <string name="TextViewTextNomeDaLoja">Loja do merka</string>
     <string name="TextViewTextFazDelivery">Faz delivery?</string>
     <string name="TextViewTextIndicaDescrição">Descrição:</string>

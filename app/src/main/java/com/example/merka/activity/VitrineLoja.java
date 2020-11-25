@@ -43,6 +43,7 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
     private TextView vitrineEnderecoLoja;
     private TextView vitrineDeliveryLoja;
     private TextView vitrineDescricaoLoja;
+    private TextView VitrineResponsavelLoja;
 
     private ProdutoVitrineAdapter adapter;
     private List<Produto> produtos;
@@ -65,6 +66,7 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
         vitrineEnderecoLoja =findViewById(R.id.vitrineEnderecoLoja);
         vitrineDeliveryLoja=findViewById(R.id.vitrineDeliveryLoja);
         vitrineDescricaoLoja=findViewById(R.id.vitrineDescricaoLoja);
+        VitrineResponsavelLoja=findViewById(R.id.vitrineResponsavelLoja);
 
         RecyclerView produtosRecyclerView = findViewById(R.id.recyclerViewVitrineProdutos);
         produtos = new ArrayList<>();
@@ -92,6 +94,8 @@ public class VitrineLoja extends AppCompatActivity implements PopupMenu.OnMenuIt
                 vitrineEnderecoLoja.setText((loja.getEndereco()));
                 vitrineDescricaoLoja.setText(loja.getDescricao());
                 vitrineDeliveryLoja.setText(loja.getDelivery());
+                VitrineResponsavelLoja.setText(loja.getResponsavel());
+
 
                 if (loja.getPic().length() > 0){
                     setImage(loja.getPic());
