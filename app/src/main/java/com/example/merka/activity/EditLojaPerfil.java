@@ -57,14 +57,12 @@ public class EditLojaPerfil extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference refUser;
-
     private EditText txtNomeLoja;
     private EditText txtContatoLoja;
     private EditText txtEnderecoLoja;
     private EditText txtDescricaoLoja;
     private EditText txtCpfLoja;
     private EditText txtResponsavel;
-
     private RadioGroup radioGroupAlteracao;
     private RadioButton radioEditSim;
     private RadioButton radioEditNao;

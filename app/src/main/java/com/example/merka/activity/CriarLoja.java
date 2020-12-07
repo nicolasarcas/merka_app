@@ -129,7 +129,6 @@ public class CriarLoja extends AppCompatActivity {
             }
         });
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
-
         radioGroupCadastro = findViewById(R.id.radioGroupCadastro);
 
         txtNomeLoja=findViewById(R.id.txtNomeLoja);

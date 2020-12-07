@@ -192,7 +192,6 @@ public class AdicionaProduto extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-
                         while (!urlTask.isSuccessful()){}
 
                         if (urlTask.isSuccessful()){
