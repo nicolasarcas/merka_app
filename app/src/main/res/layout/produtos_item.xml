@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardProdutos"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/MarginGrandeEntreElementos"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="@dimen/MarginGrandeEntreElementos"
+    android:layout_marginBottom="10dp"
+    android:radius="10dp"
+    android:scrollbars="vertical"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/layout_bg"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="94dp"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="8dp">
+
+            <ImageView
+                android:id="@+id/picProduto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/ImageViewContentDescriptionProduto"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp">
+
+            <TextView
+                android:id="@+id/nomeProduto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/DefaultTextNomeDoProduto"
+                android:textColor="@color/lightBlack"
+                android:textSize="@dimen/TextSizeNomeProduto"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/descricaoProduto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@string/DefaultTextDescricaoDoProduto" />
+
+            <TextView
+                android:id="@+id/valorProduto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/DefaultTextValorDoProduto"
+                android:textColor="@color/strongGray"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
+

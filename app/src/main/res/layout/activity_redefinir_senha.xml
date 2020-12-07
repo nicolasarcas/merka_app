@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".activity.RedefinirSenha"
+    android:paddingHorizontal="@dimen/PaddingHorizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:background="@drawable/background_title"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textAppearance="@style/textAppearance_Merka"
+        android:textSize="@dimen/TextSizeLogoMerka"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextRedefinirSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:autofillHints="preencherEmail"
+        android:hint="@string/TextViewHintPreencherEmail"
+        android:inputType="textEmailAddress"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/btnRedefinirSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginEntreElementos"
+        android:background="@drawable/background_button_red"
+        android:text="@string/ButtonTextConfirmar"
+        android:textAppearance="@style/textAppearance_WhiteTextBtn" />
+
+</LinearLayout>

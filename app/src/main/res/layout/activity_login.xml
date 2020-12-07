@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/PaddingHorizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:background="@drawable/background_title"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textAppearance="@style/textAppearance_Merka"
+        android:textSize="@dimen/TextSizeLogoMerka"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/editTextEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:autofillHints="@string/TextViewHintEmail"
+            android:ems="10"
+            android:hint="@string/TextViewHintEmail"
+            android:inputType="textEmailAddress"
+            android:textSize="@dimen/Hint"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="292dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/editTextSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+            android:autofillHints="@string/TextViewHintSenha"
+            android:ems="10"
+            android:hint="@string/TextViewHintSenha"
+            android:inputType="textPassword"
+            android:textSize="@dimen/Hint"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="360dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/buttonEntrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:background="@drawable/background_button_red"
+        android:text="@string/ButtonTextEntrar"
+        android:textAppearance="@style/textAppearance_WhiteTextBtn"
+        tools:layout_editor_absoluteX="3dp"
+        tools:layout_editor_absoluteY="584dp" />
+
+    <TextView
+        android:id="@+id/textViewEsqueciSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:text="@string/TextViewTextEsqueciASenha"
+        android:textAlignment="center"
+        android:textAppearance="@style/textAppearance_Esqueci_A_Senha"
+        tools:layout_editor_absoluteX="96dp"
+        tools:layout_editor_absoluteY="454dp" />
+
+    <View
+        android:id="@+id/LinhaHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginGrandeEntreElementos"
+        android:background="@color/design_default_color_on_secondary"
+        android:focusable="false"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="520dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/MarginEntreElementos"
+        android:text="@string/TextViewTextNaoTemUmaConta"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@android:color/background_dark"
+        android:textSize="@dimen/TextSizeJaPossuiUmaConta"
+        tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="549dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/dialog_holo_dark_frame"
+        android:text="@string/ButtonTextInscreverseNoMerka"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/TextSizeJaPossuiUmaConta"/>
+
+</LinearLayout>

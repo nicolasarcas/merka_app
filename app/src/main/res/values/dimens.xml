@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="MarginEntreElementos">8dp</dimen>
+    <dimen name="MarginGrandeEntreElementos">20dp</dimen>
+    <dimen name="PaddingLayout">20dp</dimen>
+    <dimen name="PaddingHorizontal">20dp</dimen>
+    <dimen name="Hint">32sp</dimen>
+    <dimen name="HintCadastro">27sp</dimen>
+    <dimen name="HintCadastroLojasPequenos">19sp</dimen>
+    <dimen name="TextSizeButton">27sp</dimen>
+    <dimen name="TextSizeEscrever">18sp</dimen>
+    <dimen name="TextSizeLogoMerka">90sp</dimen>
+    <dimen name="TextSizeNomeProduto">20sp</dimen>
+    <dimen name="TextSizeNomeProdutoPequeno">18sp</dimen>
+    <dimen name="TextSizeEsqueciSenha">13sp</dimen>
+    <dimen name="TextSizeJaPossuiUmaConta">15sp</dimen>
+</resources>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="false"
+    android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/MarginEntreElementos"
+            android:layout_marginRight="@dimen/MarginEntreElementos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/MarginGrandeEntreElementos"
+                android:layout_marginBottom="@dimen/MarginEntreElementos"
+                android:src="@drawable/user_icon"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp" />
+
+            <EditText
+                android:id="@+id/txtNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/TextViewHintNome"
+                android:hint="@string/TextViewHintNome"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/HintCadastro" />
+
+            <EditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/TextViewHintEmail"
+                android:hint="@string/TextViewHintEmail"
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/HintCadastro" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/txtPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="@string/TextViewHintSenha"
+                    android:hint="@string/TextViewHintSenha"
+                    android:inputType="textPassword"
+                    android:textSize="@dimen/HintCadastro" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/txtConfirmPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/MarginEntreElementos"
+                    android:autofillHints="@string/TextViewHintConfirmaSenha"
+                    android:hint="@string/TextViewHintConfirmaSenha"
+                    android:inputType="textPassword"
+                    android:textSize="@dimen/HintCadastro" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                <Button
+                    android:id="@+id/btnConfirmarAlteracao"
+                    style="?attr/buttonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_button_white_border_red"
+                    android:text="@string/ButtonTextConfirmar"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btnCancelarAlteracao"
+                    style="?attr/buttonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_button_white_border_red"
+                    android:text="@string/ButtonTextCancelar"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnExluirConta"
+                style="?attr/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/MarginEntreElementos"
+                android:layout_marginBottom="@dimen/MarginEntreElementos"
+                android:background="@drawable/background_button_white_border_red"
+                android:text="@string/ButtonTextExcluirConta"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+        </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.merka">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <activity android:name=".activity.VitrineLoja" />
+        <activity android:name=".activity.TelaBusca" />
+        <activity android:name=".activity.EditProdutoLoja" />
+        <activity android:name=".activity.AdicionaProduto" />
+        <activity android:name=".activity.ProdutosLoja" />
+        <activity android:name=".activity.EditLojaPerfil" />
+        <activity android:name=".activity.PerfilLoja" />
+        <activity android:name=".activity.CriarLoja" />
+        <activity android:name=".activity.RedefinirSenha" />
+        <activity android:name=".activity.EditPerfil" />
+        <activity android:name=".activity.Perfil" />
+        <activity
+            android:name=".activity.SplashScreen"
+            android:theme="@style/AppCompat.TelaCheia">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.Tela_Inicial" />
+        <activity android:name=".activity.Login" />
+        <activity android:name=".activity.Registrar" />
+    </application>
+
+</manifest>

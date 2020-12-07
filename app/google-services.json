@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "207158324148",
+    "firebase_url": "https://merka-5458b.firebaseio.com",
+    "project_id": "merka-5458b",
+    "storage_bucket": "merka-5458b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207158324148:android:803388714fe287467d60e1",
+        "android_client_info": {
+          "package_name": "com.example.merka"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207158324148-t9aoquh40mo6d08n6ckih0afdv7talqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.merka",
+            "certificate_hash": "6605164e315f085c4535d8c752a9c878af91b79d"
+          }
+        },
+        {
+          "client_id": "207158324148-q6mf79knmtm198rom68lbmp369gg4ee5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUNwA-UGYbcIeIFkUpB-fzhTAfRYBDYQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207158324148-q6mf79knmtm198rom68lbmp369gg4ee5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
