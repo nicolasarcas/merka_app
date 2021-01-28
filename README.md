@@ -14,3 +14,8 @@ O aplicativo está disponível para download <a href="https://drive.google.com/f
 * Criação de loja e produtos
 * Consultar o local da loja no Google Maps
 * Conectar o usuário com o vendedor
+
+### Compatibilidade
+<p>
+Android 6.0 Marshmallow ou superior.
+</p>
