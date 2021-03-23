@@ -7,7 +7,7 @@ Aplicativo Android de delivery direcionado a divulgação de produtos caseirso. 
 
 ### Instalação
 <p>
-O aplicativo está disponível para download <a href="https://drive.google.com/file/d/1qTw6uTW7OZMrdEY9D106r6M86nW7gNKe/view?usp=sharing">aqui</a>
+O aplicativo está disponível para download <a href="https://github.com/nicolasarcas/merka_app/raw/master/releases/download/Version%201/Merka.apk">aqui</a>.
 </p>
 
 ### Principais funcionalidades
